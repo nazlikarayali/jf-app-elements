@@ -147,12 +147,12 @@ export function ThemesView() {
   const [tint, setTint] = useState(DEFAULT_TINT);
   const [font, setFont] = useState(DEFAULT_FONT);
   const [radius, setRadius] = useState<RadiusScale>(DEFAULT_RADIUS as RadiusScale);
-  const [, setPalette] = useState<PaletteShade[]>(() => generatePalette(DEFAULT_COLOR));
+  const [, setPalette] = useState<PaletteShade[]>(() => generatePalette(DEFAULT_COLOR, isDarkMode()));
 
   const handleColorChange = useCallback((newColor: string) => {
     setColor(newColor);
     setBrandHue(hexToHslHue(newColor));
-    const newPalette = generatePalette(newColor);
+    const newPalette = generatePalette(newColor, isDarkMode());
     setPalette(newPalette);
     applyPaletteToDOM(newPalette);
     const neutralPalette = generateNeutralPalette(newColor, tint, isDarkMode());
@@ -163,7 +163,7 @@ export function ThemesView() {
     setBrandHue(hue);
     const newColor = hslHueToHex(hue);
     setColor(newColor);
-    const newPalette = generatePalette(newColor);
+    const newPalette = generatePalette(newColor, isDarkMode());
     setPalette(newPalette);
     applyPaletteToDOM(newPalette);
     const neutralPalette = generateNeutralPalette(newColor, tint, isDarkMode());
@@ -193,7 +193,7 @@ export function ThemesView() {
     setTint(DEFAULT_TINT);
     setFont(DEFAULT_FONT);
     setRadius(DEFAULT_RADIUS as RadiusScale);
-    const newPalette = generatePalette(DEFAULT_COLOR);
+    const newPalette = generatePalette(DEFAULT_COLOR, isDarkMode());
     setPalette(newPalette);
     resetPalette();
     resetNeutral();
@@ -203,13 +203,13 @@ export function ThemesView() {
 
   // Apply palette + neutrals whenever color or tint changes, and on theme toggle
   useEffect(() => {
-    const palette = generatePalette(color);
+    const palette = generatePalette(color, isDarkMode());
     applyPaletteToDOM(palette);
     const neutralPalette = generateNeutralPalette(color, tint, isDarkMode());
     applyNeutralToDOM(neutralPalette);
 
     const observer = new MutationObserver(() => {
-      applyPaletteToDOM(generatePalette(color));
+      applyPaletteToDOM(generatePalette(color, isDarkMode()));
       applyNeutralToDOM(generateNeutralPalette(color, tint, isDarkMode()));
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });

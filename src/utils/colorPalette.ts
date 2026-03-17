@@ -31,6 +31,21 @@ const SHADE_LIGHTNESS: Record<string, number> = {
   '950': 15,
 };
 
+// Dark mode: inverted — low shades are dark, high shades are light
+const SHADE_LIGHTNESS_DARK: Record<string, number> = {
+  '50': 12,
+  '100': 17,
+  '200': 23,
+  '300': 30,
+  '400': 42,
+  '500': 53,
+  '600': 63,
+  '700': 73,
+  '800': 83,
+  '900': 90,
+  '950': 95,
+};
+
 const SHADE_KEYS = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
 
 function hexToHSL(hex: string): HSL {
@@ -94,11 +109,12 @@ function findClosestShade(l: number): string {
  * 3. Adjust saturation: higher for mid-tones, lower for extremes
  * 4. Map lightness across the shade spectrum
  */
-export function generatePalette(baseHex: string): PaletteShade[] {
+export function generatePalette(baseHex: string, darkMode = false): PaletteShade[] {
   const base = hexToHSL(baseHex);
+  const lightnessMap = darkMode ? SHADE_LIGHTNESS_DARK : SHADE_LIGHTNESS;
 
   return SHADE_KEYS.map((key) => {
-    const targetL = SHADE_LIGHTNESS[key];
+    const targetL = lightnessMap[key];
 
     // Saturation adjustment: boost in mid-range, reduce at extremes
     let satAdj = 0;
