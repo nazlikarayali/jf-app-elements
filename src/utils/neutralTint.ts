@@ -15,17 +15,17 @@ interface NeutralShade {
 // L: 0-1 (perceptual lightness), C: 0-0.4 (chroma/saturation)
 const NEUTRAL_SHADES: { key: string; l: number; maxC: number }[] = [
   { key: '0',   l: 1.00,  maxC: 0 },
-  { key: '50',  l: 0.965, maxC: 0.02 },
-  { key: '100', l: 0.905, maxC: 0.035 },
-  { key: '200', l: 0.845, maxC: 0.045 },
-  { key: '300', l: 0.695, maxC: 0.06 },
-  { key: '400', l: 0.545, maxC: 0.07 },
-  { key: '500', l: 0.42,  maxC: 0.065 },
-  { key: '600', l: 0.35,  maxC: 0.06 },
-  { key: '700', l: 0.29,  maxC: 0.055 },
-  { key: '800', l: 0.21,  maxC: 0.05 },
-  { key: '900', l: 0.18,  maxC: 0.045 },
-  { key: '950', l: 0.12,  maxC: 0.04 },
+  { key: '50',  l: 0.965, maxC: 0.008 },
+  { key: '100', l: 0.905, maxC: 0.014 },
+  { key: '200', l: 0.845, maxC: 0.018 },
+  { key: '300', l: 0.695, maxC: 0.025 },
+  { key: '400', l: 0.545, maxC: 0.03 },
+  { key: '500', l: 0.42,  maxC: 0.028 },
+  { key: '600', l: 0.35,  maxC: 0.025 },
+  { key: '700', l: 0.29,  maxC: 0.022 },
+  { key: '800', l: 0.21,  maxC: 0.02 },
+  { key: '900', l: 0.18,  maxC: 0.018 },
+  { key: '950', l: 0.12,  maxC: 0.015 },
 ];
 
 /**
