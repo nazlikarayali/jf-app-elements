@@ -3,6 +3,7 @@ import { Header } from './layout/Header';
 import { SidebarLeft } from './layout/SidebarLeft';
 import { SidebarRight } from './layout/SidebarRight';
 import { MainContent } from './layout/MainContent';
+import { ThemesView } from './layout/ThemesView';
 import { ComponentRegistry, type RegisteredComponent } from './types/registry';
 import type { VariantValues, PropertyValues, StateValues } from './types/component';
 import './styles/app.scss';
@@ -20,7 +21,10 @@ import './components/ImageGallery/register';
 import './components/SocialFollow/register';
 import './components/Form/register';
 
+type AppMode = 'components' | 'themes';
+
 function App() {
+  const [mode, setMode] = useState<AppMode>('components');
   const [components, setComponents] = useState<RegisteredComponent[]>(ComponentRegistry.getAll());
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [variants, setVariants] = useState<VariantValues>({});
@@ -40,6 +44,7 @@ function App() {
     if (!comp) return;
 
     setSelectedId(id);
+    setMode('components');
 
     const newVariants: VariantValues = {};
     for (const [group, config] of Object.entries(comp.variants)) {
@@ -74,28 +79,34 @@ function App() {
 
   return (
     <div className="app">
-      <Header />
+      <Header mode={mode} onModeChange={setMode} />
       <div className="app-body">
-        <SidebarLeft
-          selectedId={selectedId}
-          onSelect={handleSelect}
-          components={components}
-        />
-        <MainContent
-          component={selectedComponent}
-          variants={variants}
-          properties={properties}
-          states={states}
-        />
-        <SidebarRight
-          component={selectedComponent}
-          variants={variants}
-          properties={properties}
-          states={states}
-          onVariantChange={handleVariantChange}
-          onPropertyChange={handlePropertyChange}
-          onStateChange={handleStateChange}
-        />
+        {mode === 'components' ? (
+          <>
+            <SidebarLeft
+              selectedId={selectedId}
+              onSelect={handleSelect}
+              components={components}
+            />
+            <MainContent
+              component={selectedComponent}
+              variants={variants}
+              properties={properties}
+              states={states}
+            />
+            <SidebarRight
+              component={selectedComponent}
+              variants={variants}
+              properties={properties}
+              states={states}
+              onVariantChange={handleVariantChange}
+              onPropertyChange={handlePropertyChange}
+              onStateChange={handleStateChange}
+            />
+          </>
+        ) : (
+          <ThemesView />
+        )}
       </div>
     </div>
   );
