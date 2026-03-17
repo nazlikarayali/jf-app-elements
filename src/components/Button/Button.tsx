@@ -1,0 +1,108 @@
+import type React from 'react';
+import { icons } from 'lucide-react';
+import './Button.scss';
+
+// ============================================
+// Types
+// ============================================
+export type ButtonVariant = 'Default' | 'Secondary' | 'Outlined' | 'Disabled';
+export type ButtonCorner = 'Default' | 'Rounded';
+export type ButtonState = 'Default' | 'Hovered' | 'Disabled';
+export type ButtonSize = 'Default' | 'Small';
+
+export interface ButtonProps {
+  variant?: ButtonVariant;
+  corner?: ButtonCorner;
+  size?: ButtonSize;
+  state?: ButtonState;
+  label?: string;
+  leftIcon?: string;
+  rightIcon?: string;
+  iconOnly?: boolean;
+  iconOnlyIcon?: string;
+  iconOnlyFilled?: boolean;
+  shrinked?: boolean;
+  fullWidth?: boolean;
+  onClick?: () => void;
+}
+
+// ============================================
+// Dynamic Icon Renderer
+// ============================================
+const DynamicIcon: React.FC<{ name: string; className?: string; size?: number }> = ({ name, className, size: iconSize = 20 }) => {
+  if (!name || name === 'none') return null;
+  const Icon = icons[name as keyof typeof icons];
+  if (!Icon) return null;
+  return <Icon className={className} size={iconSize} />;
+};
+
+// ============================================
+// Button Component
+// ============================================
+export const Button: React.FC<ButtonProps> = ({
+  variant = 'Default',
+  corner = 'Default',
+  size = 'Default',
+  state = 'Default',
+  label = 'Button',
+  leftIcon = 'Plus',
+  rightIcon = 'Plus',
+  iconOnly = false,
+  iconOnlyIcon = 'Plus',
+  iconOnlyFilled = true,
+  shrinked = false,
+  fullWidth = false,
+  onClick,
+}) => {
+  const isDisabled = state === 'Disabled' || variant === 'Disabled';
+
+  // =====================
+  // Icon Only Mode
+  // =====================
+  if (iconOnly) {
+    const iconOnlyClasses = [
+      'jf-btn-icon',
+      iconOnlyFilled ? 'jf-btn-icon--filled' : 'jf-btn-icon--ghost',
+      corner === 'Rounded' ? 'jf-btn-icon--rounded' : 'jf-btn-icon--default',
+      state === 'Hovered' && 'jf-btn-icon--hovered',
+      isDisabled && 'jf-btn-icon--disabled',
+    ].filter(Boolean).join(' ');
+
+    return (
+      <button className={iconOnlyClasses} disabled={isDisabled} onClick={onClick}>
+        <DynamicIcon name={iconOnlyIcon} className="jf-btn-icon__icon" size={24} />
+      </button>
+    );
+  }
+
+  // =====================
+  // Standard Button
+  // =====================
+  const hasLeftIcon = leftIcon && leftIcon !== 'none';
+  const hasRightIcon = rightIcon && rightIcon !== 'none';
+
+  const classes = [
+    'jf-btn',
+    `jf-btn--${variant.toLowerCase()}`,
+    `jf-btn--corner-${corner.toLowerCase()}`,
+    `jf-btn--size-${size.toLowerCase()}`,
+    state === 'Hovered' && 'jf-btn--hovered',
+    isDisabled && 'jf-btn--disabled',
+    shrinked && 'jf-btn--shrinked',
+    fullWidth && 'jf-btn--full-width',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const iconSize = size === 'Small' ? 16 : 20;
+
+  return (
+    <button className={classes} disabled={isDisabled} onClick={onClick}>
+      {hasLeftIcon && <DynamicIcon name={leftIcon} className="jf-btn__icon" size={iconSize} />}
+      <span className="jf-btn__label">{label}</span>
+      {hasRightIcon && <DynamicIcon name={rightIcon} className="jf-btn__icon" size={iconSize} />}
+    </button>
+  );
+};
+
+export default Button;
