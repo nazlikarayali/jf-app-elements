@@ -29,7 +29,7 @@ export const SignDocument: FC<SignDocumentProps> = ({
   const isCenter = alignment === 'Center';
   const isNormal = size === 'Normal';
 
-  const iconSize = isNormal ? 56 : 100;
+  const iconSize = isNormal ? 60 : 100;
   const iconInner = isNormal ? 32 : 52;
 
   const rootClasses = [

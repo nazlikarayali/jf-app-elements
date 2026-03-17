@@ -54,23 +54,23 @@ ComponentRegistry.register({
 
   colorTokens: [
     // Default variant
-    { token: 'Background', variable: '--bg-fill-brand', value: '#7D38EF', description: 'Fill color (primary-600)', variants: { Variant: 'Default' } },
-    { token: 'Hover', variable: '--bg-fill-brand-hover', value: '#6D29D8', description: 'Hover fill (primary-700)', variants: { Variant: 'Default' } },
-    { token: 'Disabled', variable: '--bg-fill-brand-disabled', value: '#DBD6FA', description: 'Disabled fill (primary-200)', variants: { Variant: 'Default' } },
-    { token: 'Text', variable: '--fg-inverse', value: '#FFFFFF', description: 'Label color', variants: { Variant: 'Default' } },
+    { token: 'Background', variable: '--bg-fill-brand', value: '#7D38EF', description: 'Fill color (primary-600)', variants: { Type: 'Standard', Variant: 'Default' } },
+    { token: 'Hover', variable: '--bg-fill-brand-hover', value: '#6D29D8', description: 'Hover fill (primary-700)', variants: { Type: 'Standard', Variant: 'Default' } },
+    { token: 'Disabled', variable: '--bg-fill-brand-disabled', value: '#DBD6FA', description: 'Disabled fill (primary-200)', variants: { Type: 'Standard', Variant: 'Default' } },
+    { token: 'Text', variable: '--fg-inverse', value: '#FFFFFF', description: 'Label color', variants: { Type: 'Standard', Variant: 'Default' } },
     // Secondary variant
-    { token: 'Background', variable: '--bg-fill-secondary', value: '#DADEF3', description: 'Fill color (neutral-100)', variants: { Variant: 'Secondary' } },
-    { token: 'Hover', variable: '--bg-fill-secondary-hover', value: '#C8CEED', description: 'Hover fill (neutral-200)', variants: { Variant: 'Secondary' } },
-    { token: 'Disabled', variable: '--neutral-50', value: '#F3F3FE', description: 'Disabled fill (neutral-50)', variants: { Variant: 'Secondary' } },
-    { token: 'Text', variable: '--fg-primary', value: '#091141', description: 'Label color (neutral-900)', variants: { Variant: 'Secondary' } },
-    { token: 'Disabled Text', variable: '--fg-disabled', value: '#979DC6', description: 'Disabled label (neutral-300)', variants: { Variant: 'Secondary' } },
+    { token: 'Background', variable: '--bg-fill-secondary', value: '#DADEF3', description: 'Fill color (neutral-100)', variants: { Type: 'Standard', Variant: 'Secondary' } },
+    { token: 'Hover', variable: '--bg-fill-secondary-hover', value: '#C8CEED', description: 'Hover fill (neutral-200)', variants: { Type: 'Standard', Variant: 'Secondary' } },
+    { token: 'Disabled', variable: '--neutral-50', value: '#F3F3FE', description: 'Disabled fill (neutral-50)', variants: { Type: 'Standard', Variant: 'Secondary' } },
+    { token: 'Text', variable: '--fg-primary', value: '#091141', description: 'Label color (neutral-900)', variants: { Type: 'Standard', Variant: 'Secondary' } },
+    { token: 'Disabled Text', variable: '--fg-disabled', value: '#979DC6', description: 'Disabled label (neutral-300)', variants: { Type: 'Standard', Variant: 'Secondary' } },
     // Outlined variant
-    { token: 'Border', variable: '--border', value: '#DADEF3', description: 'Border color (neutral-100)', variants: { Variant: 'Outlined' } },
-    { token: 'Hover Border', variable: '--border-hover', value: '#C8CEED', description: 'Hover border (neutral-200)', variants: { Variant: 'Outlined' } },
-    { token: 'Hover BG', variable: '--bg-fill-hover', value: '#F3F3FE', description: 'Hover fill (neutral-50)', variants: { Variant: 'Outlined' } },
-    { token: 'Text', variable: '--fg-primary', value: '#091141', description: 'Label color (neutral-900)', variants: { Variant: 'Outlined' } },
-    { token: 'Disabled Border', variable: '--border-disabled', value: '#F3F3FE', description: 'Disabled border (neutral-50)', variants: { Variant: 'Outlined' } },
-    { token: 'Disabled Text', variable: '--fg-disabled', value: '#979DC6', description: 'Disabled label (neutral-300)', variants: { Variant: 'Outlined' } },
+    { token: 'Border', variable: '--border', value: '#DADEF3', description: 'Border color (neutral-100)', variants: { Type: 'Standard', Variant: 'Outlined' } },
+    { token: 'Hover Border', variable: '--border-hover', value: '#C8CEED', description: 'Hover border (neutral-200)', variants: { Type: 'Standard', Variant: 'Outlined' } },
+    { token: 'Hover BG', variable: '--bg-fill-hover', value: '#F3F3FE', description: 'Hover fill (neutral-50)', variants: { Type: 'Standard', Variant: 'Outlined' } },
+    { token: 'Text', variable: '--fg-primary', value: '#091141', description: 'Label color (neutral-900)', variants: { Type: 'Standard', Variant: 'Outlined' } },
+    { token: 'Disabled Border', variable: '--border-disabled', value: '#F3F3FE', description: 'Disabled border (neutral-50)', variants: { Type: 'Standard', Variant: 'Outlined' } },
+    { token: 'Disabled Text', variable: '--fg-disabled', value: '#979DC6', description: 'Disabled label (neutral-300)', variants: { Type: 'Standard', Variant: 'Outlined' } },
     // Icon Only - Filled
     { token: 'Background', variable: '--bg-fill-brand', value: '#7D38EF', description: 'Icon button bg (primary-600)', variants: { Type: 'Icon Only', Filled: 'Yes' } },
     { token: 'Hover', variable: '--bg-fill-brand-hover', value: '#6D29D8', description: 'Hover bg (primary-700)', variants: { Type: 'Icon Only', Filled: 'Yes' } },

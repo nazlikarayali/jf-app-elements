@@ -1,0 +1,135 @@
+import { ComponentRegistry } from '../../types/registry';
+import { Form } from './Form';
+import type { FormAlignment, FormSize } from './Form';
+import type { VariantValues, PropertyValues, StateValues } from '../../types/component';
+import formScss from './Form.scss?raw';
+
+ComponentRegistry.register({
+  id: 'form',
+  name: 'Form',
+  category: 'Data Display',
+  icon: 'ClipboardList',
+
+  variants: {
+    Alignment: {
+      options: ['Left', 'Center', 'Right'],
+      default: 'Left',
+    },
+    Size: {
+      options: ['Normal', 'Large'],
+      default: 'Normal',
+    },
+  },
+
+  properties: [
+    { name: 'Label', type: 'text', default: 'Form' },
+    { name: 'Description', type: 'text', default: 'Type a description' },
+    { name: 'Show Icon', type: 'boolean', default: true },
+    { name: 'Required', type: 'boolean', default: true },
+    { name: 'Selected', type: 'boolean', default: false },
+    { name: 'Shrinked', type: 'boolean', default: false },
+  ],
+
+  states: [],
+
+  scss: formScss,
+
+  colorTokens: [
+    { token: 'Background', variable: '--bg-surface', value: '#FFFFFF', description: 'Card background' },
+    { token: 'Border', variable: '--border', value: '#DADEF3', description: 'Card border (neutral-100)' },
+    { token: 'Icon BG', variable: '--bg-surface-brand', value: '#EDE8FE', description: 'Icon background (primary-100)' },
+    { token: 'Icon Color', variable: '--fg-brand', value: '#7D38EF', description: 'Icon color (primary-600)' },
+    { token: 'Title', variable: '--fg-primary', value: '#091141', description: 'Label text (neutral-900)' },
+    { token: 'Description', variable: '--fg-disabled', value: '#979DC6', description: 'Description text (neutral-300)' },
+    { token: 'Badge BG', variable: '--fg-error', value: '#DF2125', description: 'Required badge (Red-600)' },
+    { token: 'Badge Icon', variable: '--fg-inverse', value: '#FFFFFF', description: 'Asterisk icon color' },
+    { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected border (Sky-500)' },
+  ],
+
+  usage: `import { Form } from '@/components/Form';
+
+// Default form with required badge
+<Form
+  label="Form"
+  description="Fill out the registration form"
+  required={true}
+/>
+
+// Large size, centered
+<Form
+  alignment="Center"
+  size="Large"
+  label="Survey"
+  description="Share your feedback"
+/>
+
+// Without required badge
+<Form
+  label="Contact Form"
+  description="Optional feedback"
+  required={false}
+/>`,
+
+  propDocs: [
+    {
+      name: 'alignment',
+      type: '"Left" | "Center" | "Right"',
+      default: '"Left"',
+      description:
+        'Controls the layout direction. **Left** and **Right** render horizontally. **Center** stacks icon above text.',
+    },
+    {
+      name: 'size',
+      type: '"Normal" | "Large"',
+      default: '"Normal"',
+      description:
+        'Controls icon and text size. **Normal**: 60px icon, 14/12px text. **Large**: 100px icon, 16/14px text.',
+    },
+    {
+      name: 'label',
+      type: 'string',
+      default: '"Form"',
+      description: 'The form name displayed as the primary text.',
+    },
+    {
+      name: 'description',
+      type: 'string',
+      default: '"Type a description"',
+      description: 'Secondary text below the label.',
+    },
+    {
+      name: 'required',
+      type: 'boolean',
+      default: 'true',
+      description:
+        'When `true`, shows a red circular badge with an asterisk icon indicating the form is required.',
+    },
+    {
+      name: 'selected',
+      type: 'boolean',
+      default: 'false',
+      description: 'When `true`, applies a 2px `border-info` border.',
+    },
+    {
+      name: 'shrinked',
+      type: 'boolean',
+      default: 'false',
+      description: 'When `true`, constrains width to 300px.',
+    },
+  ],
+
+  render(variants: VariantValues, props: PropertyValues, _states: StateValues): React.ReactNode {
+    return (
+      <Form
+        alignment={variants['Alignment'] as FormAlignment}
+        size={variants['Size'] as FormSize}
+        label={props['Label'] as string}
+        description={props['Description'] as string}
+        showIcon={props['Show Icon'] as boolean}
+        required={props['Required'] as boolean}
+        selected={props['Selected'] as boolean}
+        shrinked={props['Shrinked'] as boolean}
+      />
+    );
+  },
+});
