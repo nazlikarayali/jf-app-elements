@@ -11,14 +11,41 @@ import { Form } from '../components/Form';
 import { SocialFollow } from '../components/SocialFollow';
 import { List } from '../components/List';
 import { ProductList } from '../components/ProductList';
-import { ImageGallery } from '../components/ImageGallery';
 
 const DEFAULT_COLOR = '#7D38EF';
+const DEFAULT_FONT = 'Inter';
 
 const PRESET_COLORS = [
   '#7D38EF', '#DF2125', '#0385C8', '#19A44B', '#F97101', '#DC7801',
   '#E91E63', '#00B5D4', '#8D5DF9', '#64A501',
 ];
+
+const FONT_OPTIONS = [
+  'Inter',
+  'Frances',
+  'IBM Plex Mono',
+  'Fredoka',
+  'JetBrains Mono',
+  'Instrument Sans',
+  'Figtree',
+  'Hanken Grotesk',
+  'Geist',
+  'DM Sans',
+  'Public Sans',
+  'Google Sans',
+  'Bricolage Grotesque',
+  'Varela Round',
+];
+
+function loadGoogleFont(fontName: string) {
+  const id = `gfont-${fontName.replace(/\s+/g, '-')}`;
+  if (document.getElementById(id)) return;
+  const link = document.createElement('link');
+  link.id = id;
+  link.rel = 'stylesheet';
+  link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontName)}:wght@400;500;600;700&display=swap`;
+  document.head.appendChild(link);
+}
 
 function applyPaletteToDOM(palette: PaletteShade[]) {
   const root = document.documentElement;
@@ -68,7 +95,8 @@ function resetPalette() {
 
 export function ThemesView() {
   const [color, setColor] = useState(DEFAULT_COLOR);
-  const [palette, setPalette] = useState<PaletteShade[]>(() => generatePalette(DEFAULT_COLOR));
+  const [font, setFont] = useState(DEFAULT_FONT);
+  const [, setPalette] = useState<PaletteShade[]>(() => generatePalette(DEFAULT_COLOR));
 
   const handleColorChange = useCallback((newColor: string) => {
     setColor(newColor);
@@ -77,15 +105,26 @@ export function ThemesView() {
     applyPaletteToDOM(newPalette);
   }, []);
 
+  const handleFontChange = useCallback((newFont: string) => {
+    setFont(newFont);
+    loadGoogleFont(newFont);
+    document.documentElement.style.setProperty('--font-family', `'${newFont}', -apple-system, BlinkMacSystemFont, sans-serif`);
+  }, []);
+
   const handleReset = useCallback(() => {
     setColor(DEFAULT_COLOR);
+    setFont(DEFAULT_FONT);
     const newPalette = generatePalette(DEFAULT_COLOR);
     setPalette(newPalette);
     resetPalette();
+    document.documentElement.style.removeProperty('--font-family');
   }, []);
 
   useEffect(() => {
-    return () => resetPalette();
+    return () => {
+      resetPalette();
+      document.documentElement.style.removeProperty('--font-family');
+    };
   }, []);
 
   return (
@@ -132,16 +171,16 @@ export function ThemesView() {
         </div>
 
         <div className="themes-view__sidebar-section">
-          <h3 className="themes-view__sidebar-title">Palette</h3>
-          <div className="themes-view__palette-list">
-            {palette.map((shade) => (
-              <div className="themes-view__palette-row" key={shade.key}>
-                <div className="themes-view__palette-swatch" style={{ background: shade.hex }} />
-                <span className="themes-view__palette-key">{shade.key}</span>
-                <span className="themes-view__palette-hex">{shade.hex}</span>
-              </div>
+          <h3 className="themes-view__sidebar-title">Font Family</h3>
+          <select
+            className="themes-view__font-select"
+            value={font}
+            onChange={(e) => handleFontChange(e.target.value)}
+          >
+            {FONT_OPTIONS.map((f) => (
+              <option key={f} value={f}>{f}</option>
             ))}
-          </div>
+          </select>
         </div>
 
         <button className="themes-view__reset" onClick={handleReset}>Reset to Default</button>
@@ -149,6 +188,7 @@ export function ThemesView() {
 
       {/* Right: Preview as App Page */}
       <main className="themes-view__preview">
+        <div className="themes-view__canvas">
         <div className="themes-view__app">
           {/* Hero Section */}
           <section className="themes-view__section">
@@ -159,11 +199,6 @@ export function ThemesView() {
             </div>
           </section>
 
-          {/* Image Gallery */}
-          <section className="themes-view__section">
-            <ImageGallery layout="6" />
-          </section>
-
           {/* Products */}
           <section className="themes-view__section">
             <ProductList title="Featured Products" buttonLabel="Add to Cart" />
@@ -172,17 +207,15 @@ export function ThemesView() {
           {/* Cards Row */}
           <section className="themes-view__section">
             <Heading size="Small" heading="Our Services" subheading="What we offer" />
-            <div className="themes-view__cards-row">
-              <Card imageStyle="Icon" layout="Vertical" action="Button" title="Consulting" description="Expert guidance for your business" buttonLabel="Book Now" />
-              <Card imageStyle="Icon" layout="Vertical" action="Button" title="Design" description="Beautiful interfaces that convert" buttonLabel="View Work" />
-              <Card imageStyle="Icon" layout="Vertical" action="Button" title="Development" description="Scalable solutions built to last" buttonLabel="Start Project" />
-            </div>
+            <Card imageStyle="Icon" layout="Horizontal" action="Button" title="Consulting" description="Expert guidance for your business" buttonLabel="Book Now" />
+            <Card imageStyle="Icon" layout="Horizontal" action="Button" title="Design" description="Beautiful interfaces that convert" buttonLabel="View Work" />
+            <Card imageStyle="Icon" layout="Horizontal" action="Button" title="Development" description="Scalable solutions built to last" buttonLabel="Start Project" />
           </section>
 
           {/* List Section */}
           <section className="themes-view__section">
             <Heading size="Small" heading="Recent Updates" subheading="Stay up to date" />
-            <List layout="Basic" imageStyle="Square" size="Regular" action="Icon" items={[
+            <List layout="Basic" imageStyle="Square" size="Regular" action="Icon" actionIconFilled={false} items={[
               { title: 'New feature release v2.5', description: 'Performance improvements and bug fixes' },
               { title: 'Community meetup next week', description: 'Join us for the monthly gathering' },
               { title: 'Partnership announcement', description: 'Exciting collaboration coming soon' },
@@ -217,13 +250,8 @@ export function ThemesView() {
           {/* Footer: Social + Buttons */}
           <section className="themes-view__section themes-view__section--center themes-view__section--footer">
             <SocialFollow filled />
-            <div className="themes-view__btn-row">
-              <Button variant="Default" size="Small" label="Subscribe" leftIcon="Mail" rightIcon="none" shrinked />
-              <Button variant="Secondary" size="Small" label="Share" leftIcon="Share2" rightIcon="none" shrinked />
-              <Button iconOnly iconOnlyIcon="Heart" iconOnlyFilled={false} corner="Rounded" />
-              <Button iconOnly iconOnlyIcon="Bookmark" iconOnlyFilled={false} corner="Rounded" />
-            </div>
           </section>
+        </div>
         </div>
       </main>
     </div>
