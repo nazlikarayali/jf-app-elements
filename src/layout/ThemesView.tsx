@@ -172,15 +172,27 @@ export function ThemesView() {
 
         <div className="themes-view__sidebar-section">
           <h3 className="themes-view__sidebar-title">Font Family</h3>
-          <select
-            className="themes-view__font-select"
-            value={font}
-            onChange={(e) => handleFontChange(e.target.value)}
-          >
-            {FONT_OPTIONS.map((f) => (
-              <option key={f} value={f}>{f}</option>
-            ))}
-          </select>
+          <div className="themes-view__font-list">
+            {FONT_OPTIONS.map((f) => {
+              loadGoogleFont(f);
+              return (
+                <button
+                  key={f}
+                  className={`themes-view__font-item${font === f ? ' active' : ''}`}
+                  style={{ fontFamily: `'${f}', sans-serif` }}
+                  onClick={() => handleFontChange(f)}
+                  onMouseEnter={() => {
+                    document.documentElement.style.setProperty('--font-family', `'${f}', -apple-system, BlinkMacSystemFont, sans-serif`);
+                  }}
+                  onMouseLeave={() => {
+                    document.documentElement.style.setProperty('--font-family', `'${font}', -apple-system, BlinkMacSystemFont, sans-serif`);
+                  }}
+                >
+                  {f}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <button className="themes-view__reset" onClick={handleReset}>Reset to Default</button>
