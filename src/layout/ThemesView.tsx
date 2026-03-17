@@ -79,6 +79,9 @@ function applyPaletteToDOM(palette: PaletteShade[]) {
     map[shade.key] = shade.hex;
   }
 
+  // Only set primitive palette — semantic tokens reference these via var()
+  // so dark mode CSS mappings (e.g. --bg-fill-brand: var(--primary-400))
+  // work correctly without being overridden by inline styles.
   root.style.setProperty('--primary-50', map['50']);
   root.style.setProperty('--primary-100', map['100']);
   root.style.setProperty('--primary-200', map['200']);
@@ -90,19 +93,6 @@ function applyPaletteToDOM(palette: PaletteShade[]) {
   root.style.setProperty('--primary-800', map['800']);
   root.style.setProperty('--primary-900', map['900']);
   root.style.setProperty('--primary-950', map['950']);
-
-  root.style.setProperty('--bg-surface-brand', map['100']);
-  root.style.setProperty('--bg-surface-brand-hover', map['200']);
-  root.style.setProperty('--bg-fill-brand', map['600']);
-  root.style.setProperty('--bg-fill-brand-hover', map['700']);
-  root.style.setProperty('--bg-fill-brand-active', map['700']);
-  root.style.setProperty('--bg-fill-brand-disabled', map['200']);
-  root.style.setProperty('--fg-brand', map['600']);
-  root.style.setProperty('--fg-brand-hover', map['700']);
-  root.style.setProperty('--border-brand', map['200']);
-  root.style.setProperty('--color-primary', map['600']);
-  root.style.setProperty('--color-primary-hover', map['700']);
-  root.style.setProperty('--color-primary-light', map['50']);
 }
 
 function hslHueToHex(h: number): string {
@@ -142,10 +132,6 @@ function resetPalette() {
   const props = [
     '--primary-50', '--primary-100', '--primary-200', '--primary-300', '--primary-400',
     '--primary-500', '--primary-600', '--primary-700', '--primary-800', '--primary-900', '--primary-950',
-    '--bg-surface-brand', '--bg-surface-brand-hover',
-    '--bg-fill-brand', '--bg-fill-brand-hover', '--bg-fill-brand-active', '--bg-fill-brand-disabled',
-    '--fg-brand', '--fg-brand-hover', '--border-brand',
-    '--color-primary', '--color-primary-hover', '--color-primary-light',
   ];
   props.forEach(p => root.style.removeProperty(p));
 }
