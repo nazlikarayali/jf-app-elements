@@ -18,26 +18,23 @@ const DEFAULT_RADIUS = 'Medium';
 
 type RadiusScale = 'Small' | 'Medium' | 'Large' | 'XLarge';
 
-const RADIUS_PRESETS: Record<RadiusScale, { sm: string; md: string; lg: string; xl: string; xxl: string }> = {
-  Small:  { sm: '2px', md: '4px', lg: '6px', xl: '8px', xxl: '12px' },
-  Medium: { sm: '4px', md: '8px', lg: '12px', xl: '16px', xxl: '24px' },
-  Large:  { sm: '8px', md: '12px', lg: '16px', xl: '24px', xxl: '32px' },
-  XLarge: { sm: '12px', md: '16px', lg: '24px', xl: '32px', xxl: '40px' },
-};
+const RADIUS_MODES: { scale: RadiusScale; lg: string }[] = [
+  { scale: 'Small', lg: '6px' },
+  { scale: 'Medium', lg: '12px' },
+  { scale: 'Large', lg: '16px' },
+  { scale: 'XLarge', lg: '24px' },
+];
 
 function applyRadius(scale: RadiusScale) {
-  const root = document.documentElement;
-  const values = RADIUS_PRESETS[scale];
-  root.style.setProperty('--radius-sm', values.sm);
-  root.style.setProperty('--radius-md', values.md);
-  root.style.setProperty('--radius-lg', values.lg);
-  root.style.setProperty('--radius-xl', values.xl);
-  root.style.setProperty('--radius-xxl', values.xxl);
+  if (scale === 'Medium') {
+    document.documentElement.removeAttribute('data-radius');
+  } else {
+    document.documentElement.setAttribute('data-radius', scale.toLowerCase());
+  }
 }
 
 function resetRadius() {
-  const root = document.documentElement;
-  ['--radius-sm', '--radius-md', '--radius-lg', '--radius-xl', '--radius-xxl'].forEach(p => root.style.removeProperty(p));
+  document.documentElement.removeAttribute('data-radius');
 }
 
 const PRESET_COLORS = [
@@ -232,13 +229,13 @@ export function ThemesView() {
         <div className="themes-view__sidebar-section">
           <h3 className="themes-view__sidebar-title">Border Radius</h3>
           <div className="themes-view__radius-options">
-            {(['Small', 'Medium', 'Large', 'XLarge'] as RadiusScale[]).map((scale) => (
+            {RADIUS_MODES.map(({ scale, lg }) => (
               <button
                 key={scale}
                 className={`themes-view__radius-btn${radius === scale ? ' active' : ''}`}
                 onClick={() => handleRadiusChange(scale)}
               >
-                <div className="themes-view__radius-preview" style={{ borderRadius: RADIUS_PRESETS[scale].lg }} />
+                <div className="themes-view__radius-preview" style={{ borderRadius: lg }} />
                 <span>{scale}</span>
               </button>
             ))}
