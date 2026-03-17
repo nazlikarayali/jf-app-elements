@@ -60,19 +60,36 @@ function hexToOklchHue(hex: string): number {
   return Math.round(hue);
 }
 
+// Dark mode: inverted lightness scale
+const NEUTRAL_SHADES_DARK: { key: string; l: number; maxC: number }[] = [
+  { key: '0',   l: 0.13,  maxC: 0.015 },
+  { key: '50',  l: 0.17,  maxC: 0.015 },
+  { key: '100', l: 0.22,  maxC: 0.015 },
+  { key: '200', l: 0.28,  maxC: 0.018 },
+  { key: '300', l: 0.38,  maxC: 0.02 },
+  { key: '400', l: 0.50,  maxC: 0.025 },
+  { key: '500', l: 0.62,  maxC: 0.025 },
+  { key: '600', l: 0.72,  maxC: 0.02 },
+  { key: '700', l: 0.80,  maxC: 0.018 },
+  { key: '800', l: 0.87,  maxC: 0.015 },
+  { key: '900', l: 0.93,  maxC: 0.01 },
+  { key: '950', l: 0.97,  maxC: 0.005 },
+];
+
 /**
  * Generate tinted neutral palette using OKLCH
  * @param brandHex - Brand color hex to extract hue from
  * @param tintAmount - 0 (pure grey) to 100 (fully tinted)
+ * @param darkMode - Whether to use inverted lightness for dark mode
  * @returns Array of shades with oklch() CSS values
  */
-function generateNeutralPalette(brandHex: string, tintAmount: number): NeutralShade[] {
+function generateNeutralPalette(brandHex: string, tintAmount: number, darkMode = false): NeutralShade[] {
   const hue = hexToOklchHue(brandHex);
   const tint = Math.max(0, Math.min(100, tintAmount)) / 100;
+  const shades = darkMode ? NEUTRAL_SHADES_DARK : NEUTRAL_SHADES;
 
-  return NEUTRAL_SHADES.map(({ key, l, maxC }) => {
+  return shades.map(({ key, l, maxC }) => {
     const chroma = maxC * tint;
-    // Use oklch() CSS native function — no conversion needed
     const css = chroma === 0
       ? `oklch(${l} 0 0)`
       : `oklch(${l} ${chroma.toFixed(4)} ${hue})`;

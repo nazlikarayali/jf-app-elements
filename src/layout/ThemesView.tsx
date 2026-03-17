@@ -150,6 +150,10 @@ function resetPalette() {
   props.forEach(p => root.style.removeProperty(p));
 }
 
+function isDarkMode(): boolean {
+  return document.documentElement.getAttribute('data-theme') === 'dark';
+}
+
 export function ThemesView() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [color, setColor] = useState(DEFAULT_COLOR);
@@ -165,7 +169,7 @@ export function ThemesView() {
     const newPalette = generatePalette(newColor);
     setPalette(newPalette);
     applyPaletteToDOM(newPalette);
-    const neutralPalette = generateNeutralPalette(newColor, tint);
+    const neutralPalette = generateNeutralPalette(newColor, tint, isDarkMode());
     applyNeutralToDOM(neutralPalette);
   }, [tint]);
 
@@ -176,13 +180,13 @@ export function ThemesView() {
     const newPalette = generatePalette(newColor);
     setPalette(newPalette);
     applyPaletteToDOM(newPalette);
-    const neutralPalette = generateNeutralPalette(newColor, tint);
+    const neutralPalette = generateNeutralPalette(newColor, tint, isDarkMode());
     applyNeutralToDOM(neutralPalette);
   }, [tint]);
 
   const handleTintChange = useCallback((newTint: number) => {
     setTint(newTint);
-    const neutralPalette = generateNeutralPalette(color, newTint);
+    const neutralPalette = generateNeutralPalette(color, newTint, isDarkMode());
     applyNeutralToDOM(neutralPalette);
   }, [color]);
 
@@ -213,15 +217,23 @@ export function ThemesView() {
 
   useEffect(() => {
     // Apply initial tint
-    const neutralPalette = generateNeutralPalette(DEFAULT_COLOR, DEFAULT_TINT);
+    const neutralPalette = generateNeutralPalette(DEFAULT_COLOR, DEFAULT_TINT, isDarkMode());
     applyNeutralToDOM(neutralPalette);
+    // Re-apply neutrals when theme toggles
+    const observer = new MutationObserver(() => {
+      const np = generateNeutralPalette(color, tint, isDarkMode());
+      applyNeutralToDOM(np);
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
     return () => {
+      observer.disconnect();
       resetPalette();
       resetNeutral();
       resetRadius(canvasRef.current);
       document.documentElement.style.removeProperty('--font-family');
     };
-  }, []);
+  }, [color, tint]);
 
   return (
     <div className="themes-view">
