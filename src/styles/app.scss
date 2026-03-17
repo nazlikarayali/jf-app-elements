@@ -272,8 +272,8 @@
   --bg-fill-error: oklch(0.65 0.18 25);
 
   // ---- Foreground ----
-  // fg-inverse should be dark for text on light brand buttons
-  --fg-inverse: var(--neutral-0);
+  // fg-inverse stays white in dark mode — brand buttons always have dark bg
+  --fg-inverse: #FFFFFF;
   --fg-primary: var(--neutral-900);
   --fg-secondary: var(--neutral-600);
   --fg-tertiary: var(--neutral-400);
