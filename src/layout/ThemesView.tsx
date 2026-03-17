@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { generatePalette } from '../utils/colorPalette';
 import type { PaletteShade } from '../utils/colorPalette';
 import { Card } from '../components/Card';
@@ -25,16 +25,17 @@ const RADIUS_MODES: { scale: RadiusScale; lg: string }[] = [
   { scale: 'XLarge', lg: '24px' },
 ];
 
-function applyRadius(scale: RadiusScale) {
+function applyRadius(scale: RadiusScale, canvas: HTMLElement | null) {
+  if (!canvas) return;
   if (scale === 'Medium') {
-    document.documentElement.removeAttribute('data-radius');
+    canvas.removeAttribute('data-radius');
   } else {
-    document.documentElement.setAttribute('data-radius', scale.toLowerCase());
+    canvas.setAttribute('data-radius', scale.toLowerCase());
   }
 }
 
-function resetRadius() {
-  document.documentElement.removeAttribute('data-radius');
+function resetRadius(canvas: HTMLElement | null) {
+  if (canvas) canvas.removeAttribute('data-radius');
 }
 
 const PRESET_COLORS = [
@@ -116,6 +117,7 @@ function resetPalette() {
 }
 
 export function ThemesView() {
+  const canvasRef = useRef<HTMLDivElement>(null);
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [font, setFont] = useState(DEFAULT_FONT);
   const [radius, setRadius] = useState<RadiusScale>(DEFAULT_RADIUS as RadiusScale);
@@ -136,7 +138,7 @@ export function ThemesView() {
 
   const handleRadiusChange = useCallback((scale: RadiusScale) => {
     setRadius(scale);
-    applyRadius(scale);
+    applyRadius(scale, canvasRef.current);
   }, []);
 
   const handleReset = useCallback(() => {
@@ -146,14 +148,14 @@ export function ThemesView() {
     const newPalette = generatePalette(DEFAULT_COLOR);
     setPalette(newPalette);
     resetPalette();
-    resetRadius();
+    resetRadius(canvasRef.current);
     document.documentElement.style.removeProperty('--font-family');
   }, []);
 
   useEffect(() => {
     return () => {
       resetPalette();
-      resetRadius();
+      resetRadius(canvasRef.current);
       document.documentElement.style.removeProperty('--font-family');
     };
   }, []);
@@ -247,7 +249,7 @@ export function ThemesView() {
 
       {/* Right: Preview as App Page */}
       <main className="themes-view__preview">
-        <div className="themes-view__canvas">
+        <div className="themes-view__canvas" ref={canvasRef}>
         <div className="themes-view__app">
           {/* Hero Section */}
           <section className="themes-view__section">
