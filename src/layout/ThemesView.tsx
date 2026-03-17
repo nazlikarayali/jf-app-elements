@@ -14,6 +14,31 @@ import { ProductList } from '../components/ProductList';
 
 const DEFAULT_COLOR = '#7D38EF';
 const DEFAULT_FONT = 'Inter';
+const DEFAULT_RADIUS = 'Medium';
+
+type RadiusScale = 'Small' | 'Medium' | 'Large' | 'XLarge';
+
+const RADIUS_PRESETS: Record<RadiusScale, { sm: string; md: string; lg: string; xl: string; xxl: string }> = {
+  Small:  { sm: '2px', md: '4px', lg: '6px', xl: '8px', xxl: '12px' },
+  Medium: { sm: '4px', md: '8px', lg: '12px', xl: '16px', xxl: '24px' },
+  Large:  { sm: '8px', md: '12px', lg: '16px', xl: '24px', xxl: '32px' },
+  XLarge: { sm: '12px', md: '16px', lg: '24px', xl: '32px', xxl: '40px' },
+};
+
+function applyRadius(scale: RadiusScale) {
+  const root = document.documentElement;
+  const values = RADIUS_PRESETS[scale];
+  root.style.setProperty('--radius-sm', values.sm);
+  root.style.setProperty('--radius-md', values.md);
+  root.style.setProperty('--radius-lg', values.lg);
+  root.style.setProperty('--radius-xl', values.xl);
+  root.style.setProperty('--radius-xxl', values.xxl);
+}
+
+function resetRadius() {
+  const root = document.documentElement;
+  ['--radius-sm', '--radius-md', '--radius-lg', '--radius-xl', '--radius-xxl'].forEach(p => root.style.removeProperty(p));
+}
 
 const PRESET_COLORS = [
   '#7D38EF', '#DF2125', '#0385C8', '#19A44B', '#F97101', '#DC7801',
@@ -96,6 +121,7 @@ function resetPalette() {
 export function ThemesView() {
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [font, setFont] = useState(DEFAULT_FONT);
+  const [radius, setRadius] = useState<RadiusScale>(DEFAULT_RADIUS as RadiusScale);
   const [, setPalette] = useState<PaletteShade[]>(() => generatePalette(DEFAULT_COLOR));
 
   const handleColorChange = useCallback((newColor: string) => {
@@ -111,18 +137,26 @@ export function ThemesView() {
     document.documentElement.style.setProperty('--font-family', `'${newFont}', -apple-system, BlinkMacSystemFont, sans-serif`);
   }, []);
 
+  const handleRadiusChange = useCallback((scale: RadiusScale) => {
+    setRadius(scale);
+    applyRadius(scale);
+  }, []);
+
   const handleReset = useCallback(() => {
     setColor(DEFAULT_COLOR);
     setFont(DEFAULT_FONT);
+    setRadius(DEFAULT_RADIUS as RadiusScale);
     const newPalette = generatePalette(DEFAULT_COLOR);
     setPalette(newPalette);
     resetPalette();
+    resetRadius();
     document.documentElement.style.removeProperty('--font-family');
   }, []);
 
   useEffect(() => {
     return () => {
       resetPalette();
+      resetRadius();
       document.documentElement.style.removeProperty('--font-family');
     };
   }, []);
@@ -192,6 +226,22 @@ export function ThemesView() {
                 </button>
               );
             })}
+          </div>
+        </div>
+
+        <div className="themes-view__sidebar-section">
+          <h3 className="themes-view__sidebar-title">Border Radius</h3>
+          <div className="themes-view__radius-options">
+            {(['Small', 'Medium', 'Large', 'XLarge'] as RadiusScale[]).map((scale) => (
+              <button
+                key={scale}
+                className={`themes-view__radius-btn${radius === scale ? ' active' : ''}`}
+                onClick={() => handleRadiusChange(scale)}
+              >
+                <div className="themes-view__radius-preview" style={{ borderRadius: RADIUS_PRESETS[scale].lg }} />
+                <span>{scale}</span>
+              </button>
+            ))}
           </div>
         </div>
 
