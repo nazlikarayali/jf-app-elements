@@ -47,7 +47,7 @@ class ComponentRegistryClass {
 
   subscribe(fn: () => void) {
     this.listeners.add(fn);
-    return () => this.listeners.delete(fn);
+    return () => { this.listeners.delete(fn); };
   }
 }
 
