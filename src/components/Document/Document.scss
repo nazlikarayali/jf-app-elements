@@ -134,6 +134,13 @@
   gap: 10px;
   overflow: hidden;
 
+  &--active {
+    background: var(--bg-surface-brand);
+    height: 136px;
+    flex-direction: row;
+    gap: var(--space-2);
+  }
+
   &--selected {
     border-color: var(--border-info);
     border-radius: var(--radius-lg);
@@ -146,6 +153,10 @@
 
 .jf-doc-builder__icon {
   color: var(--fg-tertiary);
+}
+
+.jf-doc-builder__drop-icon {
+  color: var(--fg-brand);
 }
 
 .jf-doc-builder__hint {

@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import { FileText } from 'lucide-react';
+import { useState, type FC, type DragEvent } from 'react';
+import { FileText, CirclePlus } from 'lucide-react';
 import { Button } from '../Button';
 import './Document.scss';
 
@@ -27,29 +27,68 @@ export const Document: FC<DocumentProps> = ({
   selected = false,
   shrinked = false,
 }) => {
+  const [isDragging, setIsDragging] = useState(false);
+
   // =====================
   // Builder state (no file uploaded)
   // =====================
   if (!hasFile) {
     const builderClasses = [
       'jf-doc-builder',
+      isDragging && 'jf-doc-builder--active',
       selected && 'jf-doc-builder--selected',
       shrinked && 'jf-doc-builder--shrinked',
     ].filter(Boolean).join(' ');
 
+    const handleDragEnter = (e: DragEvent) => {
+      e.preventDefault();
+      setIsDragging(true);
+    };
+
+    const handleDragLeave = (e: DragEvent) => {
+      e.preventDefault();
+      if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+        setIsDragging(false);
+      }
+    };
+
+    const handleDragOver = (e: DragEvent) => {
+      e.preventDefault();
+    };
+
+    const handleDrop = (e: DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
+    };
+
     return (
-      <div className={builderClasses}>
-        <FileText size={32} className="jf-doc-builder__icon" />
-        <Button
-          variant="Default"
-          corner="Default"
-          size="Small"
-          label="Upload File"
-          leftIcon="Upload"
-          rightIcon="none"
-          shrinked
-        />
-        <span className="jf-doc-builder__hint">OR DRAG AND DROP HERE</span>
+      <div
+        className={builderClasses}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
+        {isDragging ? (
+          <>
+            <CirclePlus size={20} className="jf-doc-builder__drop-icon" />
+            <span className="jf-doc-builder__hint">DRAG AND DROP HERE</span>
+          </>
+        ) : (
+          <>
+            <FileText size={32} className="jf-doc-builder__icon" />
+            <Button
+              variant="Default"
+              corner="Default"
+              size="Small"
+              label="Upload File"
+              leftIcon="Upload"
+              rightIcon="none"
+              shrinked
+            />
+            <span className="jf-doc-builder__hint">OR DRAG AND DROP HERE</span>
+          </>
+        )}
       </div>
     );
   }
