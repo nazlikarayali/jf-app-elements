@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { generatePalette } from '../utils/colorPalette';
 import type { PaletteShade } from '../utils/colorPalette';
-import { generateNeutralPalette, applyNeutralToDOM, resetNeutral, hexToHue } from '../utils/neutralTint';
+import { generateNeutralPalette, applyNeutralToDOM, resetNeutral, hexToOklchHue } from '../utils/neutralTint';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Heading } from '../components/Heading';
@@ -217,7 +217,7 @@ export function ThemesView() {
               onChange={(e) => handleTintChange(Number(e.target.value))}
               className="themes-view__tint-range"
               style={{
-                background: `linear-gradient(to right, #808080, hsl(${hexToHue(color)}, 40%, 50%))`,
+                background: `linear-gradient(to right, #808080, oklch(0.55 0.15 ${hexToOklchHue(color)}))`,
               }}
             />
             <div className="themes-view__tint-labels">

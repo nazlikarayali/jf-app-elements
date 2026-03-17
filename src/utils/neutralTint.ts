@@ -29,28 +29,35 @@ const NEUTRAL_SHADES: { key: string; l: number; maxC: number }[] = [
 ];
 
 /**
- * Extract hue from hex color using standard RGB→HSL hue extraction
+ * Extract OKLCH hue from hex color via RGB → linear RGB → OKLab → OKLCH
  */
-function hexToHue(hex: string): number {
+function hexToOklchHue(hex: string): number {
   hex = hex.replace('#', '');
-  const r = parseInt(hex.substring(0, 2), 16) / 255;
-  const g = parseInt(hex.substring(2, 4), 16) / 255;
-  const b = parseInt(hex.substring(4, 6), 16) / 255;
+  // sRGB to linear RGB
+  const toLinear = (c: number) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  const r = toLinear(parseInt(hex.substring(0, 2), 16) / 255);
+  const g = toLinear(parseInt(hex.substring(2, 4), 16) / 255);
+  const b = toLinear(parseInt(hex.substring(4, 6), 16) / 255);
 
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  let h = 0;
+  // Linear RGB → LMS (using OKLab matrix)
+  const l_ = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b;
+  const m_ = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b;
+  const s_ = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b;
 
-  if (max !== min) {
-    const d = max - min;
-    switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
-      case g: h = ((b - r) / d + 2) / 6; break;
-      case b: h = ((r - g) / d + 4) / 6; break;
-    }
-  }
+  // LMS → LMS (cube root)
+  const l1 = Math.cbrt(l_);
+  const m1 = Math.cbrt(m_);
+  const s1 = Math.cbrt(s_);
 
-  return Math.round(h * 360);
+  // LMS → OKLab
+  const a = 1.9779984951 * l1 - 2.4285922050 * m1 + 0.4505937099 * s1;
+  const bOk = 0.0259040371 * l1 + 0.7827717662 * m1 - 0.8086757660 * s1;
+
+  // OKLab → OKLCH hue
+  let hue = Math.atan2(bOk, a) * (180 / Math.PI);
+  if (hue < 0) hue += 360;
+
+  return Math.round(hue);
 }
 
 /**
@@ -60,7 +67,7 @@ function hexToHue(hex: string): number {
  * @returns Array of shades with oklch() CSS values
  */
 function generateNeutralPalette(brandHex: string, tintAmount: number): NeutralShade[] {
-  const hue = hexToHue(brandHex);
+  const hue = hexToOklchHue(brandHex);
   const tint = Math.max(0, Math.min(100, tintAmount)) / 100;
 
   return NEUTRAL_SHADES.map(({ key, l, maxC }) => {
@@ -90,5 +97,5 @@ function resetNeutral() {
   });
 }
 
-export { generateNeutralPalette, applyNeutralToDOM, resetNeutral, hexToHue };
+export { generateNeutralPalette, applyNeutralToDOM, resetNeutral, hexToOklchHue };
 export type { NeutralShade };
