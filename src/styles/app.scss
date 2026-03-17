@@ -1340,38 +1340,39 @@ body {
 // Themes View
 // ============================================
 .themes-view {
-  padding: 32px;
-  overflow-y: auto;
   flex: 1;
   display: flex;
-  flex-direction: column;
-  gap: 40px;
+  overflow: hidden;
 }
 
-.themes-view__picker {
+// Left sidebar settings
+.themes-view__sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  padding: 20px 16px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
+}
 
-  &-header {
-    h2 {
-      font-size: 24px;
-      font-weight: 600;
-      color: var(--color-text);
-      margin: 0 0 4px;
-    }
-    p {
-      font-size: 14px;
-      color: var(--color-text-secondary);
-      margin: 0;
-    }
-  }
+.themes-view__sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-  &-controls {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+.themes-view__sidebar-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-tertiary);
+  margin: 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .themes-view__color-input {
@@ -1381,12 +1382,12 @@ body {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 6px 10px;
-  background: var(--color-surface);
+  background: var(--color-bg);
 }
 
 .themes-view__color-swatch {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -1397,11 +1398,71 @@ body {
   border: none;
   background: transparent;
   font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--color-text);
-  width: 90px;
+  width: 80px;
   outline: none;
+}
+
+// Presets
+.themes-view__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.themes-view__preset {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-rounded);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+
+  &:hover {
+    transform: scale(1.15);
+  }
+
+  &.active {
+    border-color: var(--color-text);
+    box-shadow: 0 0 0 2px var(--color-surface);
+  }
+}
+
+// Palette list
+.themes-view__palette-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.themes-view__palette-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.themes-view__palette-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.themes-view__palette-key {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  width: 30px;
+}
+
+.themes-view__palette-hex {
+  font-size: 11px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--color-text-tertiary);
 }
 
 .themes-view__reset {
@@ -1410,11 +1471,12 @@ body {
   border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-text-secondary);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   transition: all var(--transition);
+  width: 100%;
 
   &:hover {
     background: var(--color-surface-hover);
@@ -1422,128 +1484,27 @@ body {
   }
 }
 
-.themes-view__section-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-text);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0 0 12px;
-}
-
-// Palette shades
-.themes-view__palette {
-  display: flex;
-  flex-direction: column;
-}
-
-.themes-view__shades {
-  display: flex;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  height: 80px;
-}
-
-.themes-view__shade {
+// Right preview area
+.themes-view__preview {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  position: relative;
-  transition: flex 200ms ease;
-
-  &--active {
-    flex: 1.5;
-    outline: 2px solid var(--color-text);
-    outline-offset: -2px;
-    border-radius: 4px;
-    z-index: 1;
-  }
+  overflow-y: auto;
+  padding: 32px;
+  background: var(--color-bg);
 }
 
-.themes-view__shade-key {
-  font-size: 11px;
-  font-weight: 600;
-  opacity: 0.85;
-}
-
-.themes-view__shade-hex {
-  font-size: 10px;
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  opacity: 0.7;
-}
-
-.themes-view__palette-hint {
-  font-size: 12px;
-  color: var(--color-text-tertiary);
-  margin: 8px 0 0;
-}
-
-// Token mapping
-.themes-view__token-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
-}
-
-.themes-view__token {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: var(--radius-sm);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-}
-
-.themes-view__token-swatch {
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-sm);
-  flex-shrink: 0;
-  border: 1px solid rgba(0,0,0,0.08);
-}
-
-.themes-view__token-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.themes-view__token-name {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-text);
-  font-family: 'SF Mono', 'Fira Code', monospace;
-}
-
-.themes-view__token-desc {
-  display: block;
-  font-size: 11px;
-  color: var(--color-text-tertiary);
-}
-
-.themes-view__token-hex {
-  font-size: 11px;
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  color: var(--color-text-secondary);
-  flex-shrink: 0;
-}
-
-// Live preview
 .themes-view__preview-grid {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 20px;
+  align-items: flex-start;
+  align-content: flex-start;
 }
 
-.themes-view__preview-card {
-  padding: 24px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
+.themes-view__btn-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 // ============================================

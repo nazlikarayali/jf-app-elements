@@ -1,14 +1,25 @@
 import { useState, useEffect, useCallback } from 'react';
-import { generatePalette, getClosestShadeKey } from '../utils/colorPalette';
+import { generatePalette } from '../utils/colorPalette';
 import type { PaletteShade } from '../utils/colorPalette';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Heading } from '../components/Heading';
 import { DonationBox } from '../components/DonationBox';
+import { Document } from '../components/Document';
+import { SignDocument } from '../components/SignDocument';
+import { Form } from '../components/Form';
+import { SocialFollow } from '../components/SocialFollow';
+import { List } from '../components/List';
+import { ProductList } from '../components/ProductList';
+import { ImageGallery } from '../components/ImageGallery';
 
 const DEFAULT_COLOR = '#7D38EF';
 
-// Map palette shades to CSS custom properties
+const PRESET_COLORS = [
+  '#7D38EF', '#DF2125', '#0385C8', '#19A44B', '#F97101', '#DC7801',
+  '#E91E63', '#00B5D4', '#8D5DF9', '#64A501',
+];
+
 function applyPaletteToDOM(palette: PaletteShade[]) {
   const root = document.documentElement;
   const map: Record<string, string> = {};
@@ -16,7 +27,6 @@ function applyPaletteToDOM(palette: PaletteShade[]) {
     map[shade.key] = shade.hex;
   }
 
-  // Primary palette
   root.style.setProperty('--primary-50', map['50']);
   root.style.setProperty('--primary-100', map['100']);
   root.style.setProperty('--primary-200', map['200']);
@@ -29,7 +39,6 @@ function applyPaletteToDOM(palette: PaletteShade[]) {
   root.style.setProperty('--primary-900', map['900']);
   root.style.setProperty('--primary-950', map['950']);
 
-  // Semantic mappings that depend on primary
   root.style.setProperty('--bg-surface-brand', map['100']);
   root.style.setProperty('--bg-surface-brand-hover', map['200']);
   root.style.setProperty('--bg-fill-brand', map['600']);
@@ -57,24 +66,14 @@ function resetPalette() {
   props.forEach(p => root.style.removeProperty(p));
 }
 
-function contrastColor(hex: string): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance > 0.5 ? '#091141' : '#FFFFFF';
-}
-
 export function ThemesView() {
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [palette, setPalette] = useState<PaletteShade[]>(() => generatePalette(DEFAULT_COLOR));
-  const [closestShade, setClosestShade] = useState(() => getClosestShadeKey(DEFAULT_COLOR));
 
   const handleColorChange = useCallback((newColor: string) => {
     setColor(newColor);
     const newPalette = generatePalette(newColor);
     setPalette(newPalette);
-    setClosestShade(getClosestShadeKey(newColor));
     applyPaletteToDOM(newPalette);
   }, []);
 
@@ -82,7 +81,6 @@ export function ThemesView() {
     setColor(DEFAULT_COLOR);
     const newPalette = generatePalette(DEFAULT_COLOR);
     setPalette(newPalette);
-    setClosestShade(getClosestShadeKey(DEFAULT_COLOR));
     resetPalette();
   }, []);
 
@@ -92,13 +90,10 @@ export function ThemesView() {
 
   return (
     <div className="themes-view">
-      {/* Color Picker Section */}
-      <div className="themes-view__picker">
-        <div className="themes-view__picker-header">
-          <h2>Theme Generator</h2>
-          <p>Pick a color to generate a full palette and preview it on components.</p>
-        </div>
-        <div className="themes-view__picker-controls">
+      {/* Left: Settings Panel */}
+      <aside className="themes-view__sidebar">
+        <div className="themes-view__sidebar-section">
+          <h3 className="themes-view__sidebar-title">Brand Color</h3>
           <div className="themes-view__color-input">
             <input
               type="color"
@@ -119,104 +114,89 @@ export function ThemesView() {
               placeholder="#7D38EF"
             />
           </div>
-          <button className="themes-view__reset" onClick={handleReset}>Reset to Default</button>
         </div>
-      </div>
 
-      {/* Palette Display */}
-      <div className="themes-view__palette">
-        <h3 className="themes-view__section-title">Generated Palette</h3>
-        <div className="themes-view__shades">
-          {palette.map((shade) => (
-            <div
-              key={shade.key}
-              className={`themes-view__shade${shade.key === closestShade ? ' themes-view__shade--active' : ''}`}
-              style={{ background: shade.hex }}
-            >
-              <span className="themes-view__shade-key" style={{ color: contrastColor(shade.hex) }}>
-                {shade.key}
-              </span>
-              <span className="themes-view__shade-hex" style={{ color: contrastColor(shade.hex) }}>
-                {shade.hex}
-              </span>
-            </div>
-          ))}
+        <div className="themes-view__sidebar-section">
+          <h3 className="themes-view__sidebar-title">Presets</h3>
+          <div className="themes-view__presets">
+            {PRESET_COLORS.map((c) => (
+              <button
+                key={c}
+                className={`themes-view__preset${color.toUpperCase() === c ? ' active' : ''}`}
+                style={{ background: c }}
+                onClick={() => handleColorChange(c)}
+                title={c}
+              />
+            ))}
+          </div>
         </div>
-        <p className="themes-view__palette-hint">
-          Your color maps closest to shade <strong>{closestShade}</strong>
-        </p>
-      </div>
 
-      {/* Token Mapping */}
-      <div className="themes-view__mapping">
-        <h3 className="themes-view__section-title">Token Mapping</h3>
-        <div className="themes-view__token-grid">
-          {[
-            { label: 'bg-fill-brand', shade: '600', desc: 'Buttons, actions' },
-            { label: 'bg-fill-brand-hover', shade: '700', desc: 'Hover states' },
-            { label: 'bg-fill-brand-disabled', shade: '200', desc: 'Disabled states' },
-            { label: 'bg-surface-brand', shade: '100', desc: 'Card image, icon bg' },
-            { label: 'bg-surface-brand-hover', shade: '200', desc: 'Hover surface' },
-            { label: 'fg-brand', shade: '600', desc: 'Brand text, icons' },
-            { label: 'fg-brand-hover', shade: '700', desc: 'Hover text' },
-            { label: 'border-brand', shade: '200', desc: 'Brand borders' },
-          ].map((token) => {
-            const shade = palette.find(s => s.key === token.shade);
-            return (
-              <div className="themes-view__token" key={token.label}>
-                <div className="themes-view__token-swatch" style={{ background: shade?.hex }} />
-                <div className="themes-view__token-info">
-                  <span className="themes-view__token-name">{token.label}</span>
-                  <span className="themes-view__token-desc">{token.desc} → {token.shade}</span>
-                </div>
-                <span className="themes-view__token-hex">{shade?.hex}</span>
+        <div className="themes-view__sidebar-section">
+          <h3 className="themes-view__sidebar-title">Palette</h3>
+          <div className="themes-view__palette-list">
+            {palette.map((shade) => (
+              <div className="themes-view__palette-row" key={shade.key}>
+                <div className="themes-view__palette-swatch" style={{ background: shade.hex }} />
+                <span className="themes-view__palette-key">{shade.key}</span>
+                <span className="themes-view__palette-hex">{shade.hex}</span>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Live Preview */}
-      <div className="themes-view__preview">
-        <h3 className="themes-view__section-title">Live Preview</h3>
+        <button className="themes-view__reset" onClick={handleReset}>Reset to Default</button>
+      </aside>
+
+      {/* Right: Preview */}
+      <main className="themes-view__preview">
         <div className="themes-view__preview-grid">
-          <div className="themes-view__preview-card">
-            <Heading size="Small" heading="Preview Components" subheading="See how your palette looks" />
+          <Heading size="Medium" heading="Theme Preview" subheading="Components with your brand color" shrinked />
+
+          <div className="themes-view__btn-group">
+            <Button variant="Default" size="Default" label="Primary" leftIcon="none" rightIcon="none" shrinked />
+            <Button variant="Default" size="Small" label="Small" leftIcon="none" rightIcon="none" shrinked />
+            <Button variant="Secondary" size="Default" label="Secondary" leftIcon="none" rightIcon="none" shrinked />
+            <Button variant="Outlined" size="Default" label="Outlined" leftIcon="none" rightIcon="none" shrinked />
+            <Button iconOnly iconOnlyIcon="Plus" iconOnlyFilled corner="Rounded" />
+            <Button iconOnly iconOnlyIcon="Heart" iconOnlyFilled={false} corner="Rounded" />
           </div>
 
-          <div className="themes-view__preview-card">
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <Button variant="Default" size="Default" label="Primary" leftIcon="none" rightIcon="none" shrinked />
-              <Button variant="Default" size="Small" label="Small" leftIcon="none" rightIcon="none" shrinked />
-              <Button variant="Secondary" size="Default" label="Secondary" leftIcon="none" rightIcon="none" shrinked />
-              <Button variant="Outlined" size="Default" label="Outlined" leftIcon="none" rightIcon="none" shrinked />
-              <Button iconOnly iconOnlyIcon="Plus" iconOnlyFilled corner="Rounded" />
-              <Button iconOnly iconOnlyIcon="Heart" iconOnlyFilled={false} corner="Rounded" />
-            </div>
-          </div>
+          <Card imageStyle="Square" layout="Horizontal" action="Icon" title="Card Element" description="Horizontal layout with icon action" shrinked />
 
-          <div className="themes-view__preview-card">
-            <Card imageStyle="Square" layout="Horizontal" action="Icon" title="Card Element" description="With brand colors applied" />
-          </div>
+          <Card imageStyle="Square" layout="Vertical" action="Button" title="Vertical Card" description="With action button" buttonLabel="Action" shrinked />
 
-          <div className="themes-view__preview-card">
-            <Card imageStyle="Square" layout="Vertical" action="Button" title="Vertical Card" description="Button uses brand fill" buttonLabel="Action" />
-          </div>
+          <Document alignment="Left" size="Normal" fileName="report.pdf" description="2.4 MB - PDF" shrinked />
 
-          <div className="themes-view__preview-card">
-            <DonationBox
-              title="Donate"
-              description="See the progress bar and button"
-              amounts={['$10', '$25', '$50']}
-              showCustomAmount={false}
-              buttonLabel="Donate Now"
-              goalProgress={65}
-              raisedAmount="$650"
-              goalAmount="$1,000"
-            />
-          </div>
+          <SignDocument label="Sign Document" description="NDA Agreement" shrinked />
+
+          <Form label="Contact Form" description="Required fields" shrinked />
+
+          <SocialFollow filled shrinked />
+
+          <List layout="Basic" imageStyle="Square" size="Compact" action="Icon" items={[
+            { title: 'List Item 1', description: 'Description' },
+            { title: 'List Item 2', description: 'Description' },
+          ]} />
+
+          <DonationBox
+            title="Support Us"
+            description="Help make a difference"
+            amounts={['$10', '$25', '$50']}
+            showCustomAmount={false}
+            buttonLabel="Donate"
+            goalProgress={65}
+            raisedAmount="$650"
+            goalAmount="$1,000"
+          />
+
+          <ProductList
+            title="Products"
+            shrinked
+          />
+
+          <ImageGallery layout="2" shrinked />
         </div>
-      </div>
+      </main>
     </div>
   );
 }
