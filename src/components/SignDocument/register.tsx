@@ -8,7 +8,7 @@ ComponentRegistry.register({
   id: 'sign-document',
   name: 'Sign Document',
   category: 'Data Display',
-  icon: 'FileSignature',
+  icon: 'FilePenLine',
 
   variants: {
     Alignment: {

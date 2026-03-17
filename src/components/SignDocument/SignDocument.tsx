@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { FileSignature, Asterisk } from 'lucide-react';
+import { FilePenLine, Asterisk } from 'lucide-react';
 import './SignDocument.scss';
 
 export type SignDocumentAlignment = 'Left' | 'Center' | 'Right';
@@ -44,7 +44,7 @@ export const SignDocument: FC<SignDocumentProps> = ({
     <div className={rootClasses}>
       {showIcon && (
         <div className="jf-sign-doc__icon" style={{ width: iconSize, height: iconSize }}>
-          <FileSignature size={iconInner} />
+          <FilePenLine size={iconInner} />
         </div>
       )}
       <div className="jf-sign-doc__content">

@@ -16,6 +16,7 @@ import './components/Heading/register';
 import './components/List/register';
 import './components/Document/register';
 import './components/SignDocument/register';
+import './components/ImageGallery/register';
 
 function App() {
   const [components, setComponents] = useState<RegisteredComponent[]>(ComponentRegistry.getAll());
