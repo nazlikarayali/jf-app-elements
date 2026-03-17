@@ -1456,6 +1456,52 @@ body {
   }
 }
 
+// Tint slider
+.themes-view__tint-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.themes-view__tint-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 24px;
+  border-radius: 12px;
+  outline: none;
+  cursor: pointer;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+}
+
+.themes-view__tint-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+}
+
 // Font list
 .themes-view__font-list {
   display: flex;

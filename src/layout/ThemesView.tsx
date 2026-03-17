@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { generatePalette } from '../utils/colorPalette';
 import type { PaletteShade } from '../utils/colorPalette';
+import { generateNeutralPalette, applyNeutralToDOM, resetNeutral, hexToHue } from '../utils/neutralTint';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Heading } from '../components/Heading';
@@ -15,6 +16,7 @@ import { ProductList } from '../components/ProductList';
 const DEFAULT_COLOR = '#7D38EF';
 const DEFAULT_FONT = 'Inter';
 const DEFAULT_RADIUS = 'Medium';
+const DEFAULT_TINT = 50;
 
 type RadiusScale = 'Small' | 'Medium' | 'Large' | 'XLarge';
 
@@ -119,6 +121,7 @@ function resetPalette() {
 export function ThemesView() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [color, setColor] = useState(DEFAULT_COLOR);
+  const [tint, setTint] = useState(DEFAULT_TINT);
   const [font, setFont] = useState(DEFAULT_FONT);
   const [radius, setRadius] = useState<RadiusScale>(DEFAULT_RADIUS as RadiusScale);
   const [, setPalette] = useState<PaletteShade[]>(() => generatePalette(DEFAULT_COLOR));
@@ -128,7 +131,16 @@ export function ThemesView() {
     const newPalette = generatePalette(newColor);
     setPalette(newPalette);
     applyPaletteToDOM(newPalette);
-  }, []);
+    // Re-apply tint with new hue
+    const neutralPalette = generateNeutralPalette(newColor, tint);
+    applyNeutralToDOM(neutralPalette);
+  }, [tint]);
+
+  const handleTintChange = useCallback((newTint: number) => {
+    setTint(newTint);
+    const neutralPalette = generateNeutralPalette(color, newTint);
+    applyNeutralToDOM(neutralPalette);
+  }, [color]);
 
   const handleFontChange = useCallback((newFont: string) => {
     setFont(newFont);
@@ -143,18 +155,24 @@ export function ThemesView() {
 
   const handleReset = useCallback(() => {
     setColor(DEFAULT_COLOR);
+    setTint(DEFAULT_TINT);
     setFont(DEFAULT_FONT);
     setRadius(DEFAULT_RADIUS as RadiusScale);
     const newPalette = generatePalette(DEFAULT_COLOR);
     setPalette(newPalette);
     resetPalette();
+    resetNeutral();
     resetRadius(canvasRef.current);
     document.documentElement.style.removeProperty('--font-family');
   }, []);
 
   useEffect(() => {
+    // Apply initial tint
+    const neutralPalette = generateNeutralPalette(DEFAULT_COLOR, DEFAULT_TINT);
+    applyNeutralToDOM(neutralPalette);
     return () => {
       resetPalette();
+      resetNeutral();
       resetRadius(canvasRef.current);
       document.documentElement.style.removeProperty('--font-family');
     };
@@ -185,6 +203,27 @@ export function ThemesView() {
               className="themes-view__hex-input"
               placeholder="#7D38EF"
             />
+          </div>
+        </div>
+
+        <div className="themes-view__sidebar-section">
+          <h3 className="themes-view__sidebar-title">Base Color</h3>
+          <div className="themes-view__tint-slider">
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={tint}
+              onChange={(e) => handleTintChange(Number(e.target.value))}
+              className="themes-view__tint-range"
+              style={{
+                background: `linear-gradient(to right, #808080, hsl(${hexToHue(color)}, 40%, 50%))`,
+              }}
+            />
+            <div className="themes-view__tint-labels">
+              <span>Grey</span>
+              <span>Tinted</span>
+            </div>
           </div>
         </div>
 
