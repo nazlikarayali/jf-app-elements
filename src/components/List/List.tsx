@@ -39,12 +39,12 @@ export interface ListProps {
 // ============================================
 // Image Placeholder
 // ============================================
-const ImagePlaceholder: FC<{ size: number }> = ({ size: s }) => (
+const ImagePlaceholder: FC<{ size: number; strokeWidth?: number }> = ({ size: s, strokeWidth = 2.5 }) => (
   <svg width={s} height={s} viewBox="0 0 48 48" fill="none">
-    <path d="M6 36L16.58 25.42C17.36 24.64 18.64 24.64 19.42 25.42L30 36" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M26 32L30.58 27.42C31.36 26.64 32.64 26.64 33.42 27.42L42 36" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    <rect x="6" y="6" width="36" height="36" rx="4" stroke="currentColor" strokeWidth="2.5" />
-    <circle cx="18" cy="18" r="3" stroke="currentColor" strokeWidth="2.5" />
+    <path d="M6 36L16.58 25.42C17.36 24.64 18.64 24.64 19.42 25.42L30 36" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M26 32L30.58 27.42C31.36 26.64 32.64 26.64 33.42 27.42L42 36" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+    <rect x="6" y="6" width="36" height="36" rx="4" stroke="currentColor" strokeWidth={strokeWidth} />
+    <circle cx="18" cy="18" r="3" stroke="currentColor" strokeWidth={strokeWidth} />
   </svg>
 );
 
@@ -81,15 +81,17 @@ const BasicListItem: FC<{
   actionIconFilled: boolean;
   buttonLabel: string;
 }> = ({ item, imageStyle, size, action, actionIconFilled, buttonLabel }) => {
-  const imgSize = size === 'Compact' ? 64 : 104;
-  const iconSize = size === 'Compact' ? 28 : 48;
+  const isCompact = size === 'Compact';
+  const imgSize = isCompact ? 60 : 104;
+  const iconSize = isCompact ? 32 : 48;
+  const strokeW = isCompact ? 3 : 2.5;
   const hasImage = imageStyle !== 'None';
 
   return (
-    <div className={`jf-list-item jf-list-item--basic${size === 'Compact' ? ' jf-list-item--compact' : ''}`}>
+    <div className={`jf-list-item jf-list-item--basic${isCompact ? ' jf-list-item--compact' : ''}`}>
       {hasImage && (
         <div className={`jf-list-item__image jf-list-item__image--${imageStyle.toLowerCase()}`} style={{ width: imgSize, height: imgSize }}>
-          <ImagePlaceholder size={iconSize} />
+          <ImagePlaceholder size={iconSize} strokeWidth={strokeW} />
         </div>
       )}
       <div className="jf-list-item__content">

@@ -33,6 +33,7 @@ ComponentRegistry.register({
   properties: [
     { name: 'Title', type: 'text', default: 'Card Title' },
     { name: 'Description', type: 'text', default: 'Card description' },
+    { name: 'Icon', type: 'icon', default: 'Heart', showWhen: { 'Image Style': 'Icon' } },
     { name: 'Button Label', type: 'text', default: 'Edit' },
     { name: 'Selected', type: 'boolean', default: false },
     { name: 'Shrinked', type: 'boolean', default: false },
@@ -176,6 +177,7 @@ ComponentRegistry.register({
         layout={variants['Layout'] as CardLayout}
         action={variants['Action'] as CardAction}
         actionIconFilled={variants['Icon Filled'] === 'Yes'}
+        iconName={props['Icon'] as string}
         title={props['Title'] as string}
         description={props['Description'] as string}
         buttonLabel={props['Button Label'] as string}

@@ -268,15 +268,15 @@ export function ThemesView() {
           {/* Cards Row */}
           <section className="themes-view__section">
             <Heading size="Small" heading="Our Services" subheading="What we offer" />
-            <Card imageStyle="Icon" layout="Horizontal" action="Button" title="Consulting" description="Expert guidance for your business" buttonLabel="Book Now" />
-            <Card imageStyle="Icon" layout="Horizontal" action="Button" title="Design" description="Beautiful interfaces that convert" buttonLabel="View Work" />
-            <Card imageStyle="Icon" layout="Horizontal" action="Button" title="Development" description="Scalable solutions built to last" buttonLabel="Start Project" />
+            <Card imageStyle="Icon" layout="Horizontal" action="Button" iconName="MessageCircle" title="Consulting" description="Expert guidance for your business" buttonLabel="Book Now" />
+            <Card imageStyle="Icon" layout="Horizontal" action="Button" iconName="Palette" title="Design" description="Beautiful interfaces that convert" buttonLabel="View Work" />
+            <Card imageStyle="Icon" layout="Horizontal" action="Button" iconName="Code" title="Development" description="Scalable solutions built to last" buttonLabel="Start Project" />
           </section>
 
           {/* List Section */}
           <section className="themes-view__section">
             <Heading size="Small" heading="Recent Updates" subheading="Stay up to date" />
-            <List layout="Basic" imageStyle="Square" size="Regular" action="Icon" actionIconFilled={false} items={[
+            <List layout="Basic" imageStyle="Square" size="Compact" action="Icon" actionIconFilled={false} items={[
               { title: 'New feature release v2.5', description: 'Performance improvements and bug fixes' },
               { title: 'Community meetup next week', description: 'Join us for the monthly gathering' },
               { title: 'Partnership announcement', description: 'Exciting collaboration coming soon' },

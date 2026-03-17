@@ -1,4 +1,5 @@
 import type React from 'react';
+import { icons } from 'lucide-react';
 import { Button } from '../Button';
 import './Card.scss';
 
@@ -14,6 +15,7 @@ export interface CardProps {
   layout?: CardLayout;
   action?: CardAction;
   actionIconFilled?: boolean;
+  iconName?: string;
   title?: string;
   description?: string;
   buttonLabel?: string;
@@ -26,7 +28,7 @@ export interface CardProps {
 // Sub-components
 // ============================================
 
-const ImageIcon: React.FC = () => (
+const ImagePlaceholder: React.FC = () => (
   <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
     <path d="M6 36L16.58 25.42C17.36 24.64 18.64 24.64 19.42 25.42L30 36" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     <path d="M26 32L30.58 27.42C31.36 26.64 32.64 26.64 33.42 27.42L42 36" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -35,11 +37,11 @@ const ImageIcon: React.FC = () => (
   </svg>
 );
 
-const HeartIcon: React.FC = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-  </svg>
-);
+const DynamicIcon: React.FC<{ name: string; size?: number }> = ({ name, size = 32 }) => {
+  const Icon = icons[name as keyof typeof icons];
+  if (!Icon) return <ImagePlaceholder />;
+  return <Icon size={size} />;
+};
 
 // ============================================
 // Card Image
@@ -47,14 +49,15 @@ const HeartIcon: React.FC = () => (
 interface CardImageProps {
   imageStyle: CardImageStyle;
   layout: CardLayout;
+  iconName: string;
 }
 
-const CardImage: React.FC<CardImageProps> = ({ imageStyle, layout }) => {
+const CardImage: React.FC<CardImageProps> = ({ imageStyle, layout, iconName }) => {
   if (imageStyle === 'None') return null;
 
   const iconContent = imageStyle === 'Icon'
-    ? <div className="jf-card__image-icon"><HeartIcon /></div>
-    : <div className="jf-card__image-icon"><ImageIcon /></div>;
+    ? <div className="jf-card__image-icon"><DynamicIcon name={iconName} /></div>
+    : <div className="jf-card__image-icon"><ImagePlaceholder /></div>;
 
   if (layout === 'Horizontal') {
     const modClass = imageStyle === 'Square' ? 'square'
@@ -63,7 +66,6 @@ const CardImage: React.FC<CardImageProps> = ({ imageStyle, layout }) => {
     return <div className={`jf-card__image jf-card__image--${modClass}`}>{iconContent}</div>;
   }
 
-  // Card layout
   if (imageStyle === 'Square') {
     return <div className="jf-card__image jf-card__image--square-header">{iconContent}</div>;
   }
@@ -132,6 +134,7 @@ export const Card: React.FC<CardProps> = ({
   layout = 'Horizontal',
   action = 'None',
   actionIconFilled = true,
+  iconName = 'Heart',
   title = 'Card Title',
   description = 'Card description',
   buttonLabel = 'Edit',
@@ -151,28 +154,20 @@ export const Card: React.FC<CardProps> = ({
 
   const isCentered = layout === 'Vertical' && (imageStyle === 'Circle' || imageStyle === 'Icon');
 
-  // =====================
-  // BASIC Layout
-  // =====================
   if (layout === 'Horizontal') {
     return (
       <div className={classes}>
-        <CardImage imageStyle={imageStyle} layout={layout} />
+        <CardImage imageStyle={imageStyle} layout={layout} iconName={iconName} />
         <CardContent title={title} description={description} />
         <CardAction action={action} actionIconFilled={actionIconFilled} buttonLabel={buttonLabel} />
       </div>
     );
   }
 
-  // =====================
-  // CARD Layout
-  // =====================
-
-  // Square header image goes outside body
   if (imageStyle === 'Square') {
     return (
       <div className={classes}>
-        <CardImage imageStyle={imageStyle} layout={layout} />
+        <CardImage imageStyle={imageStyle} layout={layout} iconName={iconName} />
         {action === 'None' ? (
           <div className="jf-card__body">
             <CardContent title={title} description={description} />
@@ -192,10 +187,9 @@ export const Card: React.FC<CardProps> = ({
     );
   }
 
-  // Circle / Icon / None
   return (
     <div className={classes}>
-      <CardImage imageStyle={imageStyle} layout={layout} />
+      <CardImage imageStyle={imageStyle} layout={layout} iconName={iconName} />
       {action === 'Icon' ? (
         <div className="jf-card__body jf-card__body--row">
           <CardContent title={title} description={description} centered={isCentered} />

@@ -120,7 +120,7 @@ const DEFAULT_PRODUCTS: ProductItem[] = [
 ];
 
 export const ProductList: FC<ProductListProps> = ({
-  layout: initialLayout = 'ThreeColumns',
+  layout: initialLayout = 'TwoColumns',
   title = 'Products',
   searchPlaceholder = 'Search Products',
   buttonLabel = 'Add to Cart',
