@@ -105,6 +105,38 @@ function applyPaletteToDOM(palette: PaletteShade[]) {
   root.style.setProperty('--color-primary-light', map['50']);
 }
 
+function hslHueToHex(h: number): string {
+  // Fixed saturation 75%, lightness 45% for vibrant brand colors
+  const s = 0.75;
+  const l = 0.45;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12;
+    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color).toString(16).padStart(2, '0');
+  };
+  return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+}
+
+function hexToHslHue(hex: string): number {
+  hex = hex.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16) / 255;
+  const g = parseInt(hex.substring(2, 4), 16) / 255;
+  const b = parseInt(hex.substring(4, 6), 16) / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  if (max !== min) {
+    const d = max - min;
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
+    }
+  }
+  return Math.round(h * 360);
+}
+
 function resetPalette() {
   const root = document.documentElement;
   const props = [
@@ -121,6 +153,7 @@ function resetPalette() {
 export function ThemesView() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [color, setColor] = useState(DEFAULT_COLOR);
+  const [brandHue, setBrandHue] = useState(() => hexToHslHue(DEFAULT_COLOR));
   const [tint, setTint] = useState(DEFAULT_TINT);
   const [font, setFont] = useState(DEFAULT_FONT);
   const [radius, setRadius] = useState<RadiusScale>(DEFAULT_RADIUS as RadiusScale);
@@ -128,10 +161,21 @@ export function ThemesView() {
 
   const handleColorChange = useCallback((newColor: string) => {
     setColor(newColor);
+    setBrandHue(hexToHslHue(newColor));
     const newPalette = generatePalette(newColor);
     setPalette(newPalette);
     applyPaletteToDOM(newPalette);
-    // Re-apply tint with new hue
+    const neutralPalette = generateNeutralPalette(newColor, tint);
+    applyNeutralToDOM(neutralPalette);
+  }, [tint]);
+
+  const handleHueChange = useCallback((hue: number) => {
+    setBrandHue(hue);
+    const newColor = hslHueToHex(hue);
+    setColor(newColor);
+    const newPalette = generatePalette(newColor);
+    setPalette(newPalette);
+    applyPaletteToDOM(newPalette);
     const neutralPalette = generateNeutralPalette(newColor, tint);
     applyNeutralToDOM(neutralPalette);
   }, [tint]);
@@ -155,6 +199,7 @@ export function ThemesView() {
 
   const handleReset = useCallback(() => {
     setColor(DEFAULT_COLOR);
+    setBrandHue(hexToHslHue(DEFAULT_COLOR));
     setTint(DEFAULT_TINT);
     setFont(DEFAULT_FONT);
     setRadius(DEFAULT_RADIUS as RadiusScale);
@@ -184,25 +229,23 @@ export function ThemesView() {
       <aside className="themes-view__sidebar">
         <div className="themes-view__sidebar-section">
           <h3 className="themes-view__sidebar-title">Brand Color</h3>
-          <div className="themes-view__color-input">
+          <div className="themes-view__hue-row">
             <input
-              type="color"
-              value={color}
-              onChange={(e) => handleColorChange(e.target.value)}
-              className="themes-view__color-swatch"
+              type="range"
+              min="0"
+              max="360"
+              value={brandHue}
+              onChange={(e) => handleHueChange(Number(e.target.value))}
+              className="themes-view__hue-range"
             />
-            <input
-              type="text"
-              value={color}
-              onChange={(e) => {
-                if (/^#[0-9a-fA-F]{6}$/.test(e.target.value)) {
-                  handleColorChange(e.target.value);
-                }
-                setColor(e.target.value);
-              }}
-              className="themes-view__hex-input"
-              placeholder="#7D38EF"
-            />
+            <div className="themes-view__picker-wrapper">
+              <input
+                type="color"
+                value={color}
+                onChange={(e) => handleColorChange(e.target.value)}
+                className="themes-view__picker-circle"
+              />
+            </div>
           </div>
         </div>
 

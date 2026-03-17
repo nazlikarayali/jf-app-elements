@@ -1401,35 +1401,6 @@ body {
   border-bottom: 1px solid var(--color-border-light);
 }
 
-.themes-view__color-input {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: 6px 10px;
-  background: var(--color-bg);
-}
-
-.themes-view__color-swatch {
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  padding: 0;
-}
-
-.themes-view__hex-input {
-  border: none;
-  background: transparent;
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-text);
-  width: 80px;
-  outline: none;
-}
 
 // Presets
 .themes-view__presets {
@@ -1453,6 +1424,91 @@ body {
   &.active {
     border-color: var(--color-text);
     box-shadow: 0 0 0 2px var(--color-surface);
+  }
+}
+
+// Brand hue slider + picker
+.themes-view__hue-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.themes-view__hue-range {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 24px;
+  border-radius: 12px;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(to right,
+    hsl(0, 75%, 50%),
+    hsl(30, 75%, 50%),
+    hsl(60, 75%, 50%),
+    hsl(90, 75%, 50%),
+    hsl(120, 75%, 50%),
+    hsl(150, 75%, 50%),
+    hsl(180, 75%, 50%),
+    hsl(210, 75%, 50%),
+    hsl(240, 75%, 50%),
+    hsl(270, 75%, 50%),
+    hsl(300, 75%, 50%),
+    hsl(330, 75%, 50%),
+    hsl(360, 75%, 50%)
+  );
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+}
+
+.themes-view__picker-wrapper {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.themes-view__picker-circle {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  background: transparent;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-color-swatch {
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+  }
+
+  &::-moz-color-swatch {
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
   }
 }
 
