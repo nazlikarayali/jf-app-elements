@@ -147,54 +147,83 @@ export function ThemesView() {
         <button className="themes-view__reset" onClick={handleReset}>Reset to Default</button>
       </aside>
 
-      {/* Right: Preview */}
+      {/* Right: Preview as App Page */}
       <main className="themes-view__preview">
-        <div className="themes-view__preview-grid">
-          <Heading size="Medium" heading="Theme Preview" subheading="Components with your brand color" shrinked />
+        <div className="themes-view__app">
+          {/* Hero Section */}
+          <section className="themes-view__section">
+            <Heading size="Large" alignment="Center" heading="Welcome to Our Store" subheading="Discover amazing products and support our mission." />
+            <div className="themes-view__btn-row">
+              <Button variant="Default" size="Default" label="Get Started" leftIcon="ArrowRight" rightIcon="none" shrinked />
+              <Button variant="Outlined" size="Default" label="Learn More" leftIcon="none" rightIcon="none" shrinked />
+            </div>
+          </section>
 
-          <div className="themes-view__btn-group">
-            <Button variant="Default" size="Default" label="Primary" leftIcon="none" rightIcon="none" shrinked />
-            <Button variant="Default" size="Small" label="Small" leftIcon="none" rightIcon="none" shrinked />
-            <Button variant="Secondary" size="Default" label="Secondary" leftIcon="none" rightIcon="none" shrinked />
-            <Button variant="Outlined" size="Default" label="Outlined" leftIcon="none" rightIcon="none" shrinked />
-            <Button iconOnly iconOnlyIcon="Plus" iconOnlyFilled corner="Rounded" />
-            <Button iconOnly iconOnlyIcon="Heart" iconOnlyFilled={false} corner="Rounded" />
-          </div>
+          {/* Image Gallery */}
+          <section className="themes-view__section">
+            <ImageGallery layout="6" />
+          </section>
 
-          <Card imageStyle="Square" layout="Horizontal" action="Icon" title="Card Element" description="Horizontal layout with icon action" shrinked />
+          {/* Products */}
+          <section className="themes-view__section">
+            <ProductList title="Featured Products" buttonLabel="Add to Cart" />
+          </section>
 
-          <Card imageStyle="Square" layout="Vertical" action="Button" title="Vertical Card" description="With action button" buttonLabel="Action" shrinked />
+          {/* Cards Row */}
+          <section className="themes-view__section">
+            <Heading size="Small" heading="Our Services" subheading="What we offer" />
+            <div className="themes-view__cards-row">
+              <Card imageStyle="Icon" layout="Vertical" action="Button" title="Consulting" description="Expert guidance for your business" buttonLabel="Book Now" />
+              <Card imageStyle="Icon" layout="Vertical" action="Button" title="Design" description="Beautiful interfaces that convert" buttonLabel="View Work" />
+              <Card imageStyle="Icon" layout="Vertical" action="Button" title="Development" description="Scalable solutions built to last" buttonLabel="Start Project" />
+            </div>
+          </section>
 
-          <Document alignment="Left" size="Normal" fileName="report.pdf" description="2.4 MB - PDF" shrinked />
+          {/* List Section */}
+          <section className="themes-view__section">
+            <Heading size="Small" heading="Recent Updates" subheading="Stay up to date" />
+            <List layout="Basic" imageStyle="Square" size="Regular" action="Icon" items={[
+              { title: 'New feature release v2.5', description: 'Performance improvements and bug fixes' },
+              { title: 'Community meetup next week', description: 'Join us for the monthly gathering' },
+              { title: 'Partnership announcement', description: 'Exciting collaboration coming soon' },
+            ]} />
+          </section>
 
-          <SignDocument label="Sign Document" description="NDA Agreement" shrinked />
+          {/* Documents & Forms Row */}
+          <section className="themes-view__section">
+            <Heading size="Small" heading="Resources" subheading="Forms and documents" />
+            <div className="themes-view__docs-row">
+              <Form label="Contact Form" description="Get in touch with us" />
+              <SignDocument label="Terms of Service" description="Required before proceeding" />
+              <Document alignment="Left" size="Normal" fileName="Brand Guidelines.pdf" description="4.2 MB - PDF Document" />
+            </div>
+          </section>
 
-          <Form label="Contact Form" description="Required fields" shrinked />
+          {/* Donation */}
+          <section className="themes-view__section themes-view__section--center">
+            <DonationBox
+              headingAlignment="Center"
+              title="Support Our Cause"
+              description="Every contribution makes a difference in someone's life."
+              amounts={['$10.00', '$25.00', '$50.00', '$100.00']}
+              showCustomAmount
+              buttonLabel="Donate Now"
+              goalProgress={72}
+              raisedAmount="$7,200"
+              goalAmount="$10,000"
+            />
+          </section>
 
-          <SocialFollow filled shrinked />
-
-          <List layout="Basic" imageStyle="Square" size="Compact" action="Icon" items={[
-            { title: 'List Item 1', description: 'Description' },
-            { title: 'List Item 2', description: 'Description' },
-          ]} />
-
-          <DonationBox
-            title="Support Us"
-            description="Help make a difference"
-            amounts={['$10', '$25', '$50']}
-            showCustomAmount={false}
-            buttonLabel="Donate"
-            goalProgress={65}
-            raisedAmount="$650"
-            goalAmount="$1,000"
-          />
-
-          <ProductList
-            title="Products"
-            shrinked
-          />
-
-          <ImageGallery layout="2" shrinked />
+          {/* Footer: Social + Buttons */}
+          <section className="themes-view__section themes-view__section--center themes-view__section--footer">
+            <SocialFollow filled />
+            <div className="themes-view__btn-row">
+              <Button variant="Default" size="Small" label="Subscribe" leftIcon="Mail" rightIcon="none" shrinked />
+              <Button variant="Secondary" size="Small" label="Share" leftIcon="Share2" rightIcon="none" shrinked />
+              <Button iconOnly iconOnlyIcon="Heart" iconOnlyFilled={false} corner="Rounded" />
+              <Button iconOnly iconOnlyIcon="Bookmark" iconOnlyFilled={false} corner="Rounded" />
+            </div>
+          </section>
         </div>
       </main>
     </div>
