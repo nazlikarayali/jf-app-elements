@@ -215,25 +215,33 @@ export function ThemesView() {
     document.documentElement.style.removeProperty('--font-family');
   }, []);
 
+  // Apply palette + neutrals whenever color or tint changes, and on theme toggle
   useEffect(() => {
-    // Apply initial tint
-    const neutralPalette = generateNeutralPalette(DEFAULT_COLOR, DEFAULT_TINT, isDarkMode());
+    const palette = generatePalette(color);
+    applyPaletteToDOM(palette);
+    const neutralPalette = generateNeutralPalette(color, tint, isDarkMode());
     applyNeutralToDOM(neutralPalette);
-    // Re-apply neutrals when theme toggles
+
     const observer = new MutationObserver(() => {
-      const np = generateNeutralPalette(color, tint, isDarkMode());
-      applyNeutralToDOM(np);
+      applyPaletteToDOM(generatePalette(color));
+      applyNeutralToDOM(generateNeutralPalette(color, tint, isDarkMode()));
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
     return () => {
       observer.disconnect();
+    };
+  }, [color, tint]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
       resetPalette();
       resetNeutral();
       resetRadius(canvasRef.current);
       document.documentElement.style.removeProperty('--font-family');
     };
-  }, [color, tint]);
+  }, []);
 
   return (
     <div className="themes-view">
