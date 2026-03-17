@@ -72,6 +72,21 @@ function loadGoogleFont(fontName: string) {
   document.head.appendChild(link);
 }
 
+/**
+ * Calculate relative luminance from hex and return appropriate contrast color
+ */
+function getContrastColor(hex: string): string {
+  hex = hex.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16) / 255;
+  const g = parseInt(hex.substring(2, 4), 16) / 255;
+  const b = parseInt(hex.substring(4, 6), 16) / 255;
+  // sRGB to linear
+  const toLinear = (c: number) => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  const luminance = 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+  // WCAG: if luminance > 0.4, use dark text; otherwise white
+  return luminance > 0.4 ? '#091141' : '#FFFFFF';
+}
+
 function applyPaletteToDOM(palette: PaletteShade[]) {
   const root = document.documentElement;
   const map: Record<string, string> = {};
@@ -80,8 +95,6 @@ function applyPaletteToDOM(palette: PaletteShade[]) {
   }
 
   // Only set primitive palette — semantic tokens reference these via var()
-  // so dark mode CSS mappings (e.g. --bg-fill-brand: var(--primary-400))
-  // work correctly without being overridden by inline styles.
   root.style.setProperty('--primary-50', map['50']);
   root.style.setProperty('--primary-100', map['100']);
   root.style.setProperty('--primary-200', map['200']);
@@ -93,6 +106,12 @@ function applyPaletteToDOM(palette: PaletteShade[]) {
   root.style.setProperty('--primary-800', map['800']);
   root.style.setProperty('--primary-900', map['900']);
   root.style.setProperty('--primary-950', map['950']);
+
+  // Auto-contrast: set fg-inverse based on button bg luminance
+  // Light mode uses primary-600, dark mode uses primary-400
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const btnBgShade = dark ? map['400'] : map['600'];
+  root.style.setProperty('--fg-inverse', getContrastColor(btnBgShade));
 }
 
 function hslHueToHex(h: number): string {
@@ -132,6 +151,7 @@ function resetPalette() {
   const props = [
     '--primary-50', '--primary-100', '--primary-200', '--primary-300', '--primary-400',
     '--primary-500', '--primary-600', '--primary-700', '--primary-800', '--primary-900', '--primary-950',
+    '--fg-inverse',
   ];
   props.forEach(p => root.style.removeProperty(p));
 }

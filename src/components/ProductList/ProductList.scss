@@ -166,14 +166,14 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--fg-tertiary);
+  color: var(--fg-brand);
   padding: var(--space-1);
   display: flex;
   align-items: center;
   transition: color 200ms ease;
 
   &:hover {
-    color: var(--fg-primary);
+    color: var(--fg-brand-hover);
   }
 
   &--inline {
