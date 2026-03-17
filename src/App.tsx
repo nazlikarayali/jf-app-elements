@@ -14,6 +14,7 @@ import './components/DonationBox/register';
 import './components/ProductList/register';
 import './components/Heading/register';
 import './components/List/register';
+import './components/Document/register';
 
 function App() {
   const [components, setComponents] = useState<RegisteredComponent[]>(ComponentRegistry.getAll());
