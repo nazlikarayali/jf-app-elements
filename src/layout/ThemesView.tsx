@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
+import { Palette, Contrast, Type } from 'lucide-react';
 import { BottomSheet } from './components/BottomSheet';
 import { generatePalette } from '../utils/colorPalette';
 import type { PaletteShade } from '../utils/colorPalette';
@@ -164,7 +165,11 @@ function isDarkMode(): boolean {
 
 export function ThemesView() {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'colors' | 'style' | 'font' | null>(null);
+  const [colorMode, setColorMode] = useState<'light' | 'dark'>(() =>
+    document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
+  );
+  const [customExpanded, setCustomExpanded] = useState(false);
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [brandHue, setBrandHue] = useState(() => hexToHslHue(DEFAULT_COLOR));
   const [tint, setTint] = useState(DEFAULT_TINT);
@@ -222,6 +227,20 @@ export function ThemesView() {
     resetNeutral();
     resetRadius(canvasRef.current);
     document.documentElement.style.removeProperty('--font-family');
+  }, []);
+
+  const handleColorModeChange = useCallback((mode: 'light' | 'dark') => {
+    setColorMode(mode);
+    if (mode === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    localStorage.setItem('jf-lib-theme', mode);
+  }, []);
+
+  const handleTabToggle = useCallback((tab: 'colors' | 'style' | 'font') => {
+    setActiveTab((prev) => (prev === tab ? null : tab));
   }, []);
 
   // Apply palette + neutrals whenever color or tint changes, and on theme toggle
@@ -364,18 +383,157 @@ export function ThemesView() {
         {sidebarContent}
       </aside>
 
-      {/* Mobile: floating button + bottom sheet */}
-      <div className="mobile-fab mobile-fab--themes">
-        <button className="mobile-fab__btn" onClick={() => setSheetOpen(true)}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="3" />
-            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-          </svg>
+      {/* Mobile: bottom tab bar + bottom sheets */}
+      <div className="themes-bottom-bar">
+        <button
+          className={`themes-bottom-bar__tab${activeTab === 'colors' ? ' active' : ''}`}
+          onClick={() => handleTabToggle('colors')}
+        >
+          <Palette size={20} />
+          <span>Colors</span>
+        </button>
+        <button
+          className={`themes-bottom-bar__tab${activeTab === 'style' ? ' active' : ''}`}
+          onClick={() => handleTabToggle('style')}
+        >
+          <Contrast size={20} />
+          <span>Style</span>
+        </button>
+        <button
+          className={`themes-bottom-bar__tab${activeTab === 'font' ? ' active' : ''}`}
+          onClick={() => handleTabToggle('font')}
+        >
+          <Type size={20} />
+          <span>Font</span>
         </button>
       </div>
-      <BottomSheet open={sheetOpen} onClose={() => setSheetOpen(false)} title="Theme Settings">
-        <div className="themes-view__sidebar themes-view__sidebar--sheet">
-          {sidebarContent}
+
+      <BottomSheet open={activeTab === 'colors'} onClose={() => setActiveTab(null)} title="Colors" noOverlay>
+        <div className="themes-sheet-content">
+          <div className="themes-sheet-content__presets-row">
+            <button
+              className={`themes-sheet-content__color-circle themes-sheet-content__color-circle--custom${customExpanded ? ' active' : ''}`}
+              onClick={() => setCustomExpanded(!customExpanded)}
+              title="Custom"
+            >
+              <span>+</span>
+            </button>
+            {PRESET_COLORS.map((c) => (
+              <button
+                key={c}
+                className={`themes-sheet-content__color-circle${color.toUpperCase() === c ? ' active' : ''}`}
+                style={{ background: c }}
+                onClick={() => handleColorChange(c)}
+                title={c}
+              />
+            ))}
+          </div>
+          {customExpanded && (
+            <div className="themes-sheet-content__custom-area">
+              <div className="themes-view__sidebar-section">
+                <h3 className="themes-view__sidebar-title">Brand Color</h3>
+                <div className="themes-view__hue-row">
+                  <input
+                    type="range"
+                    min="0"
+                    max="360"
+                    value={brandHue}
+                    onChange={(e) => handleHueChange(Number(e.target.value))}
+                    className="themes-view__hue-range"
+                  />
+                  <div className="themes-view__picker-wrapper">
+                    <input
+                      type="color"
+                      value={color}
+                      onChange={(e) => handleColorChange(e.target.value)}
+                      className="themes-view__picker-circle"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="themes-view__sidebar-section">
+                <h3 className="themes-view__sidebar-title">Base Color</h3>
+                <div className="themes-view__tint-slider">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={tint}
+                    onChange={(e) => handleTintChange(Number(e.target.value))}
+                    className="themes-view__tint-range"
+                    style={{
+                      background: `linear-gradient(to right, #808080, oklch(0.55 0.15 ${hexToOklchHue(color)}))`,
+                    }}
+                  />
+                  <div className="themes-view__tint-labels">
+                    <span>Grey</span>
+                    <span>Tinted</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </BottomSheet>
+
+      <BottomSheet open={activeTab === 'style'} onClose={() => setActiveTab(null)} title="Style" noOverlay>
+        <div className="themes-sheet-content">
+          <div className="themes-sheet-content__section">
+            <h3 className="themes-view__sidebar-title">Color Mode</h3>
+            <div className="themes-sheet-content__segmented">
+              <button
+                className={`themes-sheet-content__seg-btn${colorMode === 'light' ? ' active' : ''}`}
+                onClick={() => handleColorModeChange('light')}
+              >
+                Light
+              </button>
+              <button
+                className={`themes-sheet-content__seg-btn${colorMode === 'dark' ? ' active' : ''}`}
+                onClick={() => handleColorModeChange('dark')}
+              >
+                Dark
+              </button>
+            </div>
+          </div>
+          <div className="themes-sheet-content__section">
+            <h3 className="themes-view__sidebar-title">Radius</h3>
+            <div className="themes-sheet-content__segmented">
+              {RADIUS_MODES.map(({ scale }) => (
+                <button
+                  key={scale}
+                  className={`themes-sheet-content__seg-btn${radius === scale ? ' active' : ''}`}
+                  onClick={() => handleRadiusChange(scale)}
+                >
+                  {scale}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </BottomSheet>
+
+      <BottomSheet open={activeTab === 'font'} onClose={() => setActiveTab(null)} title="Font" noOverlay>
+        <div className="themes-sheet-content">
+          <div className="themes-sheet-content__font-list">
+            {FONT_OPTIONS.map((f) => {
+              loadGoogleFont(f);
+              return (
+                <button
+                  key={f}
+                  className={`themes-sheet-content__font-item${font === f ? ' active' : ''}`}
+                  style={{ fontFamily: `'${f}', sans-serif` }}
+                  onClick={() => handleFontChange(f)}
+                >
+                  <span>{f}</span>
+                  {font === f && (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </BottomSheet>
 
