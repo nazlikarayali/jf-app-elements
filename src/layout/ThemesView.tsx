@@ -6,6 +6,7 @@ import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Heading } from '../components/Heading';
 import { DonationBox } from '../components/DonationBox';
+import { Testimonial } from '../components/Testimonial';
 import { Document } from '../components/Document';
 import { SignDocument } from '../components/SignDocument';
 import { Form } from '../components/Form';
@@ -398,7 +399,17 @@ export function ThemesView() {
               <Form label="Contact Form" description="Get in touch with us" />
               <SignDocument label="Terms of Service" description="Required before proceeding" />
               <Document alignment="Left" size="Normal" fileName="Brand Guidelines.pdf" description="4.2 MB - PDF Document" />
+              <Document hasFile={false} />
             </div>
+          </section>
+
+          {/* Testimonial */}
+          <section className="themes-view__section">
+            <Testimonial items={[
+              { name: 'Sarah Johnson', text: '\u201CThis platform transformed how we collect donations. The interface is intuitive and our donors love it.\u201D' },
+              { name: 'Michael Chen', text: '\u201CSetup was incredibly easy. We were up and running in minutes, not days.\u201D' },
+              { name: 'Emily Davis', text: '\u201CThe best investment we made for our nonprofit. Highly recommended!\u201D' },
+            ]} />
           </section>
 
           {/* Donation */}

@@ -20,6 +20,7 @@ import './components/SignDocument/register';
 import './components/ImageGallery/register';
 import './components/SocialFollow/register';
 import './components/Form/register';
+import './components/Testimonial/register';
 
 type AppMode = 'components' | 'themes';
 
