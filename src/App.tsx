@@ -4,6 +4,7 @@ import { SidebarLeft } from './layout/SidebarLeft';
 import { SidebarRight } from './layout/SidebarRight';
 import { MainContent } from './layout/MainContent';
 import { ThemesView } from './layout/ThemesView';
+import { BottomSheet } from './layout/components/BottomSheet';
 import { ComponentRegistry, type RegisteredComponent } from './types/registry';
 import type { VariantValues, PropertyValues, StateValues } from './types/component';
 import './styles/app.scss';
@@ -23,9 +24,11 @@ import './components/Form/register';
 import './components/Testimonial/register';
 
 type AppMode = 'components' | 'themes';
+type MobileSheet = 'none' | 'components' | 'properties';
 
 function App() {
   const [mode, setMode] = useState<AppMode>('components');
+  const [mobileSheet, setMobileSheet] = useState<MobileSheet>('none');
   const [components, setComponents] = useState<RegisteredComponent[]>(ComponentRegistry.getAll());
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [variants, setVariants] = useState<VariantValues>({});
@@ -46,6 +49,7 @@ function App() {
 
     setSelectedId(id);
     setMode('components');
+    setMobileSheet('none');
 
     const newVariants: VariantValues = {};
     for (const [group, config] of Object.entries(comp.variants)) {
@@ -104,6 +108,47 @@ function App() {
               onPropertyChange={handlePropertyChange}
               onStateChange={handleStateChange}
             />
+
+            {/* Mobile floating buttons */}
+            <div className="mobile-fab">
+              <button className="mobile-fab__btn" onClick={() => setMobileSheet('components')}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></svg>
+              </button>
+              {selectedComponent && (
+                <button className="mobile-fab__btn" onClick={() => setMobileSheet('properties')}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></svg>
+                </button>
+              )}
+            </div>
+
+            {/* Mobile bottom sheets */}
+            <BottomSheet
+              open={mobileSheet === 'components'}
+              onClose={() => setMobileSheet('none')}
+              title="Components"
+            >
+              <SidebarLeft
+                selectedId={selectedId}
+                onSelect={handleSelect}
+                components={components}
+              />
+            </BottomSheet>
+
+            <BottomSheet
+              open={mobileSheet === 'properties'}
+              onClose={() => setMobileSheet('none')}
+              title={selectedComponent?.name || 'Properties'}
+            >
+              <SidebarRight
+                component={selectedComponent}
+                variants={variants}
+                properties={properties}
+                states={states}
+                onVariantChange={handleVariantChange}
+                onPropertyChange={handlePropertyChange}
+                onStateChange={handleStateChange}
+              />
+            </BottomSheet>
           </>
         ) : (
           <ThemesView />
