@@ -1854,8 +1854,8 @@ body {
 // Responsive - Mobile
 // ============================================
 @media (max-width: 768px) {
-  .sidebar-left,
-  .sidebar-right {
+  .app-body > .sidebar-left,
+  .app-body > .sidebar-right {
     display: none;
   }
 
