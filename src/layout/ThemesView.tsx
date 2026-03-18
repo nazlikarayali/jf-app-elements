@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
+import { BottomSheet } from './components/BottomSheet';
 import { generatePalette } from '../utils/colorPalette';
 import type { PaletteShade } from '../utils/colorPalette';
 import { generateNeutralPalette, applyNeutralToDOM, resetNeutral, hexToOklchHue } from '../utils/neutralTint';
@@ -163,6 +164,7 @@ function isDarkMode(): boolean {
 
 export function ThemesView() {
   const canvasRef = useRef<HTMLDivElement>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [brandHue, setBrandHue] = useState(() => hexToHslHue(DEFAULT_COLOR));
   const [tint, setTint] = useState(DEFAULT_TINT);
@@ -250,12 +252,10 @@ export function ThemesView() {
     };
   }, []);
 
-  return (
-    <div className="themes-view">
-      {/* Left: Settings Panel */}
-      <aside className="themes-view__sidebar">
-        <div className="themes-view__sidebar-section">
-          <h3 className="themes-view__sidebar-title">Brand Color</h3>
+  const sidebarContent: ReactNode = (
+    <>
+      <div className="themes-view__sidebar-section">
+        <h3 className="themes-view__sidebar-title">Brand Color</h3>
           <div className="themes-view__hue-row">
             <input
               type="range"
@@ -353,8 +353,31 @@ export function ThemesView() {
           </div>
         </div>
 
-        <button className="themes-view__reset" onClick={handleReset}>Reset to Default</button>
+      <button className="themes-view__reset" onClick={handleReset}>Reset to Default</button>
+    </>
+  );
+
+  return (
+    <div className="themes-view">
+      {/* Left: Settings Panel (desktop) */}
+      <aside className="themes-view__sidebar">
+        {sidebarContent}
       </aside>
+
+      {/* Mobile: floating button + bottom sheet */}
+      <div className="mobile-fab mobile-fab--themes">
+        <button className="mobile-fab__btn" onClick={() => setSheetOpen(true)}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+          </svg>
+        </button>
+      </div>
+      <BottomSheet open={sheetOpen} onClose={() => setSheetOpen(false)} title="Theme Settings">
+        <div className="themes-view__sidebar themes-view__sidebar--sheet">
+          {sidebarContent}
+        </div>
+      </BottomSheet>
 
       {/* Right: Preview as App Page */}
       <main className="themes-view__preview">

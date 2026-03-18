@@ -1731,7 +1731,7 @@ body {
   background: var(--color-surface);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   width: 100%;
-  max-height: 85vh;
+  max-height: 40vh;
   display: flex;
   flex-direction: column;
   animation: slideUp 250ms ease;
@@ -1825,6 +1825,10 @@ body {
   gap: 10px;
   z-index: 50;
   flex-direction: column;
+
+  &--themes {
+    display: none;
+  }
 }
 
 .mobile-fab__btn {
@@ -1890,12 +1894,19 @@ body {
     flex-direction: column;
   }
 
-  .themes-view__sidebar {
+  .themes-view > .themes-view__sidebar {
+    display: none;
+  }
+
+  .themes-view__sidebar--sheet {
     width: 100%;
-    border-right: none;
-    border-bottom: 1px solid var(--color-border);
-    max-height: 40vh;
-    overflow-y: auto;
+    border: none;
+    padding: 16px;
+    overflow-y: visible;
+  }
+
+  .mobile-fab--themes {
+    display: flex;
   }
 
   .themes-view__preview {
