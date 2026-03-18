@@ -81,9 +81,9 @@
   width: 100%;
 
   &--normal {
-    font-size: var(--font-size-label-md);
-    line-height: var(--line-height-label-md);
-    max-height: var(--line-height-label-md);
+    font-size: var(--font-size-label-lg);
+    line-height: var(--line-height-label-lg);
+    max-height: var(--line-height-label-lg);
   }
 
   &--large {
@@ -102,9 +102,9 @@
   width: 100%;
 
   &--normal {
-    font-size: var(--font-size-label-sm);
-    line-height: var(--line-height-label-sm);
-    max-height: var(--line-height-label-sm);
+    font-size: var(--font-size-paragraph-sm);
+    line-height: var(--line-height-paragraph-sm);
+    max-height: var(--line-height-paragraph-sm);
   }
 
   &--large {
