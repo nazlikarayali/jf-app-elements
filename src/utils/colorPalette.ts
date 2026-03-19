@@ -142,5 +142,32 @@ export function getClosestShadeKey(baseHex: string): string {
   return findClosestShade(base.l);
 }
 
+/**
+ * Generate a secondary palette and apply it to the DOM as --secondary-50 through --secondary-950.
+ */
+export function applySecondaryPaletteToDOM(palette: PaletteShade[]) {
+  const root = document.documentElement;
+  const map: Record<string, string> = {};
+  for (const shade of palette) {
+    root.style.setProperty(`--secondary-${shade.key}`, shade.hex);
+    map[shade.key] = shade.hex;
+  }
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  root.style.setProperty('--fg-secondary-brand', map[dark ? '400' : '600']);
+  root.style.setProperty('--bg-surface-secondary', map[dark ? '950' : '50']);
+  root.style.setProperty('--bg-fill-secondary-brand', map[dark ? '400' : '600']);
+}
+
+/**
+ * Remove all secondary CSS variables from the DOM.
+ */
+export function resetSecondaryPalette() {
+  const root = document.documentElement;
+  SHADE_KEYS.forEach((key) => root.style.removeProperty(`--secondary-${key}`));
+  root.style.removeProperty('--fg-secondary-brand');
+  root.style.removeProperty('--bg-surface-secondary');
+  root.style.removeProperty('--bg-fill-secondary-brand');
+}
+
 export { SHADE_KEYS, hexToHSL, hslToHex };
 export type { PaletteShade };

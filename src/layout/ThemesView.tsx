@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
-import { Palette, Contrast, Type } from 'lucide-react';
+import { Palette, Contrast, Type, ChevronDown, Check, Plus, Trash2 } from 'lucide-react';
 import { BottomSheet } from './components/BottomSheet';
-import { generatePalette } from '../utils/colorPalette';
+import { generatePalette, applySecondaryPaletteToDOM, resetSecondaryPalette } from '../utils/colorPalette';
 import type { PaletteShade } from '../utils/colorPalette';
 import { generateNeutralPalette, applyNeutralToDOM, resetNeutral, hexToOklchHue } from '../utils/neutralTint';
 import { Card } from '../components/Card';
@@ -12,6 +12,7 @@ import { Testimonial } from '../components/Testimonial';
 import { Document } from '../components/Document';
 import { SignDocument } from '../components/SignDocument';
 import { Form } from '../components/Form';
+import { Table } from '../components/Table';
 import { SocialFollow } from '../components/SocialFollow';
 import { List } from '../components/List';
 import { ProductList } from '../components/ProductList';
@@ -20,6 +21,7 @@ const DEFAULT_COLOR = '#7D38EF';
 const DEFAULT_FONT = 'Inter';
 const DEFAULT_RADIUS = 'Medium';
 const DEFAULT_TINT = 50;
+const DEFAULT_HARMONY = 150;
 
 type RadiusScale = 'Small' | 'Medium' | 'Large' | 'XLarge';
 
@@ -46,6 +48,31 @@ function resetRadius(canvas: HTMLElement | null) {
 const PRESET_COLORS = [
   '#7D38EF', '#DF2125', '#0385C8', '#19A44B', '#F97101', '#DC7801',
   '#E91E63', '#00B5D4', '#8D5DF9', '#64A501',
+];
+
+interface ThemePreset {
+  name: string;
+  color: string;
+  font: string;
+  radius: RadiusScale;
+  tint: number;
+  mode: 'light' | 'dark';
+  harmonyOffset: number;
+}
+
+const THEME_PRESETS: ThemePreset[] = [
+  { name: 'Default', color: '#7D38EF', font: 'Inter', radius: 'Medium', tint: 50, mode: 'light', harmonyOffset: 150 },
+  { name: 'Ocean Breeze', color: '#0385C8', font: 'DM Sans', radius: 'Large', tint: 30, mode: 'light', harmonyOffset: 150 },
+  { name: 'Midnight Blue', color: '#0385C8', font: 'Geist', radius: 'Medium', tint: 20, mode: 'dark', harmonyOffset: 150 },
+  { name: 'Forest', color: '#19A44B', font: 'Public Sans', radius: 'Small', tint: 40, mode: 'light', harmonyOffset: 120 },
+  { name: 'Sunset', color: '#F97101', font: 'Bricolage Grotesque', radius: 'Large', tint: 60, mode: 'light', harmonyOffset: 180 },
+  { name: 'Cherry', color: '#DF2125', font: 'Instrument Sans', radius: 'Medium', tint: 35, mode: 'light', harmonyOffset: 150 },
+  { name: 'Dark Elegance', color: '#8D5DF9', font: 'Figtree', radius: 'XLarge', tint: 70, mode: 'dark', harmonyOffset: 160 },
+  { name: 'Minimal Dark', color: '#64A501', font: 'Hanken Grotesk', radius: 'Small', tint: 10, mode: 'dark', harmonyOffset: 150 },
+  { name: 'Warm Gold', color: '#DC7801', font: 'Fredoka', radius: 'XLarge', tint: 80, mode: 'light', harmonyOffset: 200 },
+  { name: 'Rose', color: '#E91E63', font: 'Varela Round', radius: 'Large', tint: 55, mode: 'light', harmonyOffset: 150 },
+  { name: 'Aqua Night', color: '#00B5D4', font: 'JetBrains Mono', radius: 'Medium', tint: 25, mode: 'dark', harmonyOffset: 150 },
+  { name: 'Monochrome', color: '#353C6A', font: 'IBM Plex Mono', radius: 'Small', tint: 0, mode: 'light', harmonyOffset: 150 },
 ];
 
 const FONT_OPTIONS = [
@@ -163,6 +190,93 @@ function isDarkMode(): boolean {
   return document.documentElement.getAttribute('data-theme') === 'dark';
 }
 
+function PresetDropdown({ presets, active, onSelect }: { presets: ThemePreset[]; active: string; onSelect: (p: ThemePreset) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  const activePreset = presets.find(p => p.name === active);
+
+  return (
+    <div className="preset-dropdown" ref={ref}>
+      <button className="preset-dropdown__trigger" onClick={() => setOpen(!open)}>
+        {activePreset && <span className="preset-dropdown__circle" style={{ background: activePreset.color }} />}
+        <span className="preset-dropdown__label">{active || 'Select theme'}</span>
+        <ChevronDown size={16} className={`preset-dropdown__chevron${open ? ' open' : ''}`} />
+      </button>
+      {open && (
+        <div className="preset-dropdown__menu">
+          {presets.map((p) => (
+            <button
+              key={p.name}
+              className={`preset-dropdown__item${p.name === active ? ' active' : ''}`}
+              onClick={() => { onSelect(p); setOpen(false); }}
+            >
+              <span className="preset-dropdown__circle" style={{ background: p.color }} />
+              <span className="preset-dropdown__item-label">{p.name}</span>
+              {p.name === active && <Check size={16} className="preset-dropdown__check" />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FontDropdown({ fonts, active, onChange }: { fonts: string[]; active: string; onChange: (f: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fonts.forEach(loadGoogleFont);
+  }, [fonts]);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  return (
+    <div className="preset-dropdown" ref={ref}>
+      <button className="preset-dropdown__trigger" onClick={() => setOpen(!open)}>
+        <span className="preset-dropdown__label" style={{ fontFamily: `'${active}', sans-serif` }}>{active}</span>
+        <ChevronDown size={16} className={`preset-dropdown__chevron${open ? ' open' : ''}`} />
+      </button>
+      {open && (
+        <div className="preset-dropdown__menu">
+          {fonts.map((f) => (
+            <button
+              key={f}
+              className={`preset-dropdown__item${f === active ? ' active' : ''}`}
+              style={{ fontFamily: `'${f}', sans-serif` }}
+              onClick={() => { onChange(f); setOpen(false); }}
+            >
+              <span className="preset-dropdown__item-label">{f}</span>
+              {f === active && <Check size={16} className="preset-dropdown__check" />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function getSecondaryColor(primaryHex: string, offsetDegrees: number): string {
+  const primaryHue = hexToHslHue(primaryHex);
+  const secondaryHue = (primaryHue + offsetDegrees) % 360;
+  return hslHueToHex(secondaryHue);
+}
+
 export function ThemesView() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState<'colors' | 'style' | 'font' | null>(null);
@@ -176,6 +290,52 @@ export function ThemesView() {
   const [font, setFont] = useState(DEFAULT_FONT);
   const [radius, setRadius] = useState<RadiusScale>(DEFAULT_RADIUS as RadiusScale);
   const [, setPalette] = useState<PaletteShade[]>(() => generatePalette(DEFAULT_COLOR, isDarkMode()));
+  const [harmonyOffset, setHarmonyOffset] = useState(DEFAULT_HARMONY);
+  const [secondaryEnabled, setSecondaryEnabled] = useState(false);
+  const [activePreset, setActivePreset] = useState('Default');
+
+  const applySecondary = useCallback((primaryColor: string, offset: number, dark: boolean) => {
+    const secondaryColor = getSecondaryColor(primaryColor, offset);
+    const secondaryPalette = generatePalette(secondaryColor, dark);
+    applySecondaryPaletteToDOM(secondaryPalette);
+  }, []);
+
+  const removeSecondary = useCallback(() => {
+    setSecondaryEnabled(false);
+    resetSecondaryPalette();
+  }, []);
+
+  const addSecondary = useCallback(() => {
+    setSecondaryEnabled(true);
+    applySecondary(color, harmonyOffset, isDarkMode());
+  }, [color, harmonyOffset, applySecondary]);
+
+  const applyPreset = useCallback((preset: ThemePreset) => {
+    setActivePreset(preset.name);
+    setColor(preset.color);
+    setBrandHue(hexToHslHue(preset.color));
+    const newPalette = generatePalette(preset.color, preset.mode === 'dark');
+    setPalette(newPalette);
+    applyPaletteToDOM(newPalette);
+    setHarmonyOffset(preset.harmonyOffset);
+    if (secondaryEnabled) {
+      applySecondary(preset.color, preset.harmonyOffset, preset.mode === 'dark');
+    }
+    setTint(preset.tint);
+    applyNeutralToDOM(generateNeutralPalette(preset.color, preset.tint, preset.mode === 'dark'));
+    setFont(preset.font);
+    loadGoogleFont(preset.font);
+    document.documentElement.style.setProperty('--font-family', `'${preset.font}', -apple-system, BlinkMacSystemFont, sans-serif`);
+    setRadius(preset.radius);
+    applyRadius(preset.radius, canvasRef.current);
+    setColorMode(preset.mode);
+    if (preset.mode === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    localStorage.setItem('jf-lib-theme', preset.mode);
+  }, [secondaryEnabled, applySecondary]);
 
   const handleColorChange = useCallback((newColor: string) => {
     setColor(newColor);
@@ -183,9 +343,11 @@ export function ThemesView() {
     const newPalette = generatePalette(newColor, isDarkMode());
     setPalette(newPalette);
     applyPaletteToDOM(newPalette);
-    const neutralPalette = generateNeutralPalette(newColor, tint, isDarkMode());
-    applyNeutralToDOM(neutralPalette);
-  }, [tint]);
+    if (secondaryEnabled) {
+      applySecondary(newColor, harmonyOffset, isDarkMode());
+    }
+    applyNeutralToDOM(generateNeutralPalette(newColor, tint, isDarkMode()));
+  }, [tint, harmonyOffset, secondaryEnabled, applySecondary]);
 
   const handleHueChange = useCallback((hue: number) => {
     setBrandHue(hue);
@@ -194,15 +356,24 @@ export function ThemesView() {
     const newPalette = generatePalette(newColor, isDarkMode());
     setPalette(newPalette);
     applyPaletteToDOM(newPalette);
-    const neutralPalette = generateNeutralPalette(newColor, tint, isDarkMode());
-    applyNeutralToDOM(neutralPalette);
-  }, [tint]);
+    if (secondaryEnabled) {
+      applySecondary(newColor, harmonyOffset, isDarkMode());
+    }
+    applyNeutralToDOM(generateNeutralPalette(newColor, tint, isDarkMode()));
+  }, [tint, harmonyOffset, secondaryEnabled, applySecondary]);
 
   const handleTintChange = useCallback((newTint: number) => {
     setTint(newTint);
     const neutralPalette = generateNeutralPalette(color, newTint, isDarkMode());
     applyNeutralToDOM(neutralPalette);
   }, [color]);
+
+  const handleHarmonyChange = useCallback((offset: number) => {
+    setHarmonyOffset(offset);
+    if (secondaryEnabled) {
+      applySecondary(color, offset, isDarkMode());
+    }
+  }, [color, secondaryEnabled, applySecondary]);
 
   const handleFontChange = useCallback((newFont: string) => {
     setFont(newFont);
@@ -219,11 +390,14 @@ export function ThemesView() {
     setColor(DEFAULT_COLOR);
     setBrandHue(hexToHslHue(DEFAULT_COLOR));
     setTint(DEFAULT_TINT);
+    setHarmonyOffset(DEFAULT_HARMONY);
+    setSecondaryEnabled(false);
     setFont(DEFAULT_FONT);
     setRadius(DEFAULT_RADIUS as RadiusScale);
     const newPalette = generatePalette(DEFAULT_COLOR, isDarkMode());
     setPalette(newPalette);
     resetPalette();
+    resetSecondaryPalette();
     resetNeutral();
     resetRadius(canvasRef.current);
     document.documentElement.style.removeProperty('--font-family');
@@ -243,15 +417,22 @@ export function ThemesView() {
     setActiveTab((prev) => (prev === tab ? null : tab));
   }, []);
 
-  // Apply palette + neutrals whenever color or tint changes, and on theme toggle
+  // Apply palette + neutrals + secondary whenever dependencies change, and on theme toggle
   useEffect(() => {
     const palette = generatePalette(color, isDarkMode());
     applyPaletteToDOM(palette);
-    const neutralPalette = generateNeutralPalette(color, tint, isDarkMode());
-    applyNeutralToDOM(neutralPalette);
+    if (secondaryEnabled) {
+      applySecondary(color, harmonyOffset, isDarkMode());
+    } else {
+      resetSecondaryPalette();
+    }
+    applyNeutralToDOM(generateNeutralPalette(color, tint, isDarkMode()));
 
     const observer = new MutationObserver(() => {
       applyPaletteToDOM(generatePalette(color, isDarkMode()));
+      if (secondaryEnabled) {
+        applySecondary(color, harmonyOffset, isDarkMode());
+      }
       applyNeutralToDOM(generateNeutralPalette(color, tint, isDarkMode()));
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
@@ -259,12 +440,13 @@ export function ThemesView() {
     return () => {
       observer.disconnect();
     };
-  }, [color, tint]);
+  }, [color, tint, harmonyOffset, secondaryEnabled, applySecondary]);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       resetPalette();
+      resetSecondaryPalette();
       resetNeutral();
       resetRadius(canvasRef.current);
       document.documentElement.style.removeProperty('--font-family');
@@ -316,44 +498,51 @@ export function ThemesView() {
           </div>
         </div>
 
-        <div className="themes-view__sidebar-section">
-          <h3 className="themes-view__sidebar-title">Presets</h3>
-          <div className="themes-view__presets">
-            {PRESET_COLORS.map((c) => (
-              <button
-                key={c}
-                className={`themes-view__preset${color.toUpperCase() === c ? ' active' : ''}`}
-                style={{ background: c }}
-                onClick={() => handleColorChange(c)}
-                title={c}
-              />
-            ))}
+        {secondaryEnabled ? (
+          <div className="themes-view__sidebar-section">
+            <div className="themes-view__section-header">
+              <h3 className="themes-view__sidebar-title">Secondary Color</h3>
+              <button className="themes-view__remove-btn" onClick={removeSecondary} title="Remove secondary color">
+                <Trash2 size={14} />
+              </button>
+            </div>
+            <div className="themes-view__secondary-color-row">
+              <div className="themes-view__harmony-preview" style={{ background: getSecondaryColor(color, harmonyOffset) }} />
+              <span className="themes-view__secondary-hex">{getSecondaryColor(color, harmonyOffset)}</span>
+            </div>
+            <div className="themes-view__harmony-slider">
+              <div className="themes-view__harmony-row">
+                <input
+                  type="range"
+                  min="0"
+                  max="360"
+                  value={harmonyOffset}
+                  onChange={(e) => handleHarmonyChange(Number(e.target.value))}
+                  className="themes-view__harmony-range"
+                  style={{
+                    background: `linear-gradient(to right, ${color}, ${getSecondaryColor(color, harmonyOffset)})`,
+                  }}
+                />
+              </div>
+            </div>
           </div>
+        ) : (
+          <div className="themes-view__sidebar-section">
+            <button className="themes-view__add-secondary" onClick={addSecondary}>
+              <Plus size={16} />
+              <span>Add secondary color scale</span>
+            </button>
+          </div>
+        )}
+
+        <div className="themes-view__sidebar-section">
+          <h3 className="themes-view__sidebar-title">Theme Presets</h3>
+          <PresetDropdown presets={THEME_PRESETS} active={activePreset} onSelect={applyPreset} />
         </div>
 
         <div className="themes-view__sidebar-section">
           <h3 className="themes-view__sidebar-title">Font Family</h3>
-          <div className="themes-view__font-list">
-            {FONT_OPTIONS.map((f) => {
-              loadGoogleFont(f);
-              return (
-                <button
-                  key={f}
-                  className={`themes-view__font-item${font === f ? ' active' : ''}`}
-                  style={{ fontFamily: `'${f}', sans-serif` }}
-                  onClick={() => handleFontChange(f)}
-                  onMouseEnter={() => {
-                    document.documentElement.style.setProperty('--font-family', `'${f}', -apple-system, BlinkMacSystemFont, sans-serif`);
-                  }}
-                  onMouseLeave={() => {
-                    document.documentElement.style.setProperty('--font-family', `'${font}', -apple-system, BlinkMacSystemFont, sans-serif`);
-                  }}
-                >
-                  {f}
-                </button>
-              );
-            })}
-          </div>
+          <FontDropdown fonts={FONT_OPTIONS} active={font} onChange={handleFontChange} />
         </div>
 
         <div className="themes-view__sidebar-section">
@@ -410,67 +599,71 @@ export function ThemesView() {
 
       <BottomSheet open={activeTab === 'colors'} onClose={() => setActiveTab(null)} title="Colors" noOverlay>
         <div className="themes-sheet-content">
-          <div className="themes-sheet-content__presets-row">
-            <button
-              className={`themes-sheet-content__color-circle themes-sheet-content__color-circle--custom${customExpanded ? ' active' : ''}`}
-              onClick={() => setCustomExpanded(!customExpanded)}
-              title="Custom"
-            >
-              <span>+</span>
-            </button>
-            {PRESET_COLORS.map((c) => (
-              <button
-                key={c}
-                className={`themes-sheet-content__color-circle${color.toUpperCase() === c ? ' active' : ''}`}
-                style={{ background: c }}
-                onClick={() => handleColorChange(c)}
-                title={c}
-              />
-            ))}
+          <div className="themes-sheet-content__section">
+            <h3 className="themes-view__sidebar-title">Theme Presets</h3>
+            <div className="themes-view__preset-dropdown-wrapper">
+              <select
+                className="themes-view__preset-dropdown"
+                value={activePreset}
+                onChange={(e) => {
+                  const preset = THEME_PRESETS.find(p => p.name === e.target.value);
+                  if (preset) applyPreset(preset);
+                }}
+              >
+                {THEME_PRESETS.map((p) => (
+                  <option key={p.name} value={p.name}>{p.name}</option>
+                ))}
+              </select>
+            </div>
           </div>
-          {customExpanded && (
-            <div className="themes-sheet-content__custom-area">
-              <div className="themes-view__sidebar-section">
-                <h3 className="themes-view__sidebar-title">Brand Color</h3>
-                <div className="themes-view__hue-row">
+          <div className="themes-sheet-content__section">
+            <h3 className="themes-view__sidebar-title">Custom Color</h3>
+            <div className="themes-sheet-content__presets-row">
+              {PRESET_COLORS.map((c) => (
+                <button
+                  key={c}
+                  className={`themes-sheet-content__color-circle${color.toUpperCase() === c ? ' active' : ''}`}
+                  style={{ background: c }}
+                  onClick={() => { handleColorChange(c); setActivePreset(''); }}
+                  title={c}
+                />
+              ))}
+            </div>
+          </div>
+          {secondaryEnabled ? (
+            <div className="themes-sheet-content__section">
+              <div className="themes-view__section-header">
+                <h3 className="themes-view__sidebar-title">Secondary Color</h3>
+                <button className="themes-view__remove-btn" onClick={removeSecondary} title="Remove secondary color">
+                  <Trash2 size={14} />
+                </button>
+              </div>
+              <div className="themes-view__secondary-color-row">
+                <div className="themes-view__harmony-preview" style={{ background: getSecondaryColor(color, harmonyOffset) }} />
+                <span className="themes-view__secondary-hex">{getSecondaryColor(color, harmonyOffset)}</span>
+              </div>
+              <div className="themes-view__harmony-slider">
+                <div className="themes-view__harmony-row">
                   <input
                     type="range"
                     min="0"
                     max="360"
-                    value={brandHue}
-                    onChange={(e) => handleHueChange(Number(e.target.value))}
-                    className="themes-view__hue-range"
-                  />
-                  <div className="themes-view__picker-wrapper">
-                    <input
-                      type="color"
-                      value={color}
-                      onChange={(e) => handleColorChange(e.target.value)}
-                      className="themes-view__picker-circle"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="themes-view__sidebar-section">
-                <h3 className="themes-view__sidebar-title">Base Color</h3>
-                <div className="themes-view__tint-slider">
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={tint}
-                    onChange={(e) => handleTintChange(Number(e.target.value))}
-                    className="themes-view__tint-range"
+                    value={harmonyOffset}
+                    onChange={(e) => handleHarmonyChange(Number(e.target.value))}
+                    className="themes-view__harmony-range"
                     style={{
-                      background: `linear-gradient(to right, #808080, oklch(0.55 0.15 ${hexToOklchHue(color)}))`,
+                      background: `linear-gradient(to right, ${color}, ${getSecondaryColor(color, harmonyOffset)})`,
                     }}
                   />
-                  <div className="themes-view__tint-labels">
-                    <span>Grey</span>
-                    <span>Tinted</span>
-                  </div>
                 </div>
               </div>
+            </div>
+          ) : (
+            <div className="themes-sheet-content__section">
+              <button className="themes-view__add-secondary" onClick={addSecondary}>
+                <Plus size={16} />
+                <span>Add secondary color scale</span>
+              </button>
             </div>
           )}
         </div>
@@ -514,26 +707,7 @@ export function ThemesView() {
 
       <BottomSheet open={activeTab === 'font'} onClose={() => setActiveTab(null)} title="Font" noOverlay>
         <div className="themes-sheet-content">
-          <div className="themes-sheet-content__font-list">
-            {FONT_OPTIONS.map((f) => {
-              loadGoogleFont(f);
-              return (
-                <button
-                  key={f}
-                  className={`themes-sheet-content__font-item${font === f ? ' active' : ''}`}
-                  style={{ fontFamily: `'${f}', sans-serif` }}
-                  onClick={() => handleFontChange(f)}
-                >
-                  <span>{f}</span>
-                  {font === f && (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+          <FontDropdown fonts={FONT_OPTIONS} active={font} onChange={handleFontChange} />
         </div>
       </BottomSheet>
 
@@ -579,9 +753,15 @@ export function ThemesView() {
             <div className="themes-view__docs-row">
               <Form label="Contact Form" description="Get in touch with us" />
               <SignDocument label="Terms of Service" description="Required before proceeding" />
+              <Table label="Submissions" description="View all form responses" />
               <Document alignment="Left" size="Normal" fileName="Brand Guidelines.pdf" description="4.2 MB - PDF Document" />
-              <Document hasFile={false} />
             </div>
+          </section>
+
+          {/* Open Form */}
+          <section className="themes-view__section">
+            <Heading size="Small" heading="Registration" subheading="Fill out the form below" />
+            <Form showForm />
           </section>
 
           {/* Testimonial */}

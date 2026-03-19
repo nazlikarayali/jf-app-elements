@@ -3,7 +3,6 @@
 // ============================================
 
 .jf-testimonial {
-  background: var(--bg-surface);
   width: 616px;
   max-width: 100%;
   padding: var(--space-3);
@@ -20,7 +19,7 @@
 }
 
 .jf-testimonial__card {
-  background: var(--bg-surface);
+  background: var(--bg-fill);
   box-shadow: 0 0 2px 0 rgba(37, 45, 91, 0.04), 0 4px 8px 0 rgba(84, 95, 111, 0.16);
   border-radius: var(--radius-lg);
   padding: var(--space-6) var(--space-6) var(--space-5);

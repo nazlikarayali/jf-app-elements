@@ -1,8 +1,8 @@
 // ============================================
-// JotForm Apps - Sign Document Component
+// JotForm Apps - Table Component
 // ============================================
 
-.jf-sign-doc {
+.jf-table {
   background: var(--bg-fill);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -21,7 +21,7 @@
   &--right {
     flex-direction: row-reverse;
 
-    .jf-sign-doc__content {
+    .jf-table__content {
       align-items: flex-end;
       text-align: right;
     }
@@ -33,7 +33,7 @@
     align-items: center;
     gap: var(--space-3);
 
-    .jf-sign-doc__content {
+    .jf-table__content {
       align-items: center;
       text-align: center;
       padding: 0 var(--space-3);
@@ -53,8 +53,7 @@
   }
 }
 
-// Icon
-.jf-sign-doc__icon {
+.jf-table__icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -64,8 +63,7 @@
   color: var(--fg-brand);
 }
 
-// Content
-.jf-sign-doc__content {
+.jf-table__content {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -74,8 +72,7 @@
   padding-right: var(--space-3);
 }
 
-// Title
-.jf-sign-doc__title {
+.jf-table__title {
   color: var(--fg-primary);
   font-weight: var(--font-weight-bold);
   overflow: hidden;
@@ -96,8 +93,7 @@
   }
 }
 
-// Description
-.jf-sign-doc__desc {
+.jf-table__desc {
   color: var(--fg-disabled);
   font-weight: var(--font-weight-regular);
   overflow: hidden;
@@ -118,8 +114,7 @@
   }
 }
 
-// Required Badge
-.jf-sign-doc__badge {
+.jf-table__badge {
   width: 24px;
   height: 24px;
   background: var(--fg-secondary-brand, var(--fg-brand));

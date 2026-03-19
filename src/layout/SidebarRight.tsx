@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { RegisteredComponent } from '../types/registry';
 import type { VariantValues, PropertyValues, StateValues } from '../types/component';
 import { IconPicker } from './components/IconPicker';
@@ -13,6 +12,8 @@ interface SidebarRightProps {
   onVariantChange: (group: string, value: string) => void;
   onPropertyChange: (name: string, value: string | boolean | number) => void;
   onStateChange: (name: string, value: boolean) => void;
+  tab?: SidebarTab;
+  onTabChange?: (tab: SidebarTab) => void;
 }
 
 export function SidebarRight({
@@ -23,8 +24,12 @@ export function SidebarRight({
   onVariantChange,
   onPropertyChange,
   onStateChange,
+  tab = 'variants',
+  onTabChange,
 }: SidebarRightProps) {
-  const [tab, setTab] = useState<SidebarTab>('variants');
+  const setTab = (newTab: SidebarTab) => {
+    onTabChange?.(newTab);
+  };
 
   if (!component) {
     return (
@@ -67,7 +72,7 @@ export function SidebarRight({
                 .filter(([, config]) => {
                   if (!config.showWhen) return true;
                   return Object.entries(config.showWhen).every(
-                    ([key, val]) => variants[key] === val
+                    ([key, val]) => (variants[key] === val) || (properties[key] === val)
                   );
                 })
                 .map(([group, config]) => (
@@ -99,7 +104,7 @@ export function SidebarRight({
                 {component.properties.filter((prop) => {
                   if (!prop.showWhen) return true;
                   return Object.entries(prop.showWhen).every(
-                    ([key, val]) => variants[key] === val
+                    ([key, val]) => (variants[key] === val) || (properties[key] === val)
                   );
                 }).map((prop) => (
                   <div className="property-item" key={prop.name}>

@@ -1,45 +1,38 @@
 import { ComponentRegistry } from '../../types/registry';
-import { Form } from './Form';
-import type { FormAlignment, FormSize } from './Form';
+import { Table } from './Table';
+import type { TableAlignment, TableSize } from './Table';
 import type { VariantValues, PropertyValues, StateValues } from '../../types/component';
-import formScss from './Form.scss?raw';
+import tableScss from './Table.scss?raw';
 
 ComponentRegistry.register({
-  id: 'form',
-  name: 'Form',
+  id: 'table',
+  name: 'Table',
   category: 'Data Display',
-  icon: 'ClipboardList',
+  icon: 'Table2',
 
   variants: {
-    'Layout Type': {
-      options: ['Card', 'Form'],
-      default: 'Card',
-    },
     Alignment: {
       options: ['Left', 'Center', 'Right'],
       default: 'Left',
-      showWhen: { 'Layout Type': 'Card' },
     },
     Size: {
       options: ['Normal', 'Large'],
       default: 'Normal',
-      showWhen: { 'Layout Type': 'Card' },
     },
   },
 
   properties: [
-    { name: 'Label', type: 'text', default: 'Form', showWhen: { 'Layout Type': 'Card' } },
-    { name: 'Description', type: 'text', default: 'Type a description', showWhen: { 'Layout Type': 'Card' } },
-    { name: 'Show Icon', type: 'boolean', default: true, showWhen: { 'Layout Type': 'Card' } },
-    { name: 'Required', type: 'boolean', default: true, showWhen: { 'Layout Type': 'Card' } },
-    { name: 'Selected', type: 'boolean', default: false, showWhen: { 'Layout Type': 'Card' } },
-    { name: 'Shrinked', type: 'boolean', default: false, showWhen: { 'Layout Type': 'Card' } },
-    { name: 'Show Border', type: 'boolean', default: true, showWhen: { 'Layout Type': 'Form' } },
+    { name: 'Label', type: 'text', default: 'Table' },
+    { name: 'Description', type: 'text', default: 'Type a description' },
+    { name: 'Show Icon', type: 'boolean', default: true },
+    { name: 'Required', type: 'boolean', default: true },
+    { name: 'Selected', type: 'boolean', default: false },
+    { name: 'Shrinked', type: 'boolean', default: false },
   ],
 
   states: [],
 
-  scss: formScss,
+  scss: tableScss,
 
   colorTokens: [
     { token: 'Background', variable: '--bg-surface', value: '#FFFFFF', description: 'Card background' },
@@ -53,32 +46,29 @@ ComponentRegistry.register({
     { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected border (Sky-500)' },
   ],
 
-  usage: `import { Form } from '@/components/Form';
+  usage: `import { Table } from '@/components/Table';
 
-// Default form with required badge
-<Form
-  label="Form"
-  description="Fill out the registration form"
+// Default table with required badge
+<Table
+  label="Table"
+  description="View and manage data entries"
   required={true}
 />
 
 // Large size, centered
-<Form
+<Table
   alignment="Center"
   size="Large"
-  label="Survey"
-  description="Share your feedback"
+  label="Submissions"
+  description="Review all form submissions"
 />
 
 // Without required badge
-<Form
-  label="Contact Form"
-  description="Optional feedback"
+<Table
+  label="Products"
+  description="Product inventory list"
   required={false}
-/>
-
-// Show expanded form view
-<Form showForm={true} />`,
+/>`,
 
   propDocs: [
     {
@@ -98,8 +88,8 @@ ComponentRegistry.register({
     {
       name: 'label',
       type: 'string',
-      default: '"Form"',
-      description: 'The form name displayed as the primary text.',
+      default: '"Table"',
+      description: 'The table name displayed as the primary text.',
     },
     {
       name: 'description',
@@ -112,7 +102,7 @@ ComponentRegistry.register({
       type: 'boolean',
       default: 'true',
       description:
-        'When `true`, shows a red circular badge with an asterisk icon indicating the form is required.',
+        'When `true`, shows a red circular badge with an asterisk icon indicating the table is required.',
     },
     {
       name: 'selected',
@@ -130,17 +120,15 @@ ComponentRegistry.register({
 
   render(variants: VariantValues, props: PropertyValues, _states: StateValues): React.ReactNode {
     return (
-      <Form
-        alignment={variants['Alignment'] as FormAlignment}
-        size={variants['Size'] as FormSize}
+      <Table
+        alignment={variants['Alignment'] as TableAlignment}
+        size={variants['Size'] as TableSize}
         label={props['Label'] as string}
         description={props['Description'] as string}
         showIcon={props['Show Icon'] as boolean}
         required={props['Required'] as boolean}
         selected={props['Selected'] as boolean}
         shrinked={props['Shrinked'] as boolean}
-        showForm={variants['Layout Type'] === 'Form'}
-        showBorder={props['Show Border'] !== false}
       />
     );
   },

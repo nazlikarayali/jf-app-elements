@@ -1,7 +1,7 @@
 export interface VariantGroup {
   options: string[];
   default: string;
-  showWhen?: Record<string, string>;
+  showWhen?: Record<string, string | boolean>;
 }
 
 export interface ComponentProperty {
@@ -9,7 +9,7 @@ export interface ComponentProperty {
   type: 'text' | 'select' | 'boolean' | 'color' | 'number' | 'icon';
   default: string | boolean | number;
   options?: string[];
-  showWhen?: Record<string, string>;
+  showWhen?: Record<string, string | boolean>;
 }
 
 export interface ComponentState {

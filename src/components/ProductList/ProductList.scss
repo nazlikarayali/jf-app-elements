@@ -3,7 +3,6 @@
 // ============================================
 
 .jf-product-list {
-  background: var(--bg-surface);
   width: 616px;
   max-width: 100%;
   font-family: var(--font-family);
@@ -49,7 +48,6 @@
 
 // Search box
 .jf-product-list__search {
-  background: var(--bg-surface);
   border: 1px solid var(--neutral-200);
   border-radius: var(--radius-md);
   height: 36px;
@@ -186,7 +184,7 @@
 }
 
 .jf-product-item__content {
-  background: var(--bg-surface);
+  background: var(--bg-fill);
   padding: var(--space-4);
   display: flex;
   flex-direction: column;
@@ -228,6 +226,7 @@
   font-size: 18px;
   font-weight: var(--font-weight-bold);
   line-height: 28px;
+  color: var(--fg-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -263,7 +262,7 @@
 }
 
 .jf-product-item__body {
-  background: var(--bg-surface);
+  background: var(--bg-fill);
   flex: 1;
   display: flex;
   align-items: center;

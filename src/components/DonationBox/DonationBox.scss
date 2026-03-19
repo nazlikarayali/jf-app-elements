@@ -3,7 +3,6 @@
 // ============================================
 
 .jf-donation {
-  background: var(--bg-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-6) 0;
   display: flex;
@@ -105,7 +104,7 @@
 
 .jf-donation__goal-fill {
   height: 12px;
-  background: var(--bg-fill-brand);
+  background: var(--bg-fill-secondary-brand, var(--bg-fill-brand));
   border-radius: 148px;
   transition: width 300ms ease;
 }
@@ -135,7 +134,7 @@
 }
 
 .jf-donation__amount-item {
-  background: var(--bg-surface);
+  background: var(--bg-fill);
   border: 1px solid var(--border-active);
   border-radius: var(--radius-lg);
   display: flex;
@@ -242,4 +241,24 @@
 // =========================================
 .jf-donation__button-wrapper {
   width: 100%;
+}
+
+// =========================================
+// Responsive: force Mobile layout on small screens
+// =========================================
+@media (max-width: 768px) {
+  .jf-donation--web {
+    width: 408px;
+    max-width: 100%;
+  }
+
+  .jf-donation__amounts--web {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .jf-donation__amounts--web .jf-donation__amount-item {
+    flex: none;
+    width: 100%;
+  }
 }

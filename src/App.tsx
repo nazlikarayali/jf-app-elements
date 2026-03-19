@@ -21,6 +21,7 @@ import './components/SignDocument/register';
 import './components/ImageGallery/register';
 import './components/SocialFollow/register';
 import './components/Form/register';
+import './components/Table/register';
 import './components/Testimonial/register';
 
 type AppMode = 'components' | 'themes';
@@ -34,6 +35,7 @@ function App() {
   const [variants, setVariants] = useState<VariantValues>({});
   const [properties, setProperties] = useState<PropertyValues>({});
   const [states, setStates] = useState<StateValues>({});
+  const [sidebarTab, setSidebarTab] = useState<'variants' | 'colors'>('variants');
 
   useEffect(() => {
     return ComponentRegistry.subscribe(() => {
@@ -98,6 +100,7 @@ function App() {
               variants={variants}
               properties={properties}
               states={states}
+              colorInspectMode={sidebarTab === 'colors'}
             />
             <SidebarRight
               component={selectedComponent}
@@ -107,6 +110,8 @@ function App() {
               onVariantChange={handleVariantChange}
               onPropertyChange={handlePropertyChange}
               onStateChange={handleStateChange}
+              tab={sidebarTab}
+              onTabChange={setSidebarTab}
             />
 
             {/* Mobile floating buttons */}

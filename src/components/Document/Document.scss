@@ -6,7 +6,7 @@
 // Document (file uploaded state)
 // =========================================
 .jf-doc {
-  background: var(--bg-surface);
+  background: var(--bg-fill);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   font-family: var(--font-family);
@@ -125,7 +125,7 @@
 // Builder state (no file, upload prompt)
 // =========================================
 .jf-doc-builder {
-  background: var(--bg-surface);
+  background: var(--bg-fill);
   border: 2px dashed var(--border-active);
   border-radius: var(--radius-lg);
   font-family: var(--font-family);

@@ -1,8 +1,9 @@
-import { useState, type ReactNode } from 'react';
+import { useState, useRef, type ReactNode } from 'react';
 import type { RegisteredComponent } from '../types/registry';
 import type { VariantValues, PropertyValues, StateValues } from '../types/component';
 import { CodeBlock } from './components/CodeBlock';
 import { PropTable } from './components/PropTable';
+import { ColorInspectTooltip } from './components/ColorInspectTooltip';
 
 type ViewType = 'preview' | 'usage' | 'scss';
 
@@ -11,10 +12,12 @@ interface MainContentProps {
   variants: VariantValues;
   properties: PropertyValues;
   states: StateValues;
+  colorInspectMode?: boolean;
 }
 
-export function MainContent({ component, variants, properties, states }: MainContentProps) {
+export function MainContent({ component, variants, properties, states, colorInspectMode }: MainContentProps) {
   const [view, setView] = useState<ViewType>('preview');
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   if (!component) {
     return (
@@ -72,7 +75,13 @@ export function MainContent({ component, variants, properties, states }: MainCon
         {/* Preview */}
         {view === 'preview' && (
           <div className="preview-panel">
-            <div className="preview-panel__canvas">{preview}</div>
+            <div
+              ref={canvasRef}
+              className={`preview-panel__canvas${colorInspectMode ? ' preview-panel__canvas--inspect' : ''}`}
+            >
+              {preview}
+              {colorInspectMode && <ColorInspectTooltip canvasRef={canvasRef} />}
+            </div>
           </div>
         )}
 
