@@ -283,7 +283,6 @@ export function ThemesView() {
   const [colorMode, setColorMode] = useState<'light' | 'dark'>(() =>
     document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
   );
-  const [customExpanded, setCustomExpanded] = useState(false);
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [brandHue, setBrandHue] = useState(() => hexToHslHue(DEFAULT_COLOR));
   const [tint, setTint] = useState(DEFAULT_TINT);
