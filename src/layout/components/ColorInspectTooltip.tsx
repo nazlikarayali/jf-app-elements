@@ -111,20 +111,11 @@ export function ColorInspectTooltip({ canvasRef }: ColorInspectTooltipProps) {
 
     const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
     if (!el || !canvas.contains(el) || el === canvas) {
-      // Remove highlight from previous element
-      if (hoveredElRef.current) {
-        hoveredElRef.current.classList.remove('color-inspect-highlight');
-        hoveredElRef.current = null;
-      }
+      hoveredElRef.current = null;
       setTooltipData(null);
       return;
     }
 
-    // Update highlight
-    if (hoveredElRef.current && hoveredElRef.current !== el) {
-      hoveredElRef.current.classList.remove('color-inspect-highlight');
-    }
-    el.classList.add('color-inspect-highlight');
     hoveredElRef.current = el;
 
     const computed = getComputedStyle(el);
@@ -158,20 +149,39 @@ export function ColorInspectTooltip({ canvasRef }: ColorInspectTooltipProps) {
       }
     }
 
-    // Text color (only if element has text content)
+    // Text / Icon color
+    const tagName = el.tagName.toLowerCase();
+    const isSvgEl = tagName === 'svg' || tagName === 'path' || tagName === 'line' || tagName === 'circle' || tagName === 'rect' || tagName === 'polyline' || tagName === 'polygon' || tagName === 'ellipse' || el.closest('svg') !== null;
     const hasText = el.childNodes.length > 0 && Array.from(el.childNodes).some(
       (node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim()
     );
-    if (hasText) {
+    if (hasText || isSvgEl) {
       const textColor = computed.color;
       if (textColor && !isTransparent(textColor)) {
         const hex = rgbToHex(textColor);
         const varName = colorMap?.get(hex) || '';
         items.push({
-          label: 'Text',
+          label: isSvgEl && !hasText ? 'Icon' : 'Text',
           varName: varName ? formatVarName(varName) : '',
           hex,
         });
+      }
+      // SVG stroke color
+      if (isSvgEl) {
+        const stroke = computed.stroke;
+        if (stroke && !isTransparent(stroke) && stroke !== 'none') {
+          const strokeHex = rgbToHex(stroke);
+          // Avoid duplicate if stroke matches color
+          const colorHex = textColor ? rgbToHex(textColor) : '';
+          if (strokeHex !== colorHex) {
+            const varName = colorMap?.get(strokeHex) || '';
+            items.push({
+              label: 'Stroke',
+              varName: varName ? formatVarName(varName) : '',
+              hex: strokeHex,
+            });
+          }
+        }
       }
     }
 
@@ -199,10 +209,7 @@ export function ColorInspectTooltip({ canvasRef }: ColorInspectTooltipProps) {
   }, [canvasRef]);
 
   const handleMouseLeave = useCallback(() => {
-    if (hoveredElRef.current) {
-      hoveredElRef.current.classList.remove('color-inspect-highlight');
-      hoveredElRef.current = null;
-    }
+    hoveredElRef.current = null;
     setTooltipData(null);
   }, []);
 
@@ -216,11 +223,7 @@ export function ColorInspectTooltip({ canvasRef }: ColorInspectTooltipProps) {
     return () => {
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
-      // Clean up highlight on unmount
-      if (hoveredElRef.current) {
-        hoveredElRef.current.classList.remove('color-inspect-highlight');
-        hoveredElRef.current = null;
-      }
+      hoveredElRef.current = null;
     };
   }, [canvasRef, handleMouseMove, handleMouseLeave]);
 
