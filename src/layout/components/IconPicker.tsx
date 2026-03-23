@@ -12,9 +12,9 @@ export function IconPicker({ value, onChange, label }: IconPickerProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const ref = useRef<HTMLDivElement>(null);
-  const { library } = useIconLibrary();
+  const { library, iconStyle } = useIconLibrary();
 
-  const allIcons = useMemo(() => getIconsForPicker(library), [library]);
+  const allIcons = useMemo(() => getIconsForPicker(library, iconStyle), [library, iconStyle]);
   const iconNames = useMemo(() => Object.keys(allIcons), [allIcons]);
 
   const filtered = useMemo(() => {
@@ -33,7 +33,7 @@ export function IconPicker({ value, onChange, label }: IconPickerProps) {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const selectedResolved = value && value !== 'none' ? resolveIcon(value, library) : null;
+  const selectedResolved = value && value !== 'none' ? resolveIcon(value, library, iconStyle) : null;
 
   return (
     <div className="icon-picker" ref={ref}>
@@ -44,10 +44,7 @@ export function IconPicker({ value, onChange, label }: IconPickerProps) {
       >
         {selectedResolved ? (
           <>
-            {selectedResolved.isHeroicon
-              ? <selectedResolved.component width={16} height={16} />
-              : <selectedResolved.component size={16} />
-            }
+            <selectedResolved.component size={16} />
             <span className="icon-picker__name">{value}</span>
           </>
         ) : (
@@ -82,7 +79,6 @@ export function IconPicker({ value, onChange, label }: IconPickerProps) {
             {filtered.map((name) => {
               const IconComp = allIcons[name];
               if (!IconComp) return null;
-              const isHero = library === 'heroicons';
               return (
                 <button
                   key={name}
@@ -90,10 +86,7 @@ export function IconPicker({ value, onChange, label }: IconPickerProps) {
                   onClick={() => { onChange(name); setOpen(false); }}
                   title={name}
                 >
-                  {isHero
-                    ? <IconComp width={16} height={16} />
-                    : <IconComp size={16} />
-                  }
+                  <IconComp size={16} />
                 </button>
               );
             })}

@@ -9,13 +9,10 @@ interface IconProps {
 }
 
 export const Icon: FC<IconProps> = ({ name, size = 20, className }) => {
-  const { library } = useIconLibrary();
+  const { library, iconStyle } = useIconLibrary();
   if (!name || name === 'none') return null;
-  const result = resolveIcon(name, library);
+  const result = resolveIcon(name, library, iconStyle);
   if (!result) return null;
-  const { component: IconComp, isHeroicon } = result;
-  if (isHeroicon) {
-    return <IconComp width={size} height={size} className={className} />;
-  }
+  const { component: IconComp } = result;
   return <IconComp size={size} className={className} />;
 };

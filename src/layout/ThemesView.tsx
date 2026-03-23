@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
 import { Icon } from '../components/Icon/Icon';
-import { useIconLibrary, type IconLibrary } from '../context/IconLibraryContext';
+import { useIconLibrary, type IconLibrary, type IconStyle } from '../context/IconLibraryContext';
 import { ICON_LIBRARIES, loadLibrary } from '../utils/iconRegistry';
 import { BottomSheet } from './components/BottomSheet';
 import { generatePalette, applySecondaryPaletteToDOM, resetSecondaryPalette } from '../utils/colorPalette';
@@ -71,12 +71,12 @@ const THEME_PRESETS: ThemePreset[] = [
   { name: 'Midnight Blue', color: '#0385C8', font: 'Geist', headingFont: '', iconLibrary: 'phosphor', radius: 'Medium', tint: 20, mode: 'dark', harmonyOffset: 150 },
   { name: 'Forest', color: '#19A44B', font: 'Public Sans', headingFont: 'Lora', iconLibrary: 'tabler', radius: 'Small', tint: 40, mode: 'light', harmonyOffset: 120 },
   { name: 'Sunset', color: '#F97101', font: 'Bricolage Grotesque', headingFont: '', iconLibrary: 'lucide', radius: 'Large', tint: 60, mode: 'light', harmonyOffset: 180 },
-  { name: 'Cherry', color: '#DF2125', font: 'Instrument Sans', headingFont: 'Merriweather', iconLibrary: 'heroicons', radius: 'Medium', tint: 35, mode: 'light', harmonyOffset: 150 },
+  { name: 'Cherry', color: '#DF2125', font: 'Instrument Sans', headingFont: 'Merriweather', iconLibrary: 'lucide', radius: 'Medium', tint: 35, mode: 'light', harmonyOffset: 150 },
   { name: 'Dark Elegance', color: '#8D5DF9', font: 'Figtree', headingFont: 'Playfair Display', iconLibrary: 'phosphor', radius: 'XLarge', tint: 70, mode: 'dark', harmonyOffset: 160 },
   { name: 'Minimal Dark', color: '#64A501', font: 'Hanken Grotesk', headingFont: '', iconLibrary: 'tabler', radius: 'Small', tint: 10, mode: 'dark', harmonyOffset: 150 },
   { name: 'Warm Gold', color: '#DC7801', font: 'Fredoka', headingFont: '', iconLibrary: 'lucide', radius: 'XLarge', tint: 80, mode: 'light', harmonyOffset: 200 },
   { name: 'Rose', color: '#E91E63', font: 'Varela Round', headingFont: 'Lora', iconLibrary: 'phosphor', radius: 'Large', tint: 55, mode: 'light', harmonyOffset: 150 },
-  { name: 'Aqua Night', color: '#00B5D4', font: 'JetBrains Mono', headingFont: '', iconLibrary: 'heroicons', radius: 'Medium', tint: 25, mode: 'dark', harmonyOffset: 150 },
+  { name: 'Aqua Night', color: '#00B5D4', font: 'JetBrains Mono', headingFont: '', iconLibrary: 'lucide', radius: 'Medium', tint: 25, mode: 'dark', harmonyOffset: 150 },
   { name: 'Monochrome', color: '#353C6A', font: 'IBM Plex Mono', headingFont: '', iconLibrary: 'tabler', radius: 'Small', tint: 0, mode: 'light', harmonyOffset: 150 },
 ];
 
@@ -405,7 +405,7 @@ function getSecondaryColor(primaryHex: string, offsetDegrees: number): string {
 
 export function ThemesView() {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const { library: activeIconLibrary, setLibrary: setIconLibrary } = useIconLibrary();
+  const { library: activeIconLibrary, iconStyle: activeIconStyle, setLibrary: setIconLibrary, setIconStyle } = useIconLibrary();
   const [activeTab, setActiveTab] = useState<'colors' | 'style' | 'font' | null>(null);
   const [colorMode, setColorMode] = useState<'light' | 'dark'>(() =>
     document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
@@ -466,7 +466,10 @@ export function ThemesView() {
     applyHeadingFontToDOM(preset.headingFont, preset.font);
     setRadius(preset.radius);
     applyRadius(preset.radius, canvasRef.current);
-    loadLibrary(preset.iconLibrary).then(() => setIconLibrary(preset.iconLibrary));
+    loadLibrary(preset.iconLibrary, 'outline').then(() => {
+      setIconLibrary(preset.iconLibrary);
+      setIconStyle('outline');
+    });
     setColorMode(preset.mode);
     if (preset.mode === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
@@ -474,7 +477,7 @@ export function ThemesView() {
       document.documentElement.removeAttribute('data-theme');
     }
     localStorage.setItem('jf-lib-theme', preset.mode);
-  }, [secondaryEnabled, applySecondary, applyHeadingFontToDOM, setIconLibrary]);
+  }, [secondaryEnabled, applySecondary, applyHeadingFontToDOM, setIconLibrary, setIconStyle]);
 
   const handleColorChange = useCallback((newColor: string) => {
     setColor(newColor);
@@ -543,9 +546,15 @@ export function ThemesView() {
   }, [applyHeadingFontToDOM]);
 
   const handleIconLibraryChange = useCallback(async (lib: IconLibrary) => {
-    await loadLibrary(lib);
+    await loadLibrary(lib, 'outline');
     setIconLibrary(lib);
-  }, [setIconLibrary]);
+    setIconStyle('outline');
+  }, [setIconLibrary, setIconStyle]);
+
+  const handleIconStyleChange = useCallback(async (style: IconStyle) => {
+    await loadLibrary(activeIconLibrary, style);
+    setIconStyle(style);
+  }, [activeIconLibrary, setIconStyle]);
 
   const handleRadiusChange = useCallback((scale: RadiusScale) => {
     setRadius(scale);
@@ -758,6 +767,22 @@ export function ThemesView() {
               </button>
             ))}
           </div>
+          {ICON_LIBRARIES.find(l => l.value === activeIconLibrary)?.hasFill && (
+            <div className="themes-view__icon-style-toggle">
+              <button
+                className={`themes-view__icon-style-btn${activeIconStyle === 'outline' ? ' active' : ''}`}
+                onClick={() => handleIconStyleChange('outline')}
+              >
+                Outline
+              </button>
+              <button
+                className={`themes-view__icon-style-btn${activeIconStyle === 'fill' ? ' active' : ''}`}
+                onClick={() => handleIconStyleChange('fill')}
+              >
+                Fill
+              </button>
+            </div>
+          )}
         </div>
 
       <button className="themes-view__reset" onClick={handleReset}>Reset to Default</button>
@@ -915,6 +940,25 @@ export function ThemesView() {
               ))}
             </div>
           </div>
+          {ICON_LIBRARIES.find(l => l.value === activeIconLibrary)?.hasFill && (
+            <div className="themes-sheet-content__section">
+              <h3 className="themes-view__sidebar-title">Icon Style</h3>
+              <div className="themes-sheet-content__segmented">
+                <button
+                  className={`themes-sheet-content__seg-btn${activeIconStyle === 'outline' ? ' active' : ''}`}
+                  onClick={() => handleIconStyleChange('outline')}
+                >
+                  Outline
+                </button>
+                <button
+                  className={`themes-sheet-content__seg-btn${activeIconStyle === 'fill' ? ' active' : ''}`}
+                  onClick={() => handleIconStyleChange('fill')}
+                >
+                  Fill
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </BottomSheet>
 
