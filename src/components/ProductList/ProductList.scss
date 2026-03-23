@@ -55,6 +55,16 @@
   align-items: center;
   gap: 8px;
   padding: 8px;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+
+  &:hover {
+    border-color: var(--neutral-300);
+  }
+
+  &:focus-within {
+    border-color: var(--fg-brand);
+    box-shadow: 0 0 0 3px var(--bg-surface-brand);
+  }
 }
 
 .jf-product-list__search-icon {
