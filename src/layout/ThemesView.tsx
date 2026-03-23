@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
-import { Palette, Contrast, Type, ChevronDown, Check, Plus, Trash2 } from 'lucide-react';
+import { Icon } from '../components/Icon/Icon';
+import { useIconLibrary, type IconLibrary } from '../context/IconLibraryContext';
+import { ICON_LIBRARIES, loadLibrary } from '../utils/iconRegistry';
 import { BottomSheet } from './components/BottomSheet';
 import { generatePalette, applySecondaryPaletteToDOM, resetSecondaryPalette } from '../utils/colorPalette';
 import type { PaletteShade } from '../utils/colorPalette';
@@ -56,6 +58,7 @@ interface ThemePreset {
   color: string;
   font: string;
   headingFont: string;
+  iconLibrary: IconLibrary;
   radius: RadiusScale;
   tint: number;
   mode: 'light' | 'dark';
@@ -63,18 +66,18 @@ interface ThemePreset {
 }
 
 const THEME_PRESETS: ThemePreset[] = [
-  { name: 'Default', color: '#7D38EF', font: 'Inter', headingFont: '', radius: 'Medium', tint: 50, mode: 'light', harmonyOffset: 150 },
-  { name: 'Ocean Breeze', color: '#0385C8', font: 'DM Sans', headingFont: 'Playfair Display', radius: 'Large', tint: 30, mode: 'light', harmonyOffset: 150 },
-  { name: 'Midnight Blue', color: '#0385C8', font: 'Geist', headingFont: '', radius: 'Medium', tint: 20, mode: 'dark', harmonyOffset: 150 },
-  { name: 'Forest', color: '#19A44B', font: 'Public Sans', headingFont: 'Lora', radius: 'Small', tint: 40, mode: 'light', harmonyOffset: 120 },
-  { name: 'Sunset', color: '#F97101', font: 'Bricolage Grotesque', headingFont: '', radius: 'Large', tint: 60, mode: 'light', harmonyOffset: 180 },
-  { name: 'Cherry', color: '#DF2125', font: 'Instrument Sans', headingFont: 'Merriweather', radius: 'Medium', tint: 35, mode: 'light', harmonyOffset: 150 },
-  { name: 'Dark Elegance', color: '#8D5DF9', font: 'Figtree', headingFont: 'Playfair Display', radius: 'XLarge', tint: 70, mode: 'dark', harmonyOffset: 160 },
-  { name: 'Minimal Dark', color: '#64A501', font: 'Hanken Grotesk', headingFont: '', radius: 'Small', tint: 10, mode: 'dark', harmonyOffset: 150 },
-  { name: 'Warm Gold', color: '#DC7801', font: 'Fredoka', headingFont: '', radius: 'XLarge', tint: 80, mode: 'light', harmonyOffset: 200 },
-  { name: 'Rose', color: '#E91E63', font: 'Varela Round', headingFont: 'Lora', radius: 'Large', tint: 55, mode: 'light', harmonyOffset: 150 },
-  { name: 'Aqua Night', color: '#00B5D4', font: 'JetBrains Mono', headingFont: '', radius: 'Medium', tint: 25, mode: 'dark', harmonyOffset: 150 },
-  { name: 'Monochrome', color: '#353C6A', font: 'IBM Plex Mono', headingFont: '', radius: 'Small', tint: 0, mode: 'light', harmonyOffset: 150 },
+  { name: 'Default', color: '#7D38EF', font: 'Inter', headingFont: '', iconLibrary: 'lucide', radius: 'Medium', tint: 50, mode: 'light', harmonyOffset: 150 },
+  { name: 'Ocean Breeze', color: '#0385C8', font: 'DM Sans', headingFont: 'Playfair Display', iconLibrary: 'lucide', radius: 'Large', tint: 30, mode: 'light', harmonyOffset: 150 },
+  { name: 'Midnight Blue', color: '#0385C8', font: 'Geist', headingFont: '', iconLibrary: 'phosphor', radius: 'Medium', tint: 20, mode: 'dark', harmonyOffset: 150 },
+  { name: 'Forest', color: '#19A44B', font: 'Public Sans', headingFont: 'Lora', iconLibrary: 'tabler', radius: 'Small', tint: 40, mode: 'light', harmonyOffset: 120 },
+  { name: 'Sunset', color: '#F97101', font: 'Bricolage Grotesque', headingFont: '', iconLibrary: 'lucide', radius: 'Large', tint: 60, mode: 'light', harmonyOffset: 180 },
+  { name: 'Cherry', color: '#DF2125', font: 'Instrument Sans', headingFont: 'Merriweather', iconLibrary: 'heroicons', radius: 'Medium', tint: 35, mode: 'light', harmonyOffset: 150 },
+  { name: 'Dark Elegance', color: '#8D5DF9', font: 'Figtree', headingFont: 'Playfair Display', iconLibrary: 'phosphor', radius: 'XLarge', tint: 70, mode: 'dark', harmonyOffset: 160 },
+  { name: 'Minimal Dark', color: '#64A501', font: 'Hanken Grotesk', headingFont: '', iconLibrary: 'tabler', radius: 'Small', tint: 10, mode: 'dark', harmonyOffset: 150 },
+  { name: 'Warm Gold', color: '#DC7801', font: 'Fredoka', headingFont: '', iconLibrary: 'lucide', radius: 'XLarge', tint: 80, mode: 'light', harmonyOffset: 200 },
+  { name: 'Rose', color: '#E91E63', font: 'Varela Round', headingFont: 'Lora', iconLibrary: 'phosphor', radius: 'Large', tint: 55, mode: 'light', harmonyOffset: 150 },
+  { name: 'Aqua Night', color: '#00B5D4', font: 'JetBrains Mono', headingFont: '', iconLibrary: 'heroicons', radius: 'Medium', tint: 25, mode: 'dark', harmonyOffset: 150 },
+  { name: 'Monochrome', color: '#353C6A', font: 'IBM Plex Mono', headingFont: '', iconLibrary: 'tabler', radius: 'Small', tint: 0, mode: 'light', harmonyOffset: 150 },
 ];
 
 const FONT_OPTIONS = [
@@ -268,7 +271,7 @@ function PresetDropdown({ presets, active, onSelect }: { presets: ThemePreset[];
       <button className="preset-dropdown__trigger" onClick={() => setOpen(!open)}>
         {activePreset && <span className="preset-dropdown__circle" style={{ background: activePreset.color }} />}
         <span className="preset-dropdown__label">{active || 'Select theme'}</span>
-        <ChevronDown size={16} className={`preset-dropdown__chevron${open ? ' open' : ''}`} />
+        <Icon name="ChevronDown" size={16} className={`preset-dropdown__chevron${open ? ' open' : ''}`} />
       </button>
       {open && (
         <div className="preset-dropdown__menu">
@@ -280,7 +283,7 @@ function PresetDropdown({ presets, active, onSelect }: { presets: ThemePreset[];
             >
               <span className="preset-dropdown__circle" style={{ background: p.color }} />
               <span className="preset-dropdown__item-label">{p.name}</span>
-              {p.name === active && <Check size={16} className="preset-dropdown__check" />}
+              {p.name === active && <Icon name="Check" size={16} className="preset-dropdown__check" />}
             </button>
           ))}
         </div>
@@ -309,7 +312,7 @@ function FontDropdown({ fonts, active, onChange }: { fonts: string[]; active: st
     <div className="preset-dropdown" ref={ref}>
       <button className="preset-dropdown__trigger" onClick={() => setOpen(!open)}>
         <span className="preset-dropdown__label" style={{ fontFamily: `'${active}', sans-serif` }}>{active}</span>
-        <ChevronDown size={16} className={`preset-dropdown__chevron${open ? ' open' : ''}`} />
+        <Icon name="ChevronDown" size={16} className={`preset-dropdown__chevron${open ? ' open' : ''}`} />
       </button>
       {open && (
         <div className="preset-dropdown__menu">
@@ -321,7 +324,7 @@ function FontDropdown({ fonts, active, onChange }: { fonts: string[]; active: st
               onClick={() => { onChange(f); setOpen(false); }}
             >
               <span className="preset-dropdown__item-label">{f}</span>
-              {f === active && <Check size={16} className="preset-dropdown__check" />}
+              {f === active && <Icon name="Check" size={16} className="preset-dropdown__check" />}
             </button>
           ))}
         </div>
@@ -365,7 +368,7 @@ function FontPairingDropdown({ pairings, activeHeading, activeBody, onSelect }: 
             </span>
           ) : 'Select a pairing'}
         </span>
-        <ChevronDown size={16} className={`preset-dropdown__chevron${open ? ' open' : ''}`} />
+        <Icon name="ChevronDown" size={16} className={`preset-dropdown__chevron${open ? ' open' : ''}`} />
       </button>
       {open && (
         <div className="preset-dropdown__menu font-pairing-menu">
@@ -384,7 +387,7 @@ function FontPairingDropdown({ pairings, activeHeading, activeBody, onSelect }: 
                 <div className="font-pairing-item__tags">
                   {p.tags.map(t => <span key={t} className="font-pairing-item__tag">{t}</span>)}
                 </div>
-                {isActive && <Check size={16} className="preset-dropdown__check" />}
+                {isActive && <Icon name="Check" size={16} className="preset-dropdown__check" />}
               </button>
             );
           })}
@@ -402,6 +405,7 @@ function getSecondaryColor(primaryHex: string, offsetDegrees: number): string {
 
 export function ThemesView() {
   const canvasRef = useRef<HTMLDivElement>(null);
+  const { library: activeIconLibrary, setLibrary: setIconLibrary } = useIconLibrary();
   const [activeTab, setActiveTab] = useState<'colors' | 'style' | 'font' | null>(null);
   const [colorMode, setColorMode] = useState<'light' | 'dark'>(() =>
     document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
@@ -462,6 +466,7 @@ export function ThemesView() {
     applyHeadingFontToDOM(preset.headingFont, preset.font);
     setRadius(preset.radius);
     applyRadius(preset.radius, canvasRef.current);
+    loadLibrary(preset.iconLibrary).then(() => setIconLibrary(preset.iconLibrary));
     setColorMode(preset.mode);
     if (preset.mode === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
@@ -469,7 +474,7 @@ export function ThemesView() {
       document.documentElement.removeAttribute('data-theme');
     }
     localStorage.setItem('jf-lib-theme', preset.mode);
-  }, [secondaryEnabled, applySecondary, applyHeadingFontToDOM]);
+  }, [secondaryEnabled, applySecondary, applyHeadingFontToDOM, setIconLibrary]);
 
   const handleColorChange = useCallback((newColor: string) => {
     setColor(newColor);
@@ -536,6 +541,11 @@ export function ThemesView() {
     setHeadingFont(pairing.heading);
     applyHeadingFontToDOM(pairing.heading, pairing.body);
   }, [applyHeadingFontToDOM]);
+
+  const handleIconLibraryChange = useCallback(async (lib: IconLibrary) => {
+    await loadLibrary(lib);
+    setIconLibrary(lib);
+  }, [setIconLibrary]);
 
   const handleRadiusChange = useCallback((scale: RadiusScale) => {
     setRadius(scale);
@@ -662,7 +672,7 @@ export function ThemesView() {
             <div className="themes-view__section-header">
               <h3 className="themes-view__sidebar-title">Secondary Color</h3>
               <button className="themes-view__remove-btn" onClick={removeSecondary} title="Remove secondary color">
-                <Trash2 size={14} />
+                <Icon name="Trash2" size={14} />
               </button>
             </div>
             <div className="themes-view__secondary-color-row">
@@ -688,7 +698,7 @@ export function ThemesView() {
         ) : (
           <div className="themes-view__sidebar-section">
             <button className="themes-view__add-secondary" onClick={addSecondary}>
-              <Plus size={16} />
+              <Icon name="Plus" size={16} />
               <span>Add secondary color scale</span>
             </button>
           </div>
@@ -735,6 +745,21 @@ export function ThemesView() {
           </div>
         </div>
 
+        <div className="themes-view__sidebar-section">
+          <h3 className="themes-view__sidebar-title">Icon Library</h3>
+          <div className="themes-view__icon-library-options">
+            {ICON_LIBRARIES.map(({ value, label }) => (
+              <button
+                key={value}
+                className={`themes-view__icon-library-btn${activeIconLibrary === value ? ' active' : ''}`}
+                onClick={() => handleIconLibraryChange(value)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
       <button className="themes-view__reset" onClick={handleReset}>Reset to Default</button>
     </>
   );
@@ -752,21 +777,21 @@ export function ThemesView() {
           className={`themes-bottom-bar__tab${activeTab === 'colors' ? ' active' : ''}`}
           onClick={() => handleTabToggle('colors')}
         >
-          <Palette size={20} />
+          <Icon name="Palette" size={20} />
           <span>Colors</span>
         </button>
         <button
           className={`themes-bottom-bar__tab${activeTab === 'style' ? ' active' : ''}`}
           onClick={() => handleTabToggle('style')}
         >
-          <Contrast size={20} />
+          <Icon name="Contrast" size={20} />
           <span>Style</span>
         </button>
         <button
           className={`themes-bottom-bar__tab${activeTab === 'font' ? ' active' : ''}`}
           onClick={() => handleTabToggle('font')}
         >
-          <Type size={20} />
+          <Icon name="Type" size={20} />
           <span>Font</span>
         </button>
       </div>
@@ -809,7 +834,7 @@ export function ThemesView() {
               <div className="themes-view__section-header">
                 <h3 className="themes-view__sidebar-title">Secondary Color</h3>
                 <button className="themes-view__remove-btn" onClick={removeSecondary} title="Remove secondary color">
-                  <Trash2 size={14} />
+                  <Icon name="Trash2" size={14} />
                 </button>
               </div>
               <div className="themes-view__secondary-color-row">
@@ -835,7 +860,7 @@ export function ThemesView() {
           ) : (
             <div className="themes-sheet-content__section">
               <button className="themes-view__add-secondary" onClick={addSecondary}>
-                <Plus size={16} />
+                <Icon name="Plus" size={16} />
                 <span>Add secondary color scale</span>
               </button>
             </div>
@@ -872,6 +897,20 @@ export function ThemesView() {
                   onClick={() => handleRadiusChange(scale)}
                 >
                   {scale}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="themes-sheet-content__section">
+            <h3 className="themes-view__sidebar-title">Icon Library</h3>
+            <div className="themes-sheet-content__segmented">
+              {ICON_LIBRARIES.map(({ value, label }) => (
+                <button
+                  key={value}
+                  className={`themes-sheet-content__seg-btn${activeIconLibrary === value ? ' active' : ''}`}
+                  onClick={() => handleIconLibraryChange(value)}
+                >
+                  {label}
                 </button>
               ))}
             </div>

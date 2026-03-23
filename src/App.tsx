@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Agentation } from 'agentation';
+import { IconLibraryProvider } from './context/IconLibraryContext';
 import { Header } from './layout/Header';
 import { SidebarLeft } from './layout/SidebarLeft';
 import { SidebarRight } from './layout/SidebarRight';
@@ -85,6 +87,7 @@ function App() {
   }, []);
 
   return (
+    <IconLibraryProvider>
     <div className="app">
       <Header mode={mode} onModeChange={setMode} />
       <div className="app-body">
@@ -161,7 +164,9 @@ function App() {
           <ThemesView />
         )}
       </div>
+      {import.meta.env.DEV && <Agentation />}
     </div>
+    </IconLibraryProvider>
   );
 }
 

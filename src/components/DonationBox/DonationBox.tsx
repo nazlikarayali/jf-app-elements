@@ -1,5 +1,5 @@
 import type React from 'react';
-import { CirclePlus } from 'lucide-react';
+import { Icon } from '../Icon/Icon';
 import { Button } from '../Button';
 import './DonationBox.scss';
 
@@ -87,7 +87,7 @@ export const DonationBox: React.FC<DonationBoxProps> = ({
         {/* Add New Amount - only visible in selected/edit state */}
         {selected && (
           <button className="jf-donation__add-amount">
-            <CirclePlus size={20} />
+            <Icon name="CirclePlus" size={20} />
             <span>Add New Amount</span>
           </button>
         )}

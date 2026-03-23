@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { ClipboardList, Asterisk, CloudUpload, Trash2 } from 'lucide-react';
+import { Icon } from '../Icon/Icon';
 import { Button } from '../Button';
 import './Form.scss';
 
@@ -67,7 +67,7 @@ export const Form: FC<FormProps> = ({
         <div className="jf-form-open__field">
           <label className="jf-form-open__label">Image</label>
           <div className="jf-form-open__upload">
-            <CloudUpload size={32} className="jf-form-open__upload-icon" />
+            <Icon name="CloudUpload" size={32} className="jf-form-open__upload-icon" />
             <div className="jf-form-open__upload-text">
               <span className="jf-form-open__upload-title">Browse Files</span>
               <span className="jf-form-open__upload-desc">Drag and drop files here</span>
@@ -77,7 +77,7 @@ export const Form: FC<FormProps> = ({
             <div className="jf-form-open__file-preview" />
             <span className="jf-form-open__file-name">Screens...766.png</span>
             <button className="jf-form-open__file-delete">
-              <Trash2 size={20} />
+              <Icon name="Trash2" size={20} />
             </button>
           </div>
         </div>
@@ -109,7 +109,7 @@ export const Form: FC<FormProps> = ({
     <div className={rootClasses}>
       {showIcon && (
         <div className="jf-form__icon" style={{ width: iconSize, height: iconSize }}>
-          <ClipboardList size={iconInner} />
+          <Icon name="ClipboardList" size={iconInner} />
         </div>
       )}
       <div className="jf-form__content">
@@ -122,7 +122,7 @@ export const Form: FC<FormProps> = ({
       </div>
       {required && (
         <div className="jf-form__badge">
-          <Asterisk size={20} />
+          <Icon name="Asterisk" size={20} />
         </div>
       )}
     </div>

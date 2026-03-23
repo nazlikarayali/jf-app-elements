@@ -1600,6 +1600,40 @@ body {
   color: var(--neutral-400);
 }
 
+// Icon Library selector
+.themes-view__icon-library-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.themes-view__icon-library-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border: 1.5px solid var(--neutral-200);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--fg-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: var(--neutral-300);
+    color: var(--fg-primary);
+  }
+
+  &.active {
+    border-color: var(--color-primary);
+    background: var(--primary-50);
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+}
+
 // Brand hue slider + picker
 .themes-view__hue-row {
   display: flex;

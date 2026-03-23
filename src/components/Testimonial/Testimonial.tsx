@@ -1,5 +1,5 @@
 import { useState, type FC } from 'react';
-import { ChevronLeft, ChevronRight, User } from 'lucide-react';
+import { Icon } from '../Icon/Icon';
 import './Testimonial.scss';
 
 export interface TestimonialItem {
@@ -42,7 +42,7 @@ export const Testimonial: FC<TestimonialProps> = ({
       <div className="jf-testimonial__card">
         <div className={`jf-testimonial__content${shrinked ? ' jf-testimonial__content--vertical' : ''}`}>
           <div className="jf-testimonial__avatar">
-            <User size={40} />
+            <Icon name="User" size={40} />
           </div>
           <div className="jf-testimonial__text">
             <h4 className="jf-testimonial__name">{current.name}</h4>
@@ -52,10 +52,10 @@ export const Testimonial: FC<TestimonialProps> = ({
         {items.length > 1 && (
           <div className="jf-testimonial__nav">
             <button className="jf-testimonial__nav-btn" onClick={handlePrev}>
-              <ChevronLeft size={16} />
+              <Icon name="ChevronLeft" size={16} />
             </button>
             <button className="jf-testimonial__nav-btn" onClick={handleNext}>
-              <ChevronRight size={16} />
+              <Icon name="ChevronRight" size={16} />
             </button>
           </div>
         )}

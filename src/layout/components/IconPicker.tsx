@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { icons } from 'lucide-react';
+import { useIconLibrary } from '../../context/IconLibraryContext';
+import { getIconsForPicker, resolveIcon } from '../../utils/iconRegistry';
 
 interface IconPickerProps {
   value: string;
@@ -7,18 +8,20 @@ interface IconPickerProps {
   label: string;
 }
 
-const iconNames = Object.keys(icons);
-
 export function IconPicker({ value, onChange, label }: IconPickerProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const ref = useRef<HTMLDivElement>(null);
+  const { library } = useIconLibrary();
+
+  const allIcons = useMemo(() => getIconsForPicker(library), [library]);
+  const iconNames = useMemo(() => Object.keys(allIcons), [allIcons]);
 
   const filtered = useMemo(() => {
     if (!search) return iconNames.slice(0, 60);
     const q = search.toLowerCase();
     return iconNames.filter((n) => n.toLowerCase().includes(q)).slice(0, 60);
-  }, [search]);
+  }, [search, iconNames]);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -30,7 +33,7 @@ export function IconPicker({ value, onChange, label }: IconPickerProps) {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const SelectedIcon = value && value !== 'none' ? icons[value as keyof typeof icons] : null;
+  const selectedResolved = value && value !== 'none' ? resolveIcon(value, library) : null;
 
   return (
     <div className="icon-picker" ref={ref}>
@@ -39,9 +42,12 @@ export function IconPicker({ value, onChange, label }: IconPickerProps) {
         className="icon-picker__trigger"
         onClick={() => { setOpen(!open); setSearch(''); }}
       >
-        {SelectedIcon ? (
+        {selectedResolved ? (
           <>
-            <SelectedIcon size={16} />
+            {selectedResolved.isHeroicon
+              ? <selectedResolved.component width={16} height={16} />
+              : <selectedResolved.component size={16} />
+            }
             <span className="icon-picker__name">{value}</span>
           </>
         ) : (
@@ -74,7 +80,9 @@ export function IconPicker({ value, onChange, label }: IconPickerProps) {
               </svg>
             </button>
             {filtered.map((name) => {
-              const Icon = icons[name as keyof typeof icons];
+              const IconComp = allIcons[name];
+              if (!IconComp) return null;
+              const isHero = library === 'heroicons';
               return (
                 <button
                   key={name}
@@ -82,7 +90,10 @@ export function IconPicker({ value, onChange, label }: IconPickerProps) {
                   onClick={() => { onChange(name); setOpen(false); }}
                   title={name}
                 >
-                  <Icon size={16} />
+                  {isHero
+                    ? <IconComp width={16} height={16} />
+                    : <IconComp size={16} />
+                  }
                 </button>
               );
             })}

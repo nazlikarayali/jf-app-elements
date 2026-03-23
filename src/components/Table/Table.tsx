@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Table2, Asterisk } from 'lucide-react';
+import { Icon } from '../Icon/Icon';
 import './Table.scss';
 
 export type TableAlignment = 'Left' | 'Center' | 'Right';
@@ -44,7 +44,7 @@ export const Table: FC<TableProps> = ({
     <div className={rootClasses}>
       {showIcon && (
         <div className="jf-table__icon" style={{ width: iconSize, height: iconSize }}>
-          <Table2 size={iconInner} />
+          <Icon name="Table2" size={iconInner} />
         </div>
       )}
       <div className="jf-table__content">
@@ -57,7 +57,7 @@ export const Table: FC<TableProps> = ({
       </div>
       {required && (
         <div className="jf-table__badge">
-          <Asterisk size={20} />
+          <Icon name="Asterisk" size={20} />
         </div>
       )}
     </div>

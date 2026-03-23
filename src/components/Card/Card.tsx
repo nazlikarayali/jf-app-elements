@@ -1,5 +1,5 @@
 import type React from 'react';
-import { icons } from 'lucide-react';
+import { Icon } from '../Icon/Icon';
 import { Button } from '../Button';
 import './Card.scss';
 
@@ -37,10 +37,8 @@ const ImagePlaceholder: React.FC = () => (
   </svg>
 );
 
-const DynamicIcon: React.FC<{ name: string; size?: number }> = ({ name, size = 32 }) => {
-  const Icon = icons[name as keyof typeof icons];
-  if (!Icon) return <ImagePlaceholder />;
-  return <Icon size={size} />;
+const DynamicCardIcon: React.FC<{ name: string; size?: number }> = ({ name, size = 32 }) => {
+  return <Icon name={name} size={size} /> || <ImagePlaceholder />;
 };
 
 // ============================================
@@ -56,7 +54,7 @@ const CardImage: React.FC<CardImageProps> = ({ imageStyle, layout, iconName }) =
   if (imageStyle === 'None') return null;
 
   const iconContent = imageStyle === 'Icon'
-    ? <div className="jf-card__image-icon"><DynamicIcon name={iconName} /></div>
+    ? <div className="jf-card__image-icon"><DynamicCardIcon name={iconName} /></div>
     : <div className="jf-card__image-icon"><ImagePlaceholder /></div>;
 
   if (layout === 'Horizontal') {

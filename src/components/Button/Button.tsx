@@ -1,5 +1,5 @@
 import type React from 'react';
-import { icons } from 'lucide-react';
+import { Icon } from '../Icon/Icon';
 import './Button.scss';
 
 // ============================================
@@ -25,16 +25,6 @@ export interface ButtonProps {
   fullWidth?: boolean;
   onClick?: () => void;
 }
-
-// ============================================
-// Dynamic Icon Renderer
-// ============================================
-const DynamicIcon: React.FC<{ name: string; className?: string; size?: number }> = ({ name, className, size: iconSize = 20 }) => {
-  if (!name || name === 'none') return null;
-  const Icon = icons[name as keyof typeof icons];
-  if (!Icon) return null;
-  return <Icon className={className} size={iconSize} />;
-};
 
 // ============================================
 // Button Component
@@ -70,7 +60,7 @@ export const Button: React.FC<ButtonProps> = ({
 
     return (
       <button className={iconOnlyClasses} disabled={isDisabled} onClick={onClick}>
-        <DynamicIcon name={iconOnlyIcon} className="jf-btn-icon__icon" size={24} />
+        <Icon name={iconOnlyIcon} className="jf-btn-icon__icon" size={24} />
       </button>
     );
   }
@@ -98,9 +88,9 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button className={classes} disabled={isDisabled} onClick={onClick}>
-      {hasLeftIcon && <DynamicIcon name={leftIcon} className="jf-btn__icon" size={iconSize} />}
+      {hasLeftIcon && <Icon name={leftIcon} className="jf-btn__icon" size={iconSize} />}
       <span className="jf-btn__label">{label}</span>
-      {hasRightIcon && <DynamicIcon name={rightIcon} className="jf-btn__icon" size={iconSize} />}
+      {hasRightIcon && <Icon name={rightIcon} className="jf-btn__icon" size={iconSize} />}
     </button>
   );
 };

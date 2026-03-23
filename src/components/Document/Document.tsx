@@ -1,5 +1,5 @@
 import { useState, type FC, type DragEvent } from 'react';
-import { FileText, CirclePlus } from 'lucide-react';
+import { Icon } from '../Icon/Icon';
 import { Button } from '../Button';
 import './Document.scss';
 
@@ -71,12 +71,12 @@ export const Document: FC<DocumentProps> = ({
       >
         {isDragging ? (
           <>
-            <CirclePlus size={20} className="jf-doc-builder__drop-icon" />
+            <Icon name="CirclePlus" size={20} className="jf-doc-builder__drop-icon" />
             <span className="jf-doc-builder__hint">DRAG AND DROP HERE</span>
           </>
         ) : (
           <>
-            <FileText size={32} className="jf-doc-builder__icon" />
+            <Icon name="FileText" size={32} className="jf-doc-builder__icon" />
             <Button
               variant="Default"
               corner="Default"
@@ -114,7 +114,7 @@ export const Document: FC<DocumentProps> = ({
     <div className={rootClasses}>
       {showIcon && (
         <div className="jf-doc__icon" style={{ width: iconSize, height: iconSize }}>
-          <FileText size={iconInner} />
+          <Icon name="FileText" size={iconInner} />
         </div>
       )}
       <div className="jf-doc__content">

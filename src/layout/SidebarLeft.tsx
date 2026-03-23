@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { icons } from 'lucide-react';
+import { Icon } from '../components/Icon/Icon';
 import type { RegisteredComponent } from '../types/registry';
 
 interface SidebarLeftProps {
@@ -9,9 +9,7 @@ interface SidebarLeftProps {
 }
 
 function ComponentIcon({ name }: { name: string }) {
-  const Icon = icons[name as keyof typeof icons];
-  if (!Icon) return <span>{name}</span>;
-  return <Icon size={16} />;
+  return <Icon name={name} size={16} />;
 }
 
 export function SidebarLeft({ selectedId, onSelect, components }: SidebarLeftProps) {

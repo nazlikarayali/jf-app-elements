@@ -1,5 +1,5 @@
 import { useState, useEffect, type FC } from 'react';
-import { Heart, Search, AlignJustify, Grid2x2 } from 'lucide-react';
+import { Icon } from '../Icon/Icon';
 import { Button } from '../Button';
 import './ProductList.scss';
 
@@ -43,7 +43,7 @@ const ProductCardItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
     <div className="jf-product-item__image">
       <ImagePlaceholder />
       <button className="jf-product-item__like">
-        <Heart size={24} />
+        <Icon name="Heart" size={24} />
       </button>
     </div>
     <div className="jf-product-item__content">
@@ -85,7 +85,7 @@ const ProductBasicItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
       </div>
       <div className="jf-product-item__right">
         <button className="jf-product-item__like jf-product-item__like--inline">
-          <Heart size={24} />
+          <Icon name="Heart" size={24} />
         </button>
         <Button
           variant="Default"
@@ -104,9 +104,9 @@ const ProductBasicItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
 // ============================================
 // Layout Switch Icons
 // ============================================
-const LAYOUT_ICONS: { layout: ProductListLayout; icon: FC<{ size?: number; className?: string }> }[] = [
-  { layout: 'SingleColumn', icon: AlignJustify },
-  { layout: 'TwoColumns', icon: Grid2x2 },
+const LAYOUT_ICONS: { layout: ProductListLayout; iconName: string }[] = [
+  { layout: 'SingleColumn', iconName: 'AlignJustify' },
+  { layout: 'TwoColumns', iconName: 'Grid2x2' },
 ];
 
 // ============================================
@@ -157,7 +157,7 @@ export const ProductList: FC<ProductListProps> = ({
       {/* Toolbar: Search + Layout Icons */}
       <div className="jf-product-list__toolbar">
         <div className="jf-product-list__search">
-          <Search size={20} className="jf-product-list__search-icon" />
+          <Icon name="Search" size={20} className="jf-product-list__search-icon" />
           <input
             type="text"
             className="jf-product-list__search-input"
@@ -165,14 +165,14 @@ export const ProductList: FC<ProductListProps> = ({
           />
         </div>
         <div className="jf-product-list__layout-switch">
-          {LAYOUT_ICONS.map(({ layout: l, icon: Icon }) => (
+          {LAYOUT_ICONS.map(({ layout: l, iconName }) => (
             <button
               key={l}
               className={`jf-product-list__layout-btn${layout === l ? ' active' : ''}`}
               onClick={() => setLayout(l)}
               title={l}
             >
-              <Icon size={18} />
+              <Icon name={iconName} size={18} />
             </button>
           ))}
         </div>
