@@ -1,5 +1,5 @@
 import { icons as lucideIcons } from 'lucide-react';
-import type { ComponentType } from 'react';
+import { createElement, type ComponentType } from 'react';
 
 export type IconLibrary = 'lucide' | 'phosphor' | 'tabler';
 export type IconStyle = 'outline' | 'fill';
@@ -226,7 +226,7 @@ export async function loadLibrary(lib: IconLibrary, style: IconStyle = 'outline'
           if (style === 'fill') {
             // Wrap with weight="fill"
             const BaseIcon = val as IconComp;
-            const FilledIcon: IconComp = (props) => <BaseIcon {...props} weight="fill" />;
+            const FilledIcon: IconComp = (props) => createElement(BaseIcon, { ...props, weight: 'fill' });
             FilledIcon.displayName = `${iconKey}Fill`;
             icons[iconKey] = FilledIcon;
           } else {
