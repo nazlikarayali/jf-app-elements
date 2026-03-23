@@ -24,12 +24,7 @@ export interface ProductListProps {
 // Image Placeholder
 // ============================================
 const ImagePlaceholder: FC<{ size?: number }> = ({ size = 80 }) => (
-  <svg width={size} height={size} viewBox="0 0 48 48" fill="none">
-    <path d="M6 36L16.58 25.42C17.36 24.64 18.64 24.64 19.42 25.42L30 36" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M26 32L30.58 27.42C31.36 26.64 32.64 26.64 33.42 27.42L42 36" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    <rect x="6" y="6" width="36" height="36" rx="4" stroke="currentColor" strokeWidth="2.5" />
-    <circle cx="18" cy="18" r="3" stroke="currentColor" strokeWidth="2.5" />
-  </svg>
+  <Icon name="Image" size={size} />
 );
 
 // ============================================
