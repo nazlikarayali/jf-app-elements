@@ -121,6 +121,7 @@ const NAME_MAP: Record<string, Partial<Record<IconLibrary, string>>> = {
 
   // Layout & Design
   AlignJustify: { phosphor: 'TextAlignJustify', tabler: 'IconAlignJustified' },
+  List: { phosphor: 'List', tabler: 'IconList' },
   AlignLeft: { phosphor: 'TextAlignLeft', tabler: 'IconAlignLeft' },
   AlignCenter: { phosphor: 'TextAlignCenter', tabler: 'IconAlignCenter' },
   AlignRight: { phosphor: 'TextAlignRight', tabler: 'IconAlignRight' },

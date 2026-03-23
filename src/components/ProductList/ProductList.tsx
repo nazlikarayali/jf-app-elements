@@ -100,7 +100,7 @@ const ProductBasicItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
 // Layout Switch Icons
 // ============================================
 const LAYOUT_ICONS: { layout: ProductListLayout; iconName: string }[] = [
-  { layout: 'SingleColumn', iconName: 'AlignJustify' },
+  { layout: 'SingleColumn', iconName: 'List' },
   { layout: 'TwoColumns', iconName: 'Grid2x2' },
 ];
 
