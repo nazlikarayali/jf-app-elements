@@ -38,7 +38,8 @@ const ImagePlaceholder: React.FC = () => (
 );
 
 const DynamicCardIcon: React.FC<{ name: string; size?: number }> = ({ name, size = 32 }) => {
-  return <Icon name={name} size={size} /> || <ImagePlaceholder />;
+  if (!name || name === 'none') return <ImagePlaceholder />;
+  return <Icon name={name} size={size} />;
 };
 
 // ============================================
