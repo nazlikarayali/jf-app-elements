@@ -184,7 +184,11 @@ const registryCache: Partial<Record<IconLibrary, Record<string, IconComp>>> = {
 };
 
 function isIconExport(key: string, val: unknown): boolean {
-  return typeof val === 'function' && /^[A-Z]/.test(key);
+  if (!/^[A-Z]/.test(key)) return false;
+  if (typeof val === 'function') return true;
+  // React.forwardRef / React.memo return objects with $$typeof
+  if (typeof val === 'object' && val !== null && '$$typeof' in val) return true;
+  return false;
 }
 
 const NON_ICON_EXPORTS = new Set([
