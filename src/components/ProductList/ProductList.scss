@@ -167,6 +167,12 @@
   color: var(--fg-brand);
 }
 
+.jf-product-item__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .jf-product-item__like {
   position: absolute;
   top: 8px;

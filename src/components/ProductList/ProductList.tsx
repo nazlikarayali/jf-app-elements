@@ -8,6 +8,7 @@ export type ProductListLayout = 'ThreeColumns' | 'TwoColumns' | 'SingleColumn';
 export interface ProductItem {
   name: string;
   price: string;
+  image?: string;
 }
 
 export interface ProductListProps {
@@ -38,7 +39,7 @@ const ProductCardItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
   return (
   <div className="jf-product-item jf-product-item--card">
     <div className="jf-product-item__image">
-      <ImagePlaceholder />
+      {product.image ? <img src={product.image} alt={product.name} className="jf-product-item__img" /> : <ImagePlaceholder />}
       <button className={`jf-product-item__like${liked ? ' liked' : ''}`} onClick={() => setLiked(!liked)}>
         <Icon name="Heart" size={24} forceStyle={liked ? 'fill' : 'outline'} />
       </button>
@@ -76,7 +77,7 @@ const ProductBasicItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
   return (
   <div className="jf-product-item jf-product-item--basic">
     <div className="jf-product-item__image-basic">
-      <ImagePlaceholder size={56} />
+      {product.image ? <img src={product.image} alt={product.name} className="jf-product-item__img" /> : <ImagePlaceholder size={56} />}
     </div>
     <div className="jf-product-item__body">
       <div className="jf-product-item__info">

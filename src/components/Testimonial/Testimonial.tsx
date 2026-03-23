@@ -5,6 +5,7 @@ import './Testimonial.scss';
 export interface TestimonialItem {
   name: string;
   text: string;
+  avatar?: string;
 }
 
 export interface TestimonialProps {
@@ -42,7 +43,7 @@ export const Testimonial: FC<TestimonialProps> = ({
       <div className="jf-testimonial__card">
         <div className={`jf-testimonial__content${shrinked ? ' jf-testimonial__content--vertical' : ''}`}>
           <div className="jf-testimonial__avatar">
-            <Icon name="User" size={40} />
+            {current.avatar ? <img src={current.avatar} alt={current.name} className="jf-testimonial__avatar-img" /> : <Icon name="User" size={40} />}
           </div>
           <div className="jf-testimonial__text">
             <h4 className="jf-testimonial__name">{current.name}</h4>
