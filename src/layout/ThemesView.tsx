@@ -19,6 +19,7 @@ import { ProductList } from '../components/ProductList';
 
 const DEFAULT_COLOR = '#7D38EF';
 const DEFAULT_FONT = 'Inter';
+const DEFAULT_HEADING_FONT = '';
 const DEFAULT_RADIUS = 'Medium';
 const DEFAULT_TINT = 50;
 const DEFAULT_HARMONY = 150;
@@ -54,6 +55,7 @@ interface ThemePreset {
   name: string;
   color: string;
   font: string;
+  headingFont: string;
   radius: RadiusScale;
   tint: number;
   mode: 'light' | 'dark';
@@ -61,18 +63,18 @@ interface ThemePreset {
 }
 
 const THEME_PRESETS: ThemePreset[] = [
-  { name: 'Default', color: '#7D38EF', font: 'Inter', radius: 'Medium', tint: 50, mode: 'light', harmonyOffset: 150 },
-  { name: 'Ocean Breeze', color: '#0385C8', font: 'DM Sans', radius: 'Large', tint: 30, mode: 'light', harmonyOffset: 150 },
-  { name: 'Midnight Blue', color: '#0385C8', font: 'Geist', radius: 'Medium', tint: 20, mode: 'dark', harmonyOffset: 150 },
-  { name: 'Forest', color: '#19A44B', font: 'Public Sans', radius: 'Small', tint: 40, mode: 'light', harmonyOffset: 120 },
-  { name: 'Sunset', color: '#F97101', font: 'Bricolage Grotesque', radius: 'Large', tint: 60, mode: 'light', harmonyOffset: 180 },
-  { name: 'Cherry', color: '#DF2125', font: 'Instrument Sans', radius: 'Medium', tint: 35, mode: 'light', harmonyOffset: 150 },
-  { name: 'Dark Elegance', color: '#8D5DF9', font: 'Figtree', radius: 'XLarge', tint: 70, mode: 'dark', harmonyOffset: 160 },
-  { name: 'Minimal Dark', color: '#64A501', font: 'Hanken Grotesk', radius: 'Small', tint: 10, mode: 'dark', harmonyOffset: 150 },
-  { name: 'Warm Gold', color: '#DC7801', font: 'Fredoka', radius: 'XLarge', tint: 80, mode: 'light', harmonyOffset: 200 },
-  { name: 'Rose', color: '#E91E63', font: 'Varela Round', radius: 'Large', tint: 55, mode: 'light', harmonyOffset: 150 },
-  { name: 'Aqua Night', color: '#00B5D4', font: 'JetBrains Mono', radius: 'Medium', tint: 25, mode: 'dark', harmonyOffset: 150 },
-  { name: 'Monochrome', color: '#353C6A', font: 'IBM Plex Mono', radius: 'Small', tint: 0, mode: 'light', harmonyOffset: 150 },
+  { name: 'Default', color: '#7D38EF', font: 'Inter', headingFont: '', radius: 'Medium', tint: 50, mode: 'light', harmonyOffset: 150 },
+  { name: 'Ocean Breeze', color: '#0385C8', font: 'DM Sans', headingFont: 'Playfair Display', radius: 'Large', tint: 30, mode: 'light', harmonyOffset: 150 },
+  { name: 'Midnight Blue', color: '#0385C8', font: 'Geist', headingFont: '', radius: 'Medium', tint: 20, mode: 'dark', harmonyOffset: 150 },
+  { name: 'Forest', color: '#19A44B', font: 'Public Sans', headingFont: 'Lora', radius: 'Small', tint: 40, mode: 'light', harmonyOffset: 120 },
+  { name: 'Sunset', color: '#F97101', font: 'Bricolage Grotesque', headingFont: '', radius: 'Large', tint: 60, mode: 'light', harmonyOffset: 180 },
+  { name: 'Cherry', color: '#DF2125', font: 'Instrument Sans', headingFont: 'Merriweather', radius: 'Medium', tint: 35, mode: 'light', harmonyOffset: 150 },
+  { name: 'Dark Elegance', color: '#8D5DF9', font: 'Figtree', headingFont: 'Playfair Display', radius: 'XLarge', tint: 70, mode: 'dark', harmonyOffset: 160 },
+  { name: 'Minimal Dark', color: '#64A501', font: 'Hanken Grotesk', headingFont: '', radius: 'Small', tint: 10, mode: 'dark', harmonyOffset: 150 },
+  { name: 'Warm Gold', color: '#DC7801', font: 'Fredoka', headingFont: '', radius: 'XLarge', tint: 80, mode: 'light', harmonyOffset: 200 },
+  { name: 'Rose', color: '#E91E63', font: 'Varela Round', headingFont: 'Lora', radius: 'Large', tint: 55, mode: 'light', harmonyOffset: 150 },
+  { name: 'Aqua Night', color: '#00B5D4', font: 'JetBrains Mono', headingFont: '', radius: 'Medium', tint: 25, mode: 'dark', harmonyOffset: 150 },
+  { name: 'Monochrome', color: '#353C6A', font: 'IBM Plex Mono', headingFont: '', radius: 'Small', tint: 0, mode: 'light', harmonyOffset: 150 },
 ];
 
 const FONT_OPTIONS = [
@@ -90,6 +92,63 @@ const FONT_OPTIONS = [
   'Google Sans',
   'Bricolage Grotesque',
   'Varela Round',
+];
+
+const HEADING_FONT_OPTIONS = [
+  'Playfair Display',
+  'Merriweather',
+  'Lora',
+  'Libre Baskerville',
+  'Fraunces',
+  'DM Serif Display',
+  'Bitter',
+  'Sora',
+  'Space Grotesk',
+  'Outfit',
+  ...FONT_OPTIONS,
+];
+
+interface FontPairing {
+  heading: string;
+  body: string;
+  tags: string[];
+}
+
+const FONT_PAIRINGS: FontPairing[] = [
+  { heading: 'Playfair Display', body: 'DM Sans', tags: ['sophisticated', 'editorial'] },
+  { heading: 'Playfair Display', body: 'Source Serif 4', tags: ['elegant', 'traditional'] },
+  { heading: 'DM Serif Display', body: 'Libre Baskerville', tags: ['literary', 'warm'] },
+  { heading: 'Cormorant Garamond', body: 'Raleway', tags: ['elegant', 'dramatic'] },
+  { heading: 'Cormorant Garamond', body: 'Lora', tags: ['dramatic', 'literary'] },
+  { heading: 'EB Garamond', body: 'Inter', tags: ['academic', 'refined'] },
+  { heading: 'EB Garamond', body: 'Crimson Text', tags: ['scholarly', 'literary'] },
+  { heading: 'Merriweather', body: 'Mulish', tags: ['reliable', 'readable'] },
+  { heading: 'Lora', body: 'Nunito Sans', tags: ['warm', 'approachable'] },
+  { heading: 'Bitter', body: 'Open Sans', tags: ['reliable', 'editorial'] },
+  { heading: 'Bitter', body: 'Lora', tags: ['warm', 'narrative'] },
+  { heading: 'Space Grotesk', body: 'DM Sans', tags: ['playful', 'startup'] },
+  { heading: 'Sora', body: 'Public Sans', tags: ['modern', 'confident'] },
+  { heading: 'Outfit', body: 'Libre Baskerville', tags: ['structured', 'professional'] },
+  { heading: 'Outfit', body: 'IBM Plex Sans', tags: ['trustworthy', 'precise'] },
+  { heading: 'Montserrat', body: 'Karla', tags: ['modern', 'bold'] },
+  { heading: 'Plus Jakarta Sans', body: 'PT Serif', tags: ['curated', 'contemporary'] },
+  { heading: 'Plus Jakarta Sans', body: 'Inter', tags: ['friendly', 'professional'] },
+  { heading: 'Manrope', body: 'DM Sans', tags: ['analytical', 'clear'] },
+  { heading: 'Urbanist', body: 'Libre Franklin', tags: ['clean', 'startup'] },
+  { heading: 'Bricolage Grotesque', body: 'Figtree', tags: ['creative', 'geometric'] },
+  { heading: 'Oswald', body: 'Barlow', tags: ['commanding', 'editorial'] },
+  { heading: 'Anton', body: 'Work Sans', tags: ['bold', 'impactful'] },
+  { heading: 'Josefin Sans', body: 'Raleway', tags: ['elegant', 'sophisticated'] },
+  { heading: 'Quicksand', body: 'Cabin', tags: ['playful', 'approachable'] },
+  { heading: 'Poppins', body: 'Hind', tags: ['friendly', 'warm'] },
+  { heading: 'Nunito', body: 'Nunito Sans', tags: ['friendly', 'approachable'] },
+  { heading: 'Roboto Slab', body: 'Roboto', tags: ['systematic', 'professional'] },
+  { heading: 'Archivo Black', body: 'Archivo', tags: ['raw', 'brutalist'] },
+  { heading: 'Barlow Condensed', body: 'Barlow', tags: ['efficient', 'modern'] },
+  { heading: 'Fjalla One', body: 'Josefin Sans', tags: ['impactful', 'commanding'] },
+  { heading: 'Figtree', body: 'Overpass', tags: ['calm', 'clear'] },
+  { heading: 'Geist', body: 'Geist', tags: ['modern', 'minimal'] },
+  { heading: 'Inter', body: 'Inter', tags: ['clean', 'neutral'] },
 ];
 
 function loadGoogleFont(fontName: string) {
@@ -271,6 +330,70 @@ function FontDropdown({ fonts, active, onChange }: { fonts: string[]; active: st
   );
 }
 
+function FontPairingDropdown({ pairings, activeHeading, activeBody, onSelect }: {
+  pairings: FontPairing[];
+  activeHeading: string;
+  activeBody: string;
+  onSelect: (p: FontPairing) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    pairings.forEach(p => { loadGoogleFont(p.heading); loadGoogleFont(p.body); });
+  }, [pairings]);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  const activePairing = pairings.find(p => p.heading === activeHeading && p.body === activeBody);
+
+  return (
+    <div className="preset-dropdown" ref={ref}>
+      <button className="preset-dropdown__trigger" onClick={() => setOpen(!open)}>
+        <span className="preset-dropdown__label">
+          {activePairing ? (
+            <span className="font-pairing-label">
+              <span style={{ fontFamily: `'${activePairing.heading}', sans-serif`, fontWeight: 600 }}>{activePairing.heading}</span>
+              <span className="font-pairing-label__sep">+</span>
+              <span style={{ fontFamily: `'${activePairing.body}', sans-serif` }}>{activePairing.body}</span>
+            </span>
+          ) : 'Select a pairing'}
+        </span>
+        <ChevronDown size={16} className={`preset-dropdown__chevron${open ? ' open' : ''}`} />
+      </button>
+      {open && (
+        <div className="preset-dropdown__menu font-pairing-menu">
+          {pairings.map((p, i) => {
+            const isActive = p.heading === activeHeading && p.body === activeBody;
+            return (
+              <button
+                key={i}
+                className={`preset-dropdown__item font-pairing-item${isActive ? ' active' : ''}`}
+                onClick={() => { onSelect(p); setOpen(false); }}
+              >
+                <div className="font-pairing-item__fonts">
+                  <span className="font-pairing-item__heading" style={{ fontFamily: `'${p.heading}', sans-serif` }}>{p.heading}</span>
+                  <span className="font-pairing-item__body" style={{ fontFamily: `'${p.body}', sans-serif` }}>{p.body}</span>
+                </div>
+                <div className="font-pairing-item__tags">
+                  {p.tags.map(t => <span key={t} className="font-pairing-item__tag">{t}</span>)}
+                </div>
+                {isActive && <Check size={16} className="preset-dropdown__check" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function getSecondaryColor(primaryHex: string, offsetDegrees: number): string {
   const primaryHue = hexToHslHue(primaryHex);
   const secondaryHue = (primaryHue + offsetDegrees) % 360;
@@ -287,6 +410,7 @@ export function ThemesView() {
   const [brandHue, setBrandHue] = useState(() => hexToHslHue(DEFAULT_COLOR));
   const [tint, setTint] = useState(DEFAULT_TINT);
   const [font, setFont] = useState(DEFAULT_FONT);
+  const [headingFont, setHeadingFont] = useState(DEFAULT_HEADING_FONT);
   const [radius, setRadius] = useState<RadiusScale>(DEFAULT_RADIUS as RadiusScale);
   const [, setPalette] = useState<PaletteShade[]>(() => generatePalette(DEFAULT_COLOR, isDarkMode()));
   const [harmonyOffset, setHarmonyOffset] = useState(DEFAULT_HARMONY);
@@ -309,6 +433,15 @@ export function ThemesView() {
     applySecondary(color, harmonyOffset, isDarkMode());
   }, [color, harmonyOffset, applySecondary]);
 
+  const applyHeadingFontToDOM = useCallback((hFont: string, bodyFont: string) => {
+    if (hFont) {
+      loadGoogleFont(hFont);
+      document.documentElement.style.setProperty('--font-family-heading', `'${hFont}', -apple-system, BlinkMacSystemFont, sans-serif`);
+    } else {
+      document.documentElement.style.setProperty('--font-family-heading', `'${bodyFont}', -apple-system, BlinkMacSystemFont, sans-serif`);
+    }
+  }, []);
+
   const applyPreset = useCallback((preset: ThemePreset) => {
     setActivePreset(preset.name);
     setColor(preset.color);
@@ -325,6 +458,8 @@ export function ThemesView() {
     setFont(preset.font);
     loadGoogleFont(preset.font);
     document.documentElement.style.setProperty('--font-family', `'${preset.font}', -apple-system, BlinkMacSystemFont, sans-serif`);
+    setHeadingFont(preset.headingFont);
+    applyHeadingFontToDOM(preset.headingFont, preset.font);
     setRadius(preset.radius);
     applyRadius(preset.radius, canvasRef.current);
     setColorMode(preset.mode);
@@ -334,7 +469,7 @@ export function ThemesView() {
       document.documentElement.removeAttribute('data-theme');
     }
     localStorage.setItem('jf-lib-theme', preset.mode);
-  }, [secondaryEnabled, applySecondary]);
+  }, [secondaryEnabled, applySecondary, applyHeadingFontToDOM]);
 
   const handleColorChange = useCallback((newColor: string) => {
     setColor(newColor);
@@ -378,7 +513,29 @@ export function ThemesView() {
     setFont(newFont);
     loadGoogleFont(newFont);
     document.documentElement.style.setProperty('--font-family', `'${newFont}', -apple-system, BlinkMacSystemFont, sans-serif`);
+    setHeadingFont((prev) => {
+      if (!prev) {
+        document.documentElement.style.setProperty('--font-family-heading', `'${newFont}', -apple-system, BlinkMacSystemFont, sans-serif`);
+      }
+      return prev;
+    });
   }, []);
+
+  const handleHeadingFontChange = useCallback((newFont: string) => {
+    setHeadingFont(newFont);
+    setFont((currentBody) => {
+      applyHeadingFontToDOM(newFont, currentBody);
+      return currentBody;
+    });
+  }, [applyHeadingFontToDOM]);
+
+  const handlePairingSelect = useCallback((pairing: FontPairing) => {
+    setFont(pairing.body);
+    loadGoogleFont(pairing.body);
+    document.documentElement.style.setProperty('--font-family', `'${pairing.body}', -apple-system, BlinkMacSystemFont, sans-serif`);
+    setHeadingFont(pairing.heading);
+    applyHeadingFontToDOM(pairing.heading, pairing.body);
+  }, [applyHeadingFontToDOM]);
 
   const handleRadiusChange = useCallback((scale: RadiusScale) => {
     setRadius(scale);
@@ -392,6 +549,7 @@ export function ThemesView() {
     setHarmonyOffset(DEFAULT_HARMONY);
     setSecondaryEnabled(false);
     setFont(DEFAULT_FONT);
+    setHeadingFont(DEFAULT_HEADING_FONT);
     setRadius(DEFAULT_RADIUS as RadiusScale);
     const newPalette = generatePalette(DEFAULT_COLOR, isDarkMode());
     setPalette(newPalette);
@@ -400,6 +558,7 @@ export function ThemesView() {
     resetNeutral();
     resetRadius(canvasRef.current);
     document.documentElement.style.removeProperty('--font-family');
+    document.documentElement.style.removeProperty('--font-family-heading');
   }, []);
 
   const handleColorModeChange = useCallback((mode: 'light' | 'dark') => {
@@ -449,6 +608,7 @@ export function ThemesView() {
       resetNeutral();
       resetRadius(canvasRef.current);
       document.documentElement.style.removeProperty('--font-family');
+      document.documentElement.style.removeProperty('--font-family-heading');
     };
   }, []);
 
@@ -540,8 +700,23 @@ export function ThemesView() {
         </div>
 
         <div className="themes-view__sidebar-section">
-          <h3 className="themes-view__sidebar-title">Font Family</h3>
+          <h3 className="themes-view__sidebar-title">Font Pairing</h3>
+          <FontPairingDropdown
+            pairings={FONT_PAIRINGS}
+            activeHeading={headingFont || font}
+            activeBody={font}
+            onSelect={handlePairingSelect}
+          />
+        </div>
+
+        <div className="themes-view__sidebar-section">
+          <h3 className="themes-view__sidebar-title">Body Font</h3>
           <FontDropdown fonts={FONT_OPTIONS} active={font} onChange={handleFontChange} />
+        </div>
+
+        <div className="themes-view__sidebar-section">
+          <h3 className="themes-view__sidebar-title">Heading Font</h3>
+          <FontDropdown fonts={HEADING_FONT_OPTIONS} active={headingFont || font} onChange={handleHeadingFontChange} />
         </div>
 
         <div className="themes-view__sidebar-section">
@@ -706,7 +881,23 @@ export function ThemesView() {
 
       <BottomSheet open={activeTab === 'font'} onClose={() => setActiveTab(null)} title="Font" noOverlay>
         <div className="themes-sheet-content">
-          <FontDropdown fonts={FONT_OPTIONS} active={font} onChange={handleFontChange} />
+          <div className="themes-sheet-content__section">
+            <h3 className="themes-view__sidebar-title">Font Pairing</h3>
+            <FontPairingDropdown
+              pairings={FONT_PAIRINGS}
+              activeHeading={headingFont || font}
+              activeBody={font}
+              onSelect={handlePairingSelect}
+            />
+          </div>
+          <div className="themes-sheet-content__section">
+            <h3 className="themes-view__sidebar-title">Body Font</h3>
+            <FontDropdown fonts={FONT_OPTIONS} active={font} onChange={handleFontChange} />
+          </div>
+          <div className="themes-sheet-content__section">
+            <h3 className="themes-view__sidebar-title">Heading Font</h3>
+            <FontDropdown fonts={HEADING_FONT_OPTIONS} active={headingFont || font} onChange={handleHeadingFontChange} />
+          </div>
         </div>
       </BottomSheet>
 
