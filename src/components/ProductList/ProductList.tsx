@@ -33,12 +33,14 @@ const ImagePlaceholder: FC<{ size?: number }> = ({ size = 80 }) => (
 const ProductCardItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
   product,
   buttonLabel,
-}) => (
+}) => {
+  const [liked, setLiked] = useState(false);
+  return (
   <div className="jf-product-item jf-product-item--card">
     <div className="jf-product-item__image">
       <ImagePlaceholder />
-      <button className="jf-product-item__like">
-        <Icon name="Heart" size={24} />
+      <button className={`jf-product-item__like${liked ? ' liked' : ''}`} onClick={() => setLiked(!liked)}>
+        <Icon name="Heart" size={24} forceStyle={liked ? 'fill' : 'outline'} />
       </button>
     </div>
     <div className="jf-product-item__content">
@@ -60,7 +62,8 @@ const ProductCardItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
       </div>
     </div>
   </div>
-);
+  );
+};
 
 // ============================================
 // Basic Item (used in single column layout)
@@ -68,7 +71,9 @@ const ProductCardItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
 const ProductBasicItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
   product,
   buttonLabel,
-}) => (
+}) => {
+  const [liked, setLiked] = useState(false);
+  return (
   <div className="jf-product-item jf-product-item--basic">
     <div className="jf-product-item__image-basic">
       <ImagePlaceholder size={56} />
@@ -79,8 +84,8 @@ const ProductBasicItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
         <p className="jf-product-item__price">{product.price}</p>
       </div>
       <div className="jf-product-item__right">
-        <button className="jf-product-item__like jf-product-item__like--inline">
-          <Icon name="Heart" size={24} />
+        <button className={`jf-product-item__like jf-product-item__like--inline${liked ? ' liked' : ''}`} onClick={() => setLiked(!liked)}>
+          <Icon name="Heart" size={24} forceStyle={liked ? 'fill' : 'outline'} />
         </button>
         <Button
           variant="Default"
@@ -94,7 +99,8 @@ const ProductBasicItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
       </div>
     </div>
   </div>
-);
+  );
+};
 
 // ============================================
 // Layout Switch Icons
@@ -152,7 +158,7 @@ export const ProductList: FC<ProductListProps> = ({
       {/* Toolbar: Search + Layout Icons */}
       <div className="jf-product-list__toolbar">
         <div className="jf-product-list__search">
-          <Icon name="Search" size={20} className="jf-product-list__search-icon" />
+          <Icon name="Search" size={20} className="jf-product-list__search-icon" forceStyle="outline" />
           <input
             type="text"
             className="jf-product-list__search-input"

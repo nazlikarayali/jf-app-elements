@@ -181,6 +181,10 @@
     padding: 0;
     overflow: visible;
   }
+
+  &.liked {
+    color: var(--fg-brand);
+  }
 }
 
 .jf-product-item__content {
