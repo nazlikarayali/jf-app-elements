@@ -12,6 +12,7 @@ ComponentRegistry.register({
   variants: {},
 
   properties: [
+    { name: 'Show Avatars', type: 'boolean', default: false },
     { name: 'Selected', type: 'boolean', default: false },
     { name: 'Shrinked', type: 'boolean', default: false },
   ],
@@ -70,8 +71,17 @@ ComponentRegistry.register({
   ],
 
   render(_variants: VariantValues, props: PropertyValues, _states: StateValues): React.ReactNode {
+    const showAvatars = props['Show Avatars'] as boolean;
+    const items = showAvatars
+      ? [
+          { name: 'Sarah Johnson', text: '\u201CThis platform transformed how we collect donations. The interface is intuitive and our donors love it.\u201D', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face' },
+          { name: 'Michael Chen', text: '\u201CSetup was incredibly easy. We were up and running in minutes, not days.\u201D', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face' },
+          { name: 'Emily Davis', text: '\u201CThe best investment we made for our nonprofit. Highly recommended!\u201D', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face' },
+        ]
+      : undefined;
     return (
       <Testimonial
+        items={items}
         selected={props['Selected'] as boolean}
         shrinked={props['Shrinked'] as boolean}
       />
