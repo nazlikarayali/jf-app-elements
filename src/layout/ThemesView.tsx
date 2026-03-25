@@ -712,7 +712,7 @@ export function ThemesView() {
               return (
                 <button
                   key={`${lib}-${style}`}
-                  className={`themes-view__icon-library-btn themes-view__icon-library-btn--vertical${isActive ? ' active' : ''}`}
+                  className={`themes-view__icon-library-btn${isActive ? ' active' : ''}`}
                   onClick={() => { handleIconLibraryChange(lib); handleIconStyleChange(style); }}
                 >
                   {svg}

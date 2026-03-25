@@ -1417,10 +1417,11 @@ body {
 
 .preset-dropdown__trigger {
   width: 100%;
+  height: 40px;
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
+  padding: 0 var(--space-3);
   border: 1.5px solid var(--neutral-200);
   border-radius: var(--radius-md);
   background: var(--bg-surface);
@@ -1599,16 +1600,13 @@ body {
   }
 }
 
-.themes-view__icon-library-btn--vertical {
-  flex-direction: column;
-  gap: var(--space-1);
-}
 
 .themes-view__icon-library-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-2) var(--space-3);
+  height: 40px;
+  padding: 0 var(--space-3);
   border: 1.5px solid var(--neutral-200);
   border-radius: var(--radius-md);
   background: transparent;
@@ -1966,7 +1964,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-2) var(--space-3);
+  height: 40px;
+  padding: 0 var(--space-3);
   border: 1.5px solid var(--neutral-200);
   border-radius: var(--radius-md);
   background: transparent;
