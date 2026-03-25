@@ -5,7 +5,7 @@ import { ICON_LIBRARIES, loadLibrary } from '../utils/iconRegistry';
 import { BottomSheet } from './components/BottomSheet';
 import { generatePalette, applySecondaryPaletteToDOM, resetSecondaryPalette } from '../utils/colorPalette';
 import type { PaletteShade } from '../utils/colorPalette';
-import { generateNeutralPalette, applyNeutralToDOM, resetNeutral, hexToOklchHue } from '../utils/neutralTint';
+import { generateNeutralPalette, applyNeutralToDOM, resetNeutral } from '../utils/neutralTint';
 import { ColorPicker } from './components/ColorPicker';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
@@ -264,45 +264,7 @@ function isDarkMode(): boolean {
   return document.documentElement.getAttribute('data-theme') === 'dark';
 }
 
-function PresetDropdown({ presets, active, onSelect }: { presets: ThemePreset[]; active: string; onSelect: (p: ThemePreset) => void }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
-
-  const activePreset = presets.find(p => p.name === active);
-
-  return (
-    <div className="preset-dropdown" ref={ref}>
-      <button className="preset-dropdown__trigger" onClick={() => setOpen(!open)}>
-        {activePreset && <span className="preset-dropdown__circle" style={{ background: activePreset.color }} />}
-        <span className="preset-dropdown__label">{active || 'Select theme'}</span>
-        <Icon name="ChevronDown" size={16} className={`preset-dropdown__chevron${open ? ' open' : ''}`} />
-      </button>
-      {open && (
-        <div className="preset-dropdown__menu">
-          {presets.map((p) => (
-            <button
-              key={p.name}
-              className={`preset-dropdown__item${p.name === active ? ' active' : ''}`}
-              onClick={() => { onSelect(p); setOpen(false); }}
-            >
-              <span className="preset-dropdown__circle" style={{ background: p.color }} />
-              <span className="preset-dropdown__item-label">{p.name}</span>
-              {p.name === active && <Icon name="Check" size={16} className="preset-dropdown__check" />}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
 function FontDropdown({ fonts, active, onChange }: { fonts: string[]; active: string; onChange: (f: string) => void }) {
   const [open, setOpen] = useState(false);
@@ -420,7 +382,6 @@ export function ThemesView() {
     document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
   );
   const [color, setColor] = useState(DEFAULT_COLOR);
-  const [brandHue, setBrandHue] = useState(() => hexToHslHue(DEFAULT_COLOR));
   const [tint, setTint] = useState(DEFAULT_TINT);
   const [font, setFont] = useState(DEFAULT_FONT);
   const [headingFont, setHeadingFont] = useState(DEFAULT_HEADING_FONT);
@@ -458,7 +419,6 @@ export function ThemesView() {
   const applyPreset = useCallback((preset: ThemePreset) => {
     setActivePreset(preset.name);
     setColor(preset.color);
-    setBrandHue(hexToHslHue(preset.color));
     const newPalette = generatePalette(preset.color, preset.mode === 'dark');
     setPalette(newPalette);
     applyPaletteToDOM(newPalette);
@@ -489,20 +449,6 @@ export function ThemesView() {
   }, [secondaryEnabled, applySecondary, applyHeadingFontToDOM, setIconLibrary, setIconStyle]);
 
   const handleColorChange = useCallback((newColor: string) => {
-    setColor(newColor);
-    setBrandHue(hexToHslHue(newColor));
-    const newPalette = generatePalette(newColor, isDarkMode());
-    setPalette(newPalette);
-    applyPaletteToDOM(newPalette);
-    if (secondaryEnabled) {
-      applySecondary(newColor, harmonyOffset, isDarkMode());
-    }
-    applyNeutralToDOM(generateNeutralPalette(newColor, tint, isDarkMode()));
-  }, [tint, harmonyOffset, secondaryEnabled, applySecondary]);
-
-  const handleHueChange = useCallback((hue: number) => {
-    setBrandHue(hue);
-    const newColor = hslHueToHex(hue);
     setColor(newColor);
     const newPalette = generatePalette(newColor, isDarkMode());
     setPalette(newPalette);
@@ -572,7 +518,6 @@ export function ThemesView() {
 
   const handleReset = useCallback(() => {
     setColor(DEFAULT_COLOR);
-    setBrandHue(hexToHslHue(DEFAULT_COLOR));
     setTint(DEFAULT_TINT);
     setHarmonyOffset(DEFAULT_HARMONY);
     setSecondaryEnabled(false);
