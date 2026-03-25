@@ -82,7 +82,6 @@ ComponentRegistry.register({
     { token: 'Divider', variable: '--border', value: '#DADEF3', description: 'Row divider (neutral-100)', variants: { Layout: 'Basic' } },
     { token: 'Action BG', variable: '--bg-fill-brand', value: '#7D38EF', description: 'Action button/icon (primary-600)' },
     { token: 'Card Border', variable: '--border', value: '#DADEF3', description: 'Card border (neutral-100)', variants: { Layout: 'Card' } },
-    { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected border (Sky-500)' },
   ],
 
   usage: `import { List } from '@/components/List';

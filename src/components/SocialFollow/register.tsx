@@ -35,7 +35,6 @@ ComponentRegistry.register({
     { token: 'Icon BG', variable: '--bg-fill-brand', value: '#7D38EF', description: 'Filled icon bg (primary-600)', variants: { Filled: 'Yes' } },
     { token: 'Icon Color', variable: '--fg-inverse', value: '#FFFFFF', description: 'Filled icon color', variants: { Filled: 'Yes' } },
     { token: 'Icon Color', variable: '--fg-brand', value: '#7D38EF', description: 'Ghost icon color (primary-600)', variants: { Filled: 'No' } },
-    { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected border (Sky-500)' },
   ],
 
   usage: `import { SocialFollow } from '@/components/SocialFollow';

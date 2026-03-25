@@ -226,13 +226,12 @@ export function SidebarRight({
                 })
                 .map((token) => (
                   <div className="color-token" key={token.token}>
-                    <div className="color-token__swatch" style={{ background: token.value }} />
+                    <div className="color-token__swatch" style={{ background: `var(${token.variable}, ${token.value})` }} />
                     <div className="color-token__info">
                       <div className="color-token__name">{token.token}</div>
                       <div className="color-token__variable">{resolvePrimitive(token.variable)}</div>
                       <div className="color-token__desc">{token.description}</div>
                     </div>
-                    <div className="color-token__value">{token.value}</div>
                   </div>
                 ))}
             </div>

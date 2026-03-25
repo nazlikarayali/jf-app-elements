@@ -29,7 +29,6 @@ ComponentRegistry.register({
   colorTokens: [
     { token: 'Background', variable: '--bg-surface', value: '#FFFFFF', description: 'Gallery background' },
     { token: 'Cell BG', variable: '--bg-fill-disabled', value: '#F3F3FE', description: 'Empty cell placeholder (neutral-50)' },
-    { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected border (Sky-500)' },
   ],
 
   usage: `import { ImageGallery } from '@/components/ImageGallery';

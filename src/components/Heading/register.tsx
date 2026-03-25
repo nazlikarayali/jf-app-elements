@@ -35,7 +35,6 @@ ComponentRegistry.register({
   colorTokens: [
     { token: 'Heading', variable: '--fg-primary', value: '#091141', description: 'Heading text color (neutral-900)' },
     { token: 'Subheading', variable: '--neutral-500', value: '#454E80', description: 'Subheading text color (neutral-500)' },
-    { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected border (Sky-500)' },
   ],
 
   usage: `import { Heading } from '@/components/Heading';

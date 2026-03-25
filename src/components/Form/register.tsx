@@ -50,7 +50,6 @@ ComponentRegistry.register({
     { token: 'Description', variable: '--fg-disabled', value: '#979DC6', description: 'Description text (neutral-300)' },
     { token: 'Badge BG', variable: '--fg-brand', value: '#7D38EF', description: 'Required badge (primary-600)' },
     { token: 'Badge Icon', variable: '--fg-inverse', value: '#FFFFFF', description: 'Asterisk icon color' },
-    { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected border (Sky-500)' },
   ],
 
   usage: `import { Form } from '@/components/Form';

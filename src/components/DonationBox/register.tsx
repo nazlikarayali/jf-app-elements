@@ -49,7 +49,6 @@ ComponentRegistry.register({
     { token: 'Add Amount BG', variable: '--bg-surface-info', value: '#DDF3FF', description: 'Add New Amount background (Sky-100)' },
     { token: 'Add Amount Text', variable: '--fg-info', value: '#0385C8', description: 'Add New Amount text (Sky-600)' },
     { token: 'Button BG', variable: '--fg-brand', value: '#7D38EF', description: 'Donate button fill (primary-600)' },
-    { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected border (Sky-500)' },
   ],
 
   usage: `import { DonationBox } from '@/components/DonationBox';

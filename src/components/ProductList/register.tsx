@@ -40,7 +40,6 @@ ComponentRegistry.register({
     { token: 'Image BG', variable: '--bg-fill-disabled', value: '#F3F3FE', description: 'Image placeholder (neutral-50)' },
     { token: 'Product Name', variable: '--fg-primary', value: '#091141', description: 'Product name text (neutral-900)' },
     { token: 'Like Icon', variable: '--fg-tertiary', value: '#6C73A8', description: 'Heart icon color (neutral-400)' },
-    { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected border (Sky-500)' },
   ],
 
   usage: `import { ProductList } from '@/components/ProductList';

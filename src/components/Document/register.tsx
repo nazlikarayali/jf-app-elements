@@ -49,7 +49,6 @@ ComponentRegistry.register({
     { token: 'Builder Border', variable: '--border-active', value: '#C8CEED', description: 'Dashed border (neutral-200)', variants: { 'Has File': 'No' } },
     { token: 'Builder Icon', variable: '--fg-tertiary', value: '#6C73A8', description: 'Document icon (neutral-400)', variants: { 'Has File': 'No' } },
     { token: 'Builder Hint', variable: '--fg-secondary', value: '#353C6A', description: 'Hint text (neutral-600)', variants: { 'Has File': 'No' } },
-    { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected border (Sky-500)' },
   ],
 
   usage: `import { Document } from '@/components/Document';

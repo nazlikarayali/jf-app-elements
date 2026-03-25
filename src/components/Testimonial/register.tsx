@@ -28,7 +28,6 @@ ComponentRegistry.register({
     { token: 'Name', variable: '--fg-primary', value: '#091141', description: 'Testimonial name (neutral-900)' },
     { token: 'Quote', variable: '--fg-primary', value: '#091141', description: 'Quote text (neutral-900)' },
     { token: 'Nav BG', variable: '--bg-surface-active', value: '#DADEF3', description: 'Navigation buttons (neutral-100)' },
-    { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected border (Sky-500)' },
   ],
 
   usage: `import { Testimonial } from '@/components/Testimonial';

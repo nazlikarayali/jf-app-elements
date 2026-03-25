@@ -52,7 +52,6 @@ ComponentRegistry.register({
     { token: 'Action BG', variable: '--bg-fill-brand', value: '#7D38EF', description: 'Action button fill (primary-600)' },
     { token: 'Action Hover', variable: '--bg-fill-brand-hover', value: '#6D29D8', description: 'Action button hover (primary-700)' },
     { token: 'Action Text', variable: '--fg-inverse', value: '#FFFFFF', description: 'Action button text' },
-    { token: 'Selected', variable: '--border-info', value: '#00A3E9', description: 'Selected state border (Sky-500)' },
   ],
 
   usage: `import { Card } from '@/components/Card';
