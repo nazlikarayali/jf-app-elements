@@ -6,6 +6,7 @@ import { BottomSheet } from './components/BottomSheet';
 import { generatePalette, applySecondaryPaletteToDOM, resetSecondaryPalette } from '../utils/colorPalette';
 import type { PaletteShade } from '../utils/colorPalette';
 import { generateNeutralPalette, applyNeutralToDOM, resetNeutral, hexToOklchHue } from '../utils/neutralTint';
+import { ColorPicker } from './components/ColorPicker';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Heading } from '../components/Heading';
@@ -53,6 +54,12 @@ const PRESET_COLORS = [
   '#E91E63', '#00B5D4', '#8D5DF9', '#64A501',
 ];
 
+interface ColorScheme {
+  brand: string;
+  surface: string;
+  text: string;
+}
+
 interface ThemePreset {
   name: string;
   color: string;
@@ -63,22 +70,27 @@ interface ThemePreset {
   tint: number;
   mode: 'light' | 'dark';
   harmonyOffset: number;
+  scheme: ColorScheme;
 }
 
-const THEME_PRESETS: ThemePreset[] = [
-  { name: 'Default', color: '#7D38EF', font: 'Inter', headingFont: '', iconLibrary: 'lucide', radius: 'Medium', tint: 50, mode: 'light', harmonyOffset: 150 },
-  { name: 'Ocean Breeze', color: '#0385C8', font: 'DM Sans', headingFont: 'Playfair Display', iconLibrary: 'lucide', radius: 'Large', tint: 30, mode: 'light', harmonyOffset: 150 },
-  { name: 'Midnight Blue', color: '#0385C8', font: 'Geist', headingFont: '', iconLibrary: 'phosphor', radius: 'Medium', tint: 20, mode: 'dark', harmonyOffset: 150 },
-  { name: 'Forest', color: '#19A44B', font: 'Public Sans', headingFont: 'Lora', iconLibrary: 'tabler', radius: 'Small', tint: 40, mode: 'light', harmonyOffset: 120 },
-  { name: 'Sunset', color: '#F97101', font: 'Bricolage Grotesque', headingFont: '', iconLibrary: 'lucide', radius: 'Large', tint: 60, mode: 'light', harmonyOffset: 180 },
-  { name: 'Cherry', color: '#DF2125', font: 'Instrument Sans', headingFont: 'Merriweather', iconLibrary: 'lucide', radius: 'Medium', tint: 35, mode: 'light', harmonyOffset: 150 },
-  { name: 'Dark Elegance', color: '#8D5DF9', font: 'Figtree', headingFont: 'Playfair Display', iconLibrary: 'phosphor', radius: 'XLarge', tint: 70, mode: 'dark', harmonyOffset: 160 },
-  { name: 'Minimal Dark', color: '#64A501', font: 'Hanken Grotesk', headingFont: '', iconLibrary: 'tabler', radius: 'Small', tint: 10, mode: 'dark', harmonyOffset: 150 },
-  { name: 'Warm Gold', color: '#DC7801', font: 'Fredoka', headingFont: '', iconLibrary: 'lucide', radius: 'XLarge', tint: 80, mode: 'light', harmonyOffset: 200 },
-  { name: 'Rose', color: '#E91E63', font: 'Varela Round', headingFont: 'Lora', iconLibrary: 'phosphor', radius: 'Large', tint: 55, mode: 'light', harmonyOffset: 150 },
-  { name: 'Aqua Night', color: '#00B5D4', font: 'JetBrains Mono', headingFont: '', iconLibrary: 'lucide', radius: 'Medium', tint: 25, mode: 'dark', harmonyOffset: 150 },
-  { name: 'Monochrome', color: '#353C6A', font: 'IBM Plex Mono', headingFont: '', iconLibrary: 'tabler', radius: 'Small', tint: 0, mode: 'light', harmonyOffset: 150 },
+// Light presets (top row: custom + 4 light)
+const LIGHT_PRESETS: ThemePreset[] = [
+  { name: 'Default', color: '#7D38EF', font: 'Inter', headingFont: '', iconLibrary: 'lucide', radius: 'Medium', tint: 50, mode: 'light', harmonyOffset: 150, scheme: { brand: '#7D38EF', surface: '#EDE8FE', text: '#7D38EF' } },
+  { name: 'Ocean Breeze', color: '#0385C8', font: 'DM Sans', headingFont: 'Playfair Display', iconLibrary: 'lucide', radius: 'Large', tint: 30, mode: 'light', harmonyOffset: 150, scheme: { brand: '#0385C8', surface: '#D3E9FF', text: '#0385C8' } },
+  { name: 'Sunset', color: '#F97101', font: 'Bricolage Grotesque', headingFont: '', iconLibrary: 'lucide', radius: 'Large', tint: 60, mode: 'light', harmonyOffset: 180, scheme: { brand: '#F97101', surface: '#FEF3C5', text: '#F97101' } },
+  { name: 'Forest', color: '#19A44B', font: 'Public Sans', headingFont: 'Lora', iconLibrary: 'tabler', radius: 'Small', tint: 40, mode: 'light', harmonyOffset: 120, scheme: { brand: '#19A44B', surface: '#DDFBE8', text: '#19A44B' } },
 ];
+
+// Dark presets (bottom row: 5 dark)
+const DARK_PRESETS: ThemePreset[] = [
+  { name: 'Dark Elegance', color: '#8D5DF9', font: 'Figtree', headingFont: 'Playfair Display', iconLibrary: 'phosphor', radius: 'XLarge', tint: 70, mode: 'dark', harmonyOffset: 160, scheme: { brand: '#8D5DF9', surface: '#F0EBFE', text: '#8D5DF9' } },
+  { name: 'Cherry Night', color: '#DF2125', font: 'Instrument Sans', headingFont: 'Merriweather', iconLibrary: 'lucide', radius: 'Medium', tint: 35, mode: 'dark', harmonyOffset: 150, scheme: { brand: '#DF2125', surface: '#FDE8E8', text: '#DF2125' } },
+  { name: 'Aqua Night', color: '#00B5D4', font: 'JetBrains Mono', headingFont: '', iconLibrary: 'lucide', radius: 'Medium', tint: 25, mode: 'dark', harmonyOffset: 150, scheme: { brand: '#00B5D4', surface: '#DDF3FF', text: '#00B5D4' } },
+  { name: 'Cozy', color: '#8B5E3C', font: 'Lora', headingFont: 'Playfair Display', iconLibrary: 'lucide', radius: 'Large', tint: 80, mode: 'dark', harmonyOffset: 150, scheme: { brand: '#8B5E3C', surface: '#F5EDE6', text: '#8B5E3C' } },
+  { name: 'Monochrome', color: '#353C6A', font: 'IBM Plex Mono', headingFont: '', iconLibrary: 'tabler', radius: 'Small', tint: 0, mode: 'dark', harmonyOffset: 150, scheme: { brand: '#353C6A', surface: '#DADEF3', text: '#353C6A' } },
+];
+
+const THEME_PRESETS: ThemePreset[] = [...LIGHT_PRESETS, ...DARK_PRESETS];
 
 const FONT_OPTIONS = [
   'Inter',
@@ -631,48 +643,71 @@ export function ThemesView() {
     };
   }, []);
 
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerPos, setPickerPos] = useState({ top: 0, left: 0 });
+  const [customColorChanged, setCustomColorChanged] = useState(false);
+  const pickerRef = useRef<HTMLDivElement>(null);
+  const customBtnRef = useRef<HTMLButtonElement>(null);
+
+  // Close picker on outside click
+  useEffect(() => {
+    if (!pickerOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (pickerRef.current && !pickerRef.current.contains(e.target as Node)) {
+        setPickerOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [pickerOpen]);
+
   const sidebarContent: ReactNode = (
     <>
-      <div className="themes-view__sidebar-section">
-        <h3 className="themes-view__sidebar-title">Brand Color</h3>
-          <div className="themes-view__hue-row">
-            <input
-              type="range"
-              min="0"
-              max="360"
-              value={brandHue}
-              onChange={(e) => handleHueChange(Number(e.target.value))}
-              className="themes-view__hue-range"
-            />
-            <div className="themes-view__picker-wrapper">
-              <input
-                type="color"
-                value={color}
-                onChange={(e) => handleColorChange(e.target.value)}
-                className="themes-view__picker-circle"
-              />
-            </div>
-          </div>
-        </div>
-
         <div className="themes-view__sidebar-section">
-          <h3 className="themes-view__sidebar-title">Base Color</h3>
-          <div className="themes-view__tint-slider">
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={tint}
-              onChange={(e) => handleTintChange(Number(e.target.value))}
-              className="themes-view__tint-range"
-              style={{
-                background: `linear-gradient(to right, #808080, oklch(0.55 0.15 ${hexToOklchHue(color)}))`,
-              }}
-            />
-            <div className="themes-view__tint-labels">
-              <span>Grey</span>
-              <span>Tinted</span>
+          <h3 className="themes-view__sidebar-title">Color Theme</h3>
+          <div className="color-theme-grid">
+            {/* Custom color button */}
+            <div className="color-theme-grid__custom-wrapper" ref={pickerRef}>
+              <button
+                ref={customBtnRef}
+                className={`color-theme-grid__custom${activePreset === '' ? ' active' : ''}${activePreset === '' && customColorChanged ? ' customized' : ''}`}
+                style={activePreset === '' ? { background: color } : undefined}
+                onClick={() => {
+                  if (activePreset !== '') {
+                    setActivePreset('');
+                    setCustomColorChanged(false);
+                  }
+                  if (!pickerOpen && customBtnRef.current) {
+                    const rect = customBtnRef.current.getBoundingClientRect();
+                    setPickerPos({ top: rect.bottom + 8, left: rect.left });
+                  }
+                  setPickerOpen(!pickerOpen);
+                }}
+                title="Custom color"
+              >
+                <div className="color-theme-grid__custom-inner">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+              </button>
+              {pickerOpen && (
+                <div className="color-theme-grid__picker-popup" style={{ top: pickerPos.top, left: pickerPos.left }}>
+                  <ColorPicker color={color} onChange={(c) => { setCustomColorChanged(true); handleColorChange(c); }} tint={tint} onTintChange={handleTintChange} />
+                </div>
+              )}
             </div>
+            {THEME_PRESETS.map((preset) => {
+              loadGoogleFont(preset.headingFont || preset.font);
+              return (
+              <button
+                key={preset.name}
+                className={`color-theme-grid__item${activePreset === preset.name ? ' active' : ''}`}
+                onClick={() => { applyPreset(preset); setPickerOpen(false); setCustomColorChanged(false); }}
+                title={preset.name}
+              >
+                <div className="color-theme-grid__outer" style={{ backgroundColor: preset.color }} />
+              </button>
+              );
+            })}
           </div>
         </div>
 
@@ -712,11 +747,6 @@ export function ThemesView() {
             </button>
           </div>
         )}
-
-        <div className="themes-view__sidebar-section">
-          <h3 className="themes-view__sidebar-title">Theme Presets</h3>
-          <PresetDropdown presets={THEME_PRESETS} active={activePreset} onSelect={applyPreset} />
-        </div>
 
         <div className="themes-view__sidebar-section">
           <h3 className="themes-view__sidebar-title">Font Pairing</h3>
@@ -792,7 +822,7 @@ export function ThemesView() {
   return (
     <div className="themes-view">
       {/* Left: Settings Panel (desktop) */}
-      <aside className="themes-view__sidebar">
+      <aside className="themes-view__sidebar" data-theme="dark">
         {sidebarContent}
       </aside>
 
