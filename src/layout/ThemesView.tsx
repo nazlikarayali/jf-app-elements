@@ -286,7 +286,7 @@ function FontDropdown({ fonts, active, onChange }: { fonts: string[]; active: st
   return (
     <div className="preset-dropdown" ref={ref}>
       <button className="preset-dropdown__trigger" onClick={() => setOpen(!open)}>
-        <span className="preset-dropdown__label" style={{ fontFamily: `'${active}', sans-serif` }}>{active}</span>
+        <span className="preset-dropdown__label font-preview" style={{ fontFamily: `'${active}', sans-serif` }}>{active}</span>
         <Icon name="ChevronDown" size={16} className={`preset-dropdown__chevron${open ? ' open' : ''}`} />
       </button>
       {open && (
@@ -294,12 +294,12 @@ function FontDropdown({ fonts, active, onChange }: { fonts: string[]; active: st
           {fonts.map((f) => (
             <button
               key={f}
-              className={`preset-dropdown__item${f === active ? ' active' : ''}`}
+              className={`preset-dropdown__item font-preview${f === active ? ' active' : ''}`}
               style={{ fontFamily: `'${f}', sans-serif` }}
               onClick={() => { onChange(f); setOpen(false); }}
             >
-              <span className="preset-dropdown__item-label">{f}</span>
-              {f === active && <Icon name="Check" size={16} className="preset-dropdown__check" />}
+              <span className="preset-dropdown__item-label font-preview">{f}</span>
+              {f === active && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="preset-dropdown__check"><path d="M20 6 9 17l-5-5"/></svg>}
             </button>
           ))}
         </div>
@@ -337,9 +337,9 @@ function FontPairingDropdown({ pairings, activeHeading, activeBody, onSelect }: 
         <span className="preset-dropdown__label">
           {activePairing ? (
             <span className="font-pairing-label">
-              <span style={{ fontFamily: `'${activePairing.heading}', sans-serif`, fontWeight: 600 }}>{activePairing.heading}</span>
+              <span className="font-preview" style={{ fontFamily: `'${activePairing.heading}', sans-serif`, fontWeight: 600 }}>{activePairing.heading}</span>
               <span className="font-pairing-label__sep">+</span>
-              <span style={{ fontFamily: `'${activePairing.body}', sans-serif` }}>{activePairing.body}</span>
+              <span className="font-preview" style={{ fontFamily: `'${activePairing.body}', sans-serif` }}>{activePairing.body}</span>
             </span>
           ) : 'Select a pairing'}
         </span>
@@ -356,10 +356,10 @@ function FontPairingDropdown({ pairings, activeHeading, activeBody, onSelect }: 
                 onClick={() => { onSelect(p); setOpen(false); }}
               >
                 <div className="font-pairing-item__fonts">
-                  <span className="font-pairing-item__heading" style={{ fontFamily: `'${p.heading}', sans-serif` }}>{p.heading}</span>
-                  <span className="font-pairing-item__body" style={{ fontFamily: `'${p.body}', sans-serif` }}>{p.body}</span>
+                  <span className="font-pairing-item__heading font-preview" style={{ fontFamily: `'${p.heading}', sans-serif` }}>{p.heading}</span>
+                  <span className="font-pairing-item__body font-preview" style={{ fontFamily: `'${p.body}', sans-serif` }}>{p.body}</span>
                 </div>
-                {isActive && <Icon name="Check" size={16} className="preset-dropdown__check" />}
+                {isActive && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="preset-dropdown__check"><path d="M20 6 9 17l-5-5"/></svg>}
               </button>
             );
           })}
@@ -658,42 +658,7 @@ export function ThemesView() {
           </div>
         </div>
 
-        {secondaryEnabled ? (
-          <div className="themes-view__sidebar-section">
-            <div className="themes-view__section-header">
-              <h3 className="themes-view__sidebar-title">Secondary Color</h3>
-              <button className="themes-view__remove-btn" onClick={removeSecondary} title="Remove secondary color">
-                <Icon name="Trash2" size={14} />
-              </button>
-            </div>
-            <div className="themes-view__secondary-color-row">
-              <div className="themes-view__harmony-preview" style={{ background: getSecondaryColor(color, harmonyOffset) }} />
-              <span className="themes-view__secondary-hex">{getSecondaryColor(color, harmonyOffset)}</span>
-            </div>
-            <div className="themes-view__harmony-slider">
-              <div className="themes-view__harmony-row">
-                <input
-                  type="range"
-                  min="0"
-                  max="360"
-                  value={harmonyOffset}
-                  onChange={(e) => handleHarmonyChange(Number(e.target.value))}
-                  className="themes-view__harmony-range"
-                  style={{
-                    background: `linear-gradient(to right, ${color}, ${getSecondaryColor(color, harmonyOffset)})`,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="themes-view__sidebar-section">
-            <button className="themes-view__add-secondary" onClick={addSecondary}>
-              <Icon name="Plus" size={16} />
-              <span>Add secondary color scale</span>
-            </button>
-          </div>
-        )}
+        {/* Secondary color section hidden for now */}
 
         <div className="themes-view__sidebar-section">
           <h3 className="themes-view__sidebar-title">Font Pairing</h3>
@@ -706,63 +671,75 @@ export function ThemesView() {
         </div>
 
         <div className="themes-view__sidebar-section">
-          <h3 className="themes-view__sidebar-title">Body Font</h3>
-          <FontDropdown fonts={FONT_OPTIONS} active={font} onChange={handleFontChange} />
-        </div>
-
-        <div className="themes-view__sidebar-section">
           <h3 className="themes-view__sidebar-title">Heading Font</h3>
           <FontDropdown fonts={HEADING_FONT_OPTIONS} active={headingFont || font} onChange={handleHeadingFontChange} />
         </div>
 
         <div className="themes-view__sidebar-section">
+          <h3 className="themes-view__sidebar-title">Body Font</h3>
+          <FontDropdown fonts={FONT_OPTIONS} active={font} onChange={handleFontChange} />
+        </div>
+
+        <div className="themes-view__sidebar-section">
           <h3 className="themes-view__sidebar-title">Border Radius</h3>
           <div className="themes-view__radius-options">
-            {RADIUS_MODES.map(({ scale, lg }) => (
-              <button
-                key={scale}
-                className={`themes-view__radius-btn${radius === scale ? ' active' : ''}`}
-                onClick={() => handleRadiusChange(scale)}
-              >
-                <div className="themes-view__radius-preview" style={{ borderRadius: lg }} />
-                <span>{scale}</span>
-              </button>
-            ))}
+            {RADIUS_MODES.map(({ scale, lg }) => {
+              const r = parseInt(lg);
+              return (
+                <button
+                  key={scale}
+                  className={`themes-view__radius-btn${radius === scale ? ' active' : ''}`}
+                  onClick={() => handleRadiusChange(scale)}
+                  title={scale}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d={`M4 24 V${r} Q4 4 ${r} 4 H24`} strokeLinecap="round" />
+                  </svg>
+                </button>
+              );
+            })}
           </div>
         </div>
 
         <div className="themes-view__sidebar-section">
-          <h3 className="themes-view__sidebar-title">Icon Library</h3>
-          <div className="themes-view__icon-library-options">
-            {ICON_LIBRARIES.map(({ value, label }) => (
-              <button
-                key={value}
-                className={`themes-view__icon-library-btn${activeIconLibrary === value ? ' active' : ''}`}
-                onClick={() => handleIconLibraryChange(value)}
-              >
-                {label}
-              </button>
-            ))}
+          <h3 className="themes-view__sidebar-title">Icon Style</h3>
+          <div className="themes-view__icon-library-options themes-view__icon-library-options--4col">
+            {([
+              { lib: 'lucide' as const, style: 'outline' as const, svg: (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                </svg>
+              )},
+              { lib: 'phosphor' as const, style: 'outline' as const, svg: (
+                <svg width="24" height="24" viewBox="0 0 256 256" fill="none" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="32" y="48" width="192" height="160" rx="8"/><circle cx="96" cy="112" r="20"/><path d="M224,168l-44.69-44.69a8,8,0,0,0-11.31,0L100.69,190.6,83.31,173.31a8,8,0,0,0-11.31,0L32,213.09"/>
+                </svg>
+              )},
+              { lib: 'tabler' as const, style: 'outline' as const, svg: (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 8h.01"/><rect width="16" height="16" x="4" y="4" rx="3"/><path d="m4 15 4-4a3 5 0 0 1 3 0l5 5"/><path d="m14 14 1-1a3 5 0 0 1 3 0l2 2"/>
+                </svg>
+              )},
+              { lib: 'phosphor' as const, style: 'fill' as const, svg: (
+                <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor">
+                  <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm-60,64a12,12,0,1,1,12,12A12,12,0,0,1,156,104ZM40,200V172l52-52,80,80Zm176,0H194.63l-56-56,20-20L216,181.38Z"/>
+                </svg>
+              )},
+            ]).map(({ lib, style, svg }) => {
+              const isActive = activeIconLibrary === lib && activeIconStyle === style;
+              return (
+                <button
+                  key={`${lib}-${style}`}
+                  className={`themes-view__icon-library-btn themes-view__icon-library-btn--vertical${isActive ? ' active' : ''}`}
+                  onClick={() => { handleIconLibraryChange(lib); handleIconStyleChange(style); }}
+                >
+                  {svg}
+                </button>
+              );
+            })}
           </div>
-          {ICON_LIBRARIES.find(l => l.value === activeIconLibrary)?.hasFill && (
-            <div className="themes-view__icon-style-toggle">
-              <button
-                className={`themes-view__icon-style-btn${activeIconStyle === 'outline' ? ' active' : ''}`}
-                onClick={() => handleIconStyleChange('outline')}
-              >
-                Outline
-              </button>
-              <button
-                className={`themes-view__icon-style-btn${activeIconStyle === 'fill' ? ' active' : ''}`}
-                onClick={() => handleIconStyleChange('fill')}
-              >
-                Fill
-              </button>
-            </div>
-          )}
         </div>
 
-      <button className="themes-view__reset" onClick={handleReset}>Reset to Default</button>
     </>
   );
 
