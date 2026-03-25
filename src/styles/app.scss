@@ -1859,7 +1859,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
 
   .themes-view__sidebar-title {
     margin: 0;
@@ -2046,16 +2046,16 @@ body {
 }
 
 .themes-view__app {
-  padding: 40px 32px 60px;
+  padding: var(--space-10) var(--space-8) var(--space-16);
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: var(--space-12);
 }
 
 .themes-view__section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--space-4);
 
   &--center {
     align-items: center;
@@ -2070,7 +2070,7 @@ body {
 
 .themes-view__btn-row {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
@@ -2079,7 +2079,7 @@ body {
 .themes-view__docs-row {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-4);
 }
 
 // ============================================
@@ -2516,8 +2516,8 @@ body {
   }
 
   .themes-view__app {
-    padding: 24px 16px 40px;
-    gap: 32px;
+    padding: var(--space-6) var(--space-4) var(--space-10);
+    gap: var(--space-8);
   }
 
   .themes-view__cards-row {
