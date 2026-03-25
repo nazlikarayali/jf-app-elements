@@ -41,7 +41,7 @@ const ProductCardItem: FC<{ product: ProductItem; buttonLabel: string }> = ({
     <div className="jf-product-item__image">
       {product.image ? <img src={product.image} alt={product.name} className="jf-product-item__img" /> : <ImagePlaceholder />}
       <button className={`jf-product-item__like${liked ? ' liked' : ''}`} onClick={() => setLiked(!liked)}>
-        <Icon name="Heart" size={24} forceStyle={liked ? 'fill' : 'outline'} />
+        <Icon name="Heart" size={18} forceStyle={liked ? 'fill' : 'outline'} />
       </button>
     </div>
     <div className="jf-product-item__content">

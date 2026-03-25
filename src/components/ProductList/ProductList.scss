@@ -176,32 +176,49 @@
 
 .jf-product-item__like {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: none;
+  top: var(--space-2);
+  right: var(--space-2);
+  background: color-mix(in srgb, var(--bg-surface) 80%, transparent);
   border: none;
   cursor: pointer;
-  color: var(--fg-brand);
-  padding: var(--space-1);
+  color: var(--fg-primary);
+  opacity: 0;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   display: flex;
   align-items: center;
-  transition: color 200ms ease;
-
-  &:hover {
-    color: var(--fg-brand-hover);
-  }
+  justify-content: center;
+  border-radius: var(--radius-rounded);
+  box-shadow: var(--shadow-sm);
+  transition: opacity 200ms ease, color 200ms ease;
 
   &--inline {
     position: static;
     width: 16px;
     height: 16px;
-    padding: 0;
-    overflow: visible;
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    opacity: 0.6;
   }
 
   &.liked {
-    color: var(--fg-brand);
+    opacity: 1;
+    color: var(--fg-error);
   }
+}
+
+.jf-product-item:hover .jf-product-item__like {
+  opacity: 1;
+}
+
+.jf-product-item__like:hover {
+  background: var(--bg-surface);
+}
+
+.jf-product-item .jf-product-item__like.liked {
+  opacity: 1;
 }
 
 .jf-product-item__content {

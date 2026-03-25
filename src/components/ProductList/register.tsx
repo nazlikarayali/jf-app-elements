@@ -39,7 +39,7 @@ ComponentRegistry.register({
     { token: 'Item Border', variable: '--border', value: '#DADEF3', description: 'Product card border (neutral-100)' },
     { token: 'Image BG', variable: '--bg-fill-disabled', value: '#F3F3FE', description: 'Image placeholder (neutral-50)' },
     { token: 'Product Name', variable: '--fg-primary', value: '#091141', description: 'Product name text (neutral-900)' },
-    { token: 'Like Icon', variable: '--fg-tertiary', value: '#6C73A8', description: 'Heart icon color (neutral-400)' },
+    { token: 'Like Icon', variable: '--fg-primary', value: '#091141', description: 'Heart icon color (fg-primary, 60% opacity)' },
   ],
 
   usage: `import { ProductList } from '@/components/ProductList';
