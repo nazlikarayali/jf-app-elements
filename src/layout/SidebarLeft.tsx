@@ -34,10 +34,6 @@ export function SidebarLeft({ selectedId, onSelect, components, foundationPage, 
 
   return (
     <aside className="sidebar-left">
-      <div className="sidebar-left__header">
-        <h3>Components</h3>
-        <span className="component-count">{components.length}</span>
-      </div>
       <div className="sidebar-left__search">
         <input
           type="text"
