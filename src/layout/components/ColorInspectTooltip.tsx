@@ -16,13 +16,27 @@ interface ColorInspectTooltipProps {
   canvasRef: RefObject<HTMLDivElement | null>;
 }
 
-function rgbToHex(rgb: string): string {
-  const match = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-  if (!match) return rgb;
-  const r = parseInt(match[1]).toString(16).padStart(2, '0');
-  const g = parseInt(match[2]).toString(16).padStart(2, '0');
-  const b = parseInt(match[3]).toString(16).padStart(2, '0');
-  return `#${r}${g}${b}`.toUpperCase();
+const _canvas = document.createElement('canvas');
+_canvas.width = 1;
+_canvas.height = 1;
+const _ctx = _canvas.getContext('2d', { willReadFrequently: true })!;
+
+function rgbToHex(color: string): string {
+  // Try rgb() parse first
+  const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (match) {
+    const r = parseInt(match[1]).toString(16).padStart(2, '0');
+    const g = parseInt(match[2]).toString(16).padStart(2, '0');
+    const b = parseInt(match[3]).toString(16).padStart(2, '0');
+    return `#${r}${g}${b}`.toUpperCase();
+  }
+  // Fallback: canvas pixel read for oklch/hsl/etc.
+  _ctx.clearRect(0, 0, 1, 1);
+  _ctx.fillStyle = '#000000';
+  _ctx.fillStyle = color;
+  _ctx.fillRect(0, 0, 1, 1);
+  const [r, g, b] = _ctx.getImageData(0, 0, 1, 1).data;
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`.toUpperCase();
 }
 
 function isTransparent(color: string): boolean {

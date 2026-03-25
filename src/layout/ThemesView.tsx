@@ -396,9 +396,6 @@ function FontPairingDropdown({ pairings, activeHeading, activeBody, onSelect }: 
                   <span className="font-pairing-item__heading" style={{ fontFamily: `'${p.heading}', sans-serif` }}>{p.heading}</span>
                   <span className="font-pairing-item__body" style={{ fontFamily: `'${p.body}', sans-serif` }}>{p.body}</span>
                 </div>
-                <div className="font-pairing-item__tags">
-                  {p.tags.map(t => <span key={t} className="font-pairing-item__tag">{t}</span>)}
-                </div>
                 {isActive && <Icon name="Check" size={16} className="preset-dropdown__check" />}
               </button>
             );
@@ -664,7 +661,7 @@ export function ThemesView() {
   const sidebarContent: ReactNode = (
     <>
         <div className="themes-view__sidebar-section">
-          <h3 className="themes-view__sidebar-title">Color Theme</h3>
+          <h3 className="themes-view__sidebar-title">Themes</h3>
           <div className="color-theme-grid">
             {/* Custom color button */}
             <div className="color-theme-grid__custom-wrapper" ref={pickerRef}>
