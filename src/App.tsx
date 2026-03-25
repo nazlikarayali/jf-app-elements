@@ -120,6 +120,7 @@ function App() {
                   states={states}
                   colorInspectMode={sidebarTab === 'colors'}
                   spacingInspectMode={sidebarTab === 'colors' && showSpacing}
+                  onPropertyChange={handlePropertyChange}
                 />
                 <SidebarRight
                   component={selectedComponent}

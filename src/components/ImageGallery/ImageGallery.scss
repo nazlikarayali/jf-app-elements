@@ -12,8 +12,9 @@
   aspect-ratio: 1 / 1;
 
   &--selected {
-    border: 2px solid var(--border-info);
-    border-radius: var(--radius-lg);
+    outline: 2px solid var(--border-info);
+    outline-offset: 4px;
+    border-radius: var(--radius-sm);
   }
 
   &--shrinked {

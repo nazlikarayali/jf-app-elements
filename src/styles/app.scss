@@ -2589,8 +2589,12 @@ body {
 }
 
 // Highlight outline on hovered element
+.preview-panel__canvas > * {
+  cursor: pointer;
+}
+
 .preview-panel__canvas--inspect * {
-  cursor: crosshair !important;
+  cursor: pointer !important;
 }
 
 // ============================================

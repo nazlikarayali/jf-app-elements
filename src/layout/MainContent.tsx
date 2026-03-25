@@ -15,9 +15,10 @@ interface MainContentProps {
   states: StateValues;
   colorInspectMode?: boolean;
   spacingInspectMode?: boolean;
+  onPropertyChange?: (name: string, value: string | boolean | number) => void;
 }
 
-export function MainContent({ component, variants, properties, states, colorInspectMode, spacingInspectMode }: MainContentProps) {
+export function MainContent({ component, variants, properties, states, colorInspectMode, spacingInspectMode, onPropertyChange }: MainContentProps) {
   const [view, setView] = useState<ViewType>('preview');
   const canvasRef = useRef<HTMLDivElement>(null);
 
@@ -80,6 +81,14 @@ export function MainContent({ component, variants, properties, states, colorInsp
             <div
               ref={canvasRef}
               className={`preview-panel__canvas${colorInspectMode ? ' preview-panel__canvas--inspect' : ''}`}
+              onClick={() => {
+                if (!colorInspectMode && onPropertyChange) {
+                  const hasProp = component?.properties.some(p => p.name === 'Selected');
+                  if (hasProp) {
+                    onPropertyChange('Selected', !properties['Selected']);
+                  }
+                }
+              }}
             >
               {preview}
               {colorInspectMode && !spacingInspectMode && <ColorInspectTooltip canvasRef={canvasRef} />}

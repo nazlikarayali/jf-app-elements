@@ -586,6 +586,10 @@ export function ThemesView() {
   }, []);
 
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [selectedPreviewItem, setSelectedPreviewItem] = useState<string | null>(null);
+  const togglePreviewSelect = useCallback((id: string) => {
+    setSelectedPreviewItem(prev => prev === id ? null : id);
+  }, []);
   const [pickerPos, setPickerPos] = useState({ top: 0, left: 0 });
   const [customColorChanged, setCustomColorChanged] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
@@ -962,7 +966,9 @@ export function ThemesView() {
         <div className="themes-view__app">
           {/* Hero Section */}
           <section className="themes-view__section">
-            <Heading size="Large" alignment="Center" heading="Welcome to Our Store" subheading="Discover amazing products and support our mission." />
+            <div onClick={() => togglePreviewSelect('hero-heading')} style={{ cursor: 'pointer' }}>
+              <Heading selected={selectedPreviewItem === 'hero-heading'} size="Large" alignment="Center" heading="Welcome to Our Store" subheading="Discover amazing products and support our mission." />
+            </div>
             <div className="themes-view__btn-row">
               <Button variant="Default" size="Default" label="Get Started" leftIcon="ArrowRight" rightIcon="none" shrinked />
               <Button variant="Outlined" size="Default" label="Learn More" leftIcon="none" rightIcon="none" shrinked />
@@ -971,76 +977,111 @@ export function ThemesView() {
 
           {/* Products */}
           <section className="themes-view__section">
-            <ProductList title="Featured Products" buttonLabel="Add to Cart" products={[
-              { name: 'Wireless Headphones', price: '$79.99', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop' },
-              { name: 'Smart Watch', price: '$199.99', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop' },
-              { name: 'Leather Bag', price: '$129.99', image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=300&fit=crop' },
-              { name: 'Running Shoes', price: '$89.99', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop' },
-            ]} />
+            <div onClick={() => togglePreviewSelect('products')} style={{ cursor: 'pointer' }}>
+              <ProductList selected={selectedPreviewItem === 'products'} title="Featured Products" buttonLabel="Add to Cart" products={[
+                { name: 'Wireless Headphones', price: '$79.99', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop' },
+                { name: 'Smart Watch', price: '$199.99', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop' },
+                { name: 'Leather Bag', price: '$129.99', image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=300&fit=crop' },
+                { name: 'Running Shoes', price: '$89.99', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop' },
+              ]} />
+            </div>
           </section>
 
           {/* Cards Row */}
           <section className="themes-view__section">
-            <Heading size="Small" heading="Our Services" subheading="What we offer" />
-            <Card imageStyle="Icon" layout="Horizontal" action="Button" iconName="MessageCircle" title="Consulting" description="Expert guidance for your business" buttonLabel="Book Now" />
-            <Card imageStyle="Icon" layout="Horizontal" action="Button" iconName="Palette" title="Design" description="Beautiful interfaces that convert" buttonLabel="View Work" />
-            <Card imageStyle="Icon" layout="Horizontal" action="Button" iconName="Code" title="Development" description="Scalable solutions built to last" buttonLabel="Start Project" />
+            <div onClick={() => togglePreviewSelect('services-heading')} style={{ cursor: 'pointer' }}>
+              <Heading selected={selectedPreviewItem === 'services-heading'} size="Small" heading="Our Services" subheading="What we offer" />
+            </div>
+            <div onClick={() => togglePreviewSelect('card-1')} style={{ cursor: 'pointer' }}>
+              <Card selected={selectedPreviewItem === 'card-1'} imageStyle="Icon" layout="Horizontal" action="Button" iconName="MessageCircle" title="Consulting" description="Expert guidance for your business" buttonLabel="Book Now" />
+            </div>
+            <div onClick={() => togglePreviewSelect('card-2')} style={{ cursor: 'pointer' }}>
+              <Card selected={selectedPreviewItem === 'card-2'} imageStyle="Icon" layout="Horizontal" action="Button" iconName="Palette" title="Design" description="Beautiful interfaces that convert" buttonLabel="View Work" />
+            </div>
+            <div onClick={() => togglePreviewSelect('card-3')} style={{ cursor: 'pointer' }}>
+              <Card selected={selectedPreviewItem === 'card-3'} imageStyle="Icon" layout="Horizontal" action="Button" iconName="Code" title="Development" description="Scalable solutions built to last" buttonLabel="Start Project" />
+            </div>
           </section>
 
           {/* List Section */}
           <section className="themes-view__section">
-            <Heading size="Small" heading="Recent Updates" subheading="Stay up to date" />
-            <List layout="Basic" imageStyle="Square" size="Compact" action="Icon" actionIconFilled={false} items={[
-              { title: 'New feature release v2.5', description: 'Performance improvements and bug fixes' },
-              { title: 'Community meetup next week', description: 'Join us for the monthly gathering' },
-              { title: 'Partnership announcement', description: 'Exciting collaboration coming soon' },
-            ]} />
+            <div onClick={() => togglePreviewSelect('updates-heading')} style={{ cursor: 'pointer' }}>
+              <Heading selected={selectedPreviewItem === 'updates-heading'} size="Small" heading="Recent Updates" subheading="Stay up to date" />
+            </div>
+            <div onClick={() => togglePreviewSelect('list')} style={{ cursor: 'pointer' }}>
+              <List selected={selectedPreviewItem === 'list'} layout="Basic" imageStyle="Square" size="Compact" action="Icon" actionIconFilled={false} items={[
+                { title: 'New feature release v2.5', description: 'Performance improvements and bug fixes' },
+                { title: 'Community meetup next week', description: 'Join us for the monthly gathering' },
+                { title: 'Partnership announcement', description: 'Exciting collaboration coming soon' },
+              ]} />
+            </div>
           </section>
 
           {/* Documents & Forms Row */}
           <section className="themes-view__section">
-            <Heading size="Small" heading="Resources" subheading="Forms and documents" />
+            <div onClick={() => togglePreviewSelect('resources-heading')} style={{ cursor: 'pointer' }}>
+              <Heading selected={selectedPreviewItem === 'resources-heading'} size="Small" heading="Resources" subheading="Forms and documents" />
+            </div>
             <div className="themes-view__docs-row">
-              <Form label="Contact Form" description="Get in touch with us" />
-              <SignDocument label="Terms of Service" description="Required before proceeding" />
-              <Table label="Submissions" description="View all form responses" />
-              <Document alignment="Left" size="Normal" fileName="Brand Guidelines.pdf" description="4.2 MB - PDF Document" />
+              <div onClick={() => togglePreviewSelect('form-1')} style={{ cursor: 'pointer' }}>
+                <Form selected={selectedPreviewItem === 'form-1'} label="Contact Form" description="Get in touch with us" />
+              </div>
+              <div onClick={() => togglePreviewSelect('sign-doc')} style={{ cursor: 'pointer' }}>
+                <SignDocument selected={selectedPreviewItem === 'sign-doc'} label="Terms of Service" description="Required before proceeding" />
+              </div>
+              <div onClick={() => togglePreviewSelect('table')} style={{ cursor: 'pointer' }}>
+                <Table selected={selectedPreviewItem === 'table'} label="Submissions" description="View all form responses" />
+              </div>
+              <div onClick={() => togglePreviewSelect('document')} style={{ cursor: 'pointer' }}>
+                <Document selected={selectedPreviewItem === 'document'} alignment="Left" size="Normal" fileName="Brand Guidelines.pdf" description="4.2 MB - PDF Document" />
+              </div>
             </div>
           </section>
 
           {/* Open Form */}
           <section className="themes-view__section">
-            <Heading size="Small" heading="Registration" subheading="Fill out the form below" />
-            <Form showForm />
+            <div onClick={() => togglePreviewSelect('reg-heading')} style={{ cursor: 'pointer' }}>
+              <Heading selected={selectedPreviewItem === 'reg-heading'} size="Small" heading="Registration" subheading="Fill out the form below" />
+            </div>
+            <div onClick={() => togglePreviewSelect('form-2')} style={{ cursor: 'pointer' }}>
+              <Form selected={selectedPreviewItem === 'form-2'} showForm />
+            </div>
           </section>
 
           {/* Testimonial */}
           <section className="themes-view__section">
-            <Testimonial items={[
-              { name: 'Sarah Johnson', text: '\u201CThis platform transformed how we collect donations. The interface is intuitive and our donors love it.\u201D', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face' },
-              { name: 'Michael Chen', text: '\u201CSetup was incredibly easy. We were up and running in minutes, not days.\u201D', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face' },
-              { name: 'Emily Davis', text: '\u201CThe best investment we made for our nonprofit. Highly recommended!\u201D', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face' },
-            ]} />
+            <div onClick={() => togglePreviewSelect('testimonial')} style={{ cursor: 'pointer' }}>
+              <Testimonial selected={selectedPreviewItem === 'testimonial'} items={[
+                { name: 'Sarah Johnson', text: '\u201CThis platform transformed how we collect donations. The interface is intuitive and our donors love it.\u201D', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face' },
+                { name: 'Michael Chen', text: '\u201CSetup was incredibly easy. We were up and running in minutes, not days.\u201D', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face' },
+                { name: 'Emily Davis', text: '\u201CThe best investment we made for our nonprofit. Highly recommended!\u201D', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face' },
+              ]} />
+            </div>
           </section>
 
           {/* Donation */}
           <section className="themes-view__section themes-view__section--center">
-            <DonationBox
-              headingAlignment="Center"
-              title="Support Our Cause"
-              description="Every contribution makes a difference in someone's life."
-              amounts={['$10.00', '$25.00', '$50.00', '$100.00']}
-              showCustomAmount
-              buttonLabel="Donate Now"
-              goalProgress={72}
-              raisedAmount="$7,200"
-              goalAmount="$10,000"
-            />
+            <div onClick={() => togglePreviewSelect('donation')} style={{ cursor: 'pointer' }}>
+              <DonationBox
+                selected={selectedPreviewItem === 'donation'}
+                headingAlignment="Center"
+                title="Support Our Cause"
+                description="Every contribution makes a difference in someone's life."
+                amounts={['$10.00', '$25.00', '$50.00', '$100.00']}
+                showCustomAmount
+                buttonLabel="Donate Now"
+                goalProgress={72}
+                raisedAmount="$7,200"
+                goalAmount="$10,000"
+              />
+            </div>
           </section>
 
           {/* Footer: Social + Buttons */}
           <section className="themes-view__section themes-view__section--center themes-view__section--footer">
-            <SocialFollow filled />
+            <div onClick={() => togglePreviewSelect('social')} style={{ cursor: 'pointer' }}>
+              <SocialFollow selected={selectedPreviewItem === 'social'} filled />
+            </div>
           </section>
         </div>
         </div>
