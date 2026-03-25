@@ -643,6 +643,30 @@ export function ThemesView() {
         {/* Secondary color section hidden for now */}
 
         <div className="themes-view__sidebar-section">
+          <h3 className="themes-view__sidebar-title">Appearing</h3>
+          <div className="themes-view__appearing-options">
+            {(['light', 'dark'] as const).map((mode) => (
+              <button
+                key={mode}
+                className={`themes-view__appearing-btn${colorMode === mode ? ' active' : ''}`}
+                onClick={() => handleColorModeChange(mode)}
+              >
+                {mode === 'light' ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                  </svg>
+                )}
+                <span>{mode.charAt(0).toUpperCase() + mode.slice(1)}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="themes-view__sidebar-section">
           <h3 className="themes-view__sidebar-title">Font Pairing</h3>
           <FontPairingDropdown
             pairings={FONT_PAIRINGS}
