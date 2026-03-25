@@ -55,13 +55,9 @@ function buildColorMap(): Map<string, string> {
   const map = new Map<string, string>();
   const root = document.documentElement;
 
+  // Semantic vars first, then primitives last so primitives win the hex→name mapping
   const knownVars = [
-    '--primary-50', '--primary-100', '--primary-200', '--primary-300', '--primary-400',
-    '--primary-500', '--primary-600', '--primary-700', '--primary-800', '--primary-900', '--primary-950',
-    '--secondary-50', '--secondary-100', '--secondary-200', '--secondary-300', '--secondary-400',
-    '--secondary-500', '--secondary-600', '--secondary-700', '--secondary-800', '--secondary-900', '--secondary-950',
-    '--neutral-0', '--neutral-50', '--neutral-100', '--neutral-200', '--neutral-300',
-    '--neutral-400', '--neutral-500', '--neutral-600', '--neutral-700', '--neutral-800', '--neutral-900', '--neutral-950',
+    // Semantic tokens (set first — will be overwritten by primitives)
     '--fg-primary', '--fg-secondary', '--fg-tertiary', '--fg-disabled', '--fg-brand', '--fg-inverse',
     '--fg-error', '--fg-success', '--fg-warning', '--fg-info',
     '--bg-surface', '--bg-fill', '--bg-page', '--bg-surface-brand', '--bg-fill-brand',
@@ -71,6 +67,13 @@ function buildColorMap(): Map<string, string> {
     '--color-text-tertiary', '--color-surface', '--color-border', '--color-border-active',
     '--color-bg', '--color-bg-hover', '--color-bg-active',
     '--color-success', '--color-error', '--color-warning', '--color-info',
+    // Primitive tokens (set last — always win)
+    '--primary-50', '--primary-100', '--primary-200', '--primary-300', '--primary-400',
+    '--primary-500', '--primary-600', '--primary-700', '--primary-800', '--primary-900', '--primary-950',
+    '--secondary-50', '--secondary-100', '--secondary-200', '--secondary-300', '--secondary-400',
+    '--secondary-500', '--secondary-600', '--secondary-700', '--secondary-800', '--secondary-900', '--secondary-950',
+    '--neutral-0', '--neutral-50', '--neutral-100', '--neutral-200', '--neutral-300',
+    '--neutral-400', '--neutral-500', '--neutral-600', '--neutral-700', '--neutral-800', '--neutral-900', '--neutral-950',
   ];
 
   for (const name of knownVars) {

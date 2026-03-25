@@ -1,6 +1,7 @@
 import type { RegisteredComponent } from '../types/registry';
 import type { VariantValues, PropertyValues, StateValues } from '../types/component';
 import { IconPicker } from './components/IconPicker';
+import { resolvePrimitive } from '../utils/semanticToPrimitive';
 
 type SidebarTab = 'variants' | 'colors';
 
@@ -209,7 +210,7 @@ export function SidebarRight({
                     <div className="color-token__swatch" style={{ background: token.value }} />
                     <div className="color-token__info">
                       <div className="color-token__name">{token.token}</div>
-                      <div className="color-token__variable">{token.variable}</div>
+                      <div className="color-token__variable">{resolvePrimitive(token.variable)}</div>
                       <div className="color-token__desc">{token.description}</div>
                     </div>
                     <div className="color-token__value">{token.value}</div>
