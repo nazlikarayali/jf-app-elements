@@ -26,6 +26,7 @@ import './components/SocialFollow/register';
 import './components/Form/register';
 import './components/Table/register';
 import './components/Testimonial/register';
+import './components/DailyTaskManager/register';
 
 type AppMode = 'components' | 'themes';
 type MobileSheet = 'none' | 'components' | 'properties';

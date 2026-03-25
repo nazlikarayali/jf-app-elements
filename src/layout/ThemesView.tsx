@@ -19,6 +19,7 @@ import { Table } from '../components/Table';
 import { SocialFollow } from '../components/SocialFollow';
 import { List } from '../components/List';
 import { ProductList } from '../components/ProductList';
+import { DailyTaskManager } from '../components/DailyTaskManager/DailyTaskManager';
 
 const DEFAULT_COLOR = '#7D38EF';
 const DEFAULT_FONT = 'Inter';
@@ -1014,6 +1015,13 @@ export function ThemesView() {
                 { title: 'Community meetup next week', description: 'Join us for the monthly gathering' },
                 { title: 'Partnership announcement', description: 'Exciting collaboration coming soon' },
               ]} />
+            </div>
+          </section>
+
+          {/* Daily Tasks Widget */}
+          <section className="themes-view__section">
+            <div onClick={() => togglePreviewSelect('daily-tasks')} style={{ cursor: 'pointer' }}>
+              <DailyTaskManager selected={selectedPreviewItem === 'daily-tasks'} />
             </div>
           </section>
 
