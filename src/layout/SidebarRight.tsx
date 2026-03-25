@@ -15,6 +15,8 @@ interface SidebarRightProps {
   onStateChange: (name: string, value: boolean) => void;
   tab?: SidebarTab;
   onTabChange?: (tab: SidebarTab) => void;
+  showSpacing?: boolean;
+  onShowSpacingChange?: (value: boolean) => void;
 }
 
 export function SidebarRight({
@@ -27,6 +29,8 @@ export function SidebarRight({
   onStateChange,
   tab = 'variants',
   onTabChange,
+  showSpacing = false,
+  onShowSpacingChange,
 }: SidebarRightProps) {
   const setTab = (newTab: SidebarTab) => {
     onTabChange?.(newTab);
@@ -56,7 +60,7 @@ export function SidebarRight({
           className={`sidebar-right__tab${tab === 'colors' ? ' active' : ''}`}
           onClick={() => setTab('colors')}
         >
-          Colors
+          Mapping
         </button>
       </div>
 
@@ -193,9 +197,24 @@ export function SidebarRight({
         </div>
       )}
 
-      {/* Colors Tab */}
+      {/* Mapping Tab */}
       {tab === 'colors' && (
         <div className="sidebar-right__content">
+          <div className="props-section">
+            <h4 className="props-section__title">Spacing</h4>
+            <div className="toggle-switch">
+              <span className="toggle-switch__label">Show Spacing</span>
+              <input
+                type="checkbox"
+                className="toggle-switch__input"
+                checked={showSpacing}
+                onChange={(e) => onShowSpacingChange?.(e.target.checked)}
+              />
+            </div>
+          </div>
+          <div className="props-section">
+            <h4 className="props-section__title">Colors</h4>
+          </div>
           {component.colorTokens && component.colorTokens.length > 0 ? (
             <div className="color-tokens">
               {component.colorTokens

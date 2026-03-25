@@ -2589,3 +2589,85 @@ body {
   cursor: crosshair !important;
 }
 
+// ============================================
+// Spacing Inspect Overlays & Tooltip
+// ============================================
+.spacing-overlay {
+  pointer-events: none;
+  z-index: 9998;
+}
+
+.spacing-overlay--padding {
+  background: rgba(46, 204, 113, 0.25);
+}
+
+.spacing-overlay--margin {
+  background: rgba(243, 156, 18, 0.25);
+}
+
+.spacing-overlay--gap {
+  background: rgba(155, 89, 182, 0.25);
+}
+
+.spacing-inspect-tooltip {
+  position: fixed;
+  z-index: 9999;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 10px 14px;
+  pointer-events: none;
+  min-width: 160px;
+  font-family: var(--font-family);
+}
+
+.spacing-inspect-tooltip__section {
+  & + & { margin-top: 6px; }
+}
+
+.spacing-inspect-tooltip__label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+.spacing-inspect-tooltip__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.spacing-inspect-tooltip__dot--padding {
+  background: rgba(46, 204, 113, 0.7);
+}
+
+.spacing-inspect-tooltip__dot--margin {
+  background: rgba(243, 156, 18, 0.7);
+}
+
+.spacing-inspect-tooltip__dot--gap {
+  background: rgba(155, 89, 182, 0.7);
+}
+
+.spacing-inspect-tooltip__values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+
+.spacing-inspect-tooltip__token {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.spacing-inspect-tooltip__px {
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+}
+

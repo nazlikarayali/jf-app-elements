@@ -4,6 +4,7 @@ import type { VariantValues, PropertyValues, StateValues } from '../types/compon
 import { CodeBlock } from './components/CodeBlock';
 import { PropTable } from './components/PropTable';
 import { ColorInspectTooltip } from './components/ColorInspectTooltip';
+import { SpacingInspectTooltip } from './components/SpacingInspectTooltip';
 
 type ViewType = 'preview' | 'usage' | 'scss';
 
@@ -13,9 +14,10 @@ interface MainContentProps {
   properties: PropertyValues;
   states: StateValues;
   colorInspectMode?: boolean;
+  spacingInspectMode?: boolean;
 }
 
-export function MainContent({ component, variants, properties, states, colorInspectMode }: MainContentProps) {
+export function MainContent({ component, variants, properties, states, colorInspectMode, spacingInspectMode }: MainContentProps) {
   const [view, setView] = useState<ViewType>('preview');
   const canvasRef = useRef<HTMLDivElement>(null);
 
@@ -80,7 +82,8 @@ export function MainContent({ component, variants, properties, states, colorInsp
               className={`preview-panel__canvas${colorInspectMode ? ' preview-panel__canvas--inspect' : ''}`}
             >
               {preview}
-              {colorInspectMode && <ColorInspectTooltip canvasRef={canvasRef} />}
+              {colorInspectMode && !spacingInspectMode && <ColorInspectTooltip canvasRef={canvasRef} />}
+              {spacingInspectMode && <SpacingInspectTooltip canvasRef={canvasRef} />}
             </div>
           </div>
         )}

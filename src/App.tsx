@@ -38,6 +38,7 @@ function App() {
   const [properties, setProperties] = useState<PropertyValues>({});
   const [states, setStates] = useState<StateValues>({});
   const [sidebarTab, setSidebarTab] = useState<'variants' | 'colors'>('variants');
+  const [showSpacing, setShowSpacing] = useState(false);
 
   useEffect(() => {
     return ComponentRegistry.subscribe(() => {
@@ -104,6 +105,7 @@ function App() {
               properties={properties}
               states={states}
               colorInspectMode={sidebarTab === 'colors'}
+              spacingInspectMode={sidebarTab === 'colors' && showSpacing}
             />
             <SidebarRight
               component={selectedComponent}
@@ -115,6 +117,8 @@ function App() {
               onStateChange={handleStateChange}
               tab={sidebarTab}
               onTabChange={setSidebarTab}
+              showSpacing={showSpacing}
+              onShowSpacingChange={setShowSpacing}
             />
 
             {/* Mobile floating buttons */}
