@@ -5,6 +5,7 @@ import { Header } from './layout/Header';
 import { SidebarLeft } from './layout/SidebarLeft';
 import { SidebarRight } from './layout/SidebarRight';
 import { MainContent } from './layout/MainContent';
+import { FoundationColors } from './layout/FoundationColors';
 import { ThemesView } from './layout/ThemesView';
 import { BottomSheet } from './layout/components/BottomSheet';
 import { ComponentRegistry, type RegisteredComponent } from './types/registry';
@@ -39,6 +40,7 @@ function App() {
   const [states, setStates] = useState<StateValues>({});
   const [sidebarTab, setSidebarTab] = useState<'variants' | 'colors'>('variants');
   const [showSpacing, setShowSpacing] = useState(false);
+  const [foundationPage, setFoundationPage] = useState<string | null>(null);
 
   useEffect(() => {
     return ComponentRegistry.subscribe(() => {
@@ -48,11 +50,17 @@ function App() {
 
   const selectedComponent = selectedId ? ComponentRegistry.get(selectedId) || null : null;
 
+  const handleFoundationSelect = useCallback((page: string) => {
+    setFoundationPage(page);
+    setSelectedId(null);
+  }, []);
+
   const handleSelect = useCallback((id: string) => {
     const comp = ComponentRegistry.get(id);
     if (!comp) return;
 
     setSelectedId(id);
+    setFoundationPage(null);
     setMode('components');
     setMobileSheet('none');
 
@@ -98,28 +106,36 @@ function App() {
               selectedId={selectedId}
               onSelect={handleSelect}
               components={components}
+              foundationPage={foundationPage}
+              onFoundationSelect={handleFoundationSelect}
             />
-            <MainContent
-              component={selectedComponent}
-              variants={variants}
-              properties={properties}
-              states={states}
-              colorInspectMode={sidebarTab === 'colors'}
-              spacingInspectMode={sidebarTab === 'colors' && showSpacing}
-            />
-            <SidebarRight
-              component={selectedComponent}
-              variants={variants}
-              properties={properties}
-              states={states}
-              onVariantChange={handleVariantChange}
-              onPropertyChange={handlePropertyChange}
-              onStateChange={handleStateChange}
-              tab={sidebarTab}
-              onTabChange={setSidebarTab}
-              showSpacing={showSpacing}
-              onShowSpacingChange={setShowSpacing}
-            />
+            {foundationPage === 'colors' ? (
+              <FoundationColors />
+            ) : (
+              <>
+                <MainContent
+                  component={selectedComponent}
+                  variants={variants}
+                  properties={properties}
+                  states={states}
+                  colorInspectMode={sidebarTab === 'colors'}
+                  spacingInspectMode={sidebarTab === 'colors' && showSpacing}
+                />
+                <SidebarRight
+                  component={selectedComponent}
+                  variants={variants}
+                  properties={properties}
+                  states={states}
+                  onVariantChange={handleVariantChange}
+                  onPropertyChange={handlePropertyChange}
+                  onStateChange={handleStateChange}
+                  tab={sidebarTab}
+                  onTabChange={setSidebarTab}
+                  showSpacing={showSpacing}
+                  onShowSpacingChange={setShowSpacing}
+                />
+              </>
+            )}
 
             {/* Mobile floating buttons */}
             <div className="mobile-fab mobile-fab--left">
@@ -145,6 +161,8 @@ function App() {
                 selectedId={selectedId}
                 onSelect={handleSelect}
                 components={components}
+                foundationPage={foundationPage}
+                onFoundationSelect={handleFoundationSelect}
               />
             </BottomSheet>
 

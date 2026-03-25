@@ -6,13 +6,15 @@ interface SidebarLeftProps {
   selectedId: string | null;
   onSelect: (id: string) => void;
   components: RegisteredComponent[];
+  foundationPage?: string | null;
+  onFoundationSelect?: (page: string) => void;
 }
 
 function ComponentIcon({ name }: { name: string }) {
   return <Icon name={name} size={16} />;
 }
 
-export function SidebarLeft({ selectedId, onSelect, components }: SidebarLeftProps) {
+export function SidebarLeft({ selectedId, onSelect, components, foundationPage, onFoundationSelect }: SidebarLeftProps) {
   const [search, setSearch] = useState('');
 
   const filtered = search
@@ -45,6 +47,21 @@ export function SidebarLeft({ selectedId, onSelect, components }: SidebarLeftPro
         />
       </div>
       <nav className="component-list">
+        {/* Foundations */}
+        {!search && (
+          <div className="component-list__category">
+            <div className="component-list__category-title">Foundations</div>
+            <button
+              className={`component-list__item${foundationPage === 'colors' ? ' active' : ''}`}
+              onClick={() => onFoundationSelect?.('colors')}
+            >
+              <span className="component-list__item-icon">
+                <Icon name="Palette" size={16} />
+              </span>
+              Colors
+            </button>
+          </div>
+        )}
         {filtered.length === 0 ? (
           <div className="empty-state">
             <p>{search ? 'No matching components.' : 'No components yet.'}</p>
