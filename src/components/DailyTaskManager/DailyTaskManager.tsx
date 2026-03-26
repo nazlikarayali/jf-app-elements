@@ -59,10 +59,7 @@ export function DailyTaskManager({ tasks: initialTasks, selected = false }: Dail
           </svg>
         </div>
         <div className="jf-daily-tasks__header-text">
-          <div className="jf-daily-tasks__title-row">
-            <h3 className="jf-daily-tasks__title">Daily Tasks</h3>
-            <span className="jf-daily-tasks__count">{completedCount}/{totalCount}</span>
-          </div>
+          <h3 className="jf-daily-tasks__title">Daily Tasks</h3>
           <p className="jf-daily-tasks__subtitle">
             {percentage === 100 ? 'All done! Great work.' : `${percentage}% completed`}
           </p>

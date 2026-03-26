@@ -5,7 +5,7 @@
 .jf-daily-tasks {
   width: 616px;
   max-width: 100%;
-  background: var(--bg-surface);
+  background: var(--bg-fill);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   padding: var(--space-3);
@@ -106,7 +106,7 @@
   transition: background var(--transition);
 
   &:hover {
-    background: var(--bg-surface-hover);
+    background: var(--bg-fill-hover);
   }
 
   &.completed .jf-daily-tasks__item-text {
