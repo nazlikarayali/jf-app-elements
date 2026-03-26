@@ -796,8 +796,7 @@ export function ThemesView() {
             <h3 className="themes-view__sidebar-title">Themes</h3>
             <div className="color-theme-grid">
               <button
-                className={`color-theme-grid__custom${activePreset === '' ? ' active customized' : ''}`}
-                style={activePreset === '' ? { background: color } : undefined}
+                className="color-theme-grid__custom"
                 onClick={() => { setActivePreset(''); setMobilePickerOpen(true); }}
               >
                 <div className="color-theme-grid__custom-inner">
