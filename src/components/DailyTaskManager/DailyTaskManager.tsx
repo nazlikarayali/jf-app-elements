@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { Button } from '../Button';
 import './DailyTaskManager.scss';
 
 export interface TaskItem {
@@ -52,13 +53,20 @@ export function DailyTaskManager({ tasks: initialTasks, selected = false }: Dail
     <div className={classes}>
       {/* Header */}
       <div className="jf-daily-tasks__header">
-        <div className="jf-daily-tasks__title-row">
-          <h3 className="jf-daily-tasks__title">Daily Tasks</h3>
-          <span className="jf-daily-tasks__count">{completedCount}/{totalCount}</span>
+        <div className="jf-daily-tasks__icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
         </div>
-        <p className="jf-daily-tasks__subtitle">
-          {percentage === 100 ? 'All done! Great work.' : `${percentage}% completed`}
-        </p>
+        <div className="jf-daily-tasks__header-text">
+          <div className="jf-daily-tasks__title-row">
+            <h3 className="jf-daily-tasks__title">Daily Tasks</h3>
+            <span className="jf-daily-tasks__count">{completedCount}/{totalCount}</span>
+          </div>
+          <p className="jf-daily-tasks__subtitle">
+            {percentage === 100 ? 'All done! Great work.' : `${percentage}% completed`}
+          </p>
+        </div>
       </div>
 
       {/* Progress */}
@@ -89,14 +97,15 @@ export function DailyTaskManager({ tasks: initialTasks, selected = false }: Dail
               )}
             </button>
             <span className="jf-daily-tasks__item-text">{task.text}</span>
-            <button
-              className="jf-daily-tasks__remove"
-              onClick={() => removeTask(task.id)}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <path d="M18 6 6 18M6 6l12 12" />
-              </svg>
-            </button>
+            <div className="jf-daily-tasks__remove" onClick={() => removeTask(task.id)}>
+              <Button
+                iconOnly
+                iconOnlyIcon="Trash2"
+                iconOnlyFilled={false}
+                iconOnlySm
+                corner="Default"
+              />
+            </div>
           </div>
         ))}
       </div>

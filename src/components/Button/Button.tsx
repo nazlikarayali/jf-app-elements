@@ -21,6 +21,7 @@ export interface ButtonProps {
   iconOnly?: boolean;
   iconOnlyIcon?: string;
   iconOnlyFilled?: boolean;
+  iconOnlySm?: boolean;
   shrinked?: boolean;
   fullWidth?: boolean;
   onClick?: () => void;
@@ -40,6 +41,7 @@ export const Button: React.FC<ButtonProps> = ({
   iconOnly = false,
   iconOnlyIcon = 'Plus',
   iconOnlyFilled = true,
+  iconOnlySm = false,
   shrinked = false,
   fullWidth = false,
   onClick,
@@ -54,13 +56,14 @@ export const Button: React.FC<ButtonProps> = ({
       'jf-btn-icon',
       iconOnlyFilled ? 'jf-btn-icon--filled' : 'jf-btn-icon--ghost',
       corner === 'Rounded' ? 'jf-btn-icon--rounded' : 'jf-btn-icon--default',
+      iconOnlySm && 'jf-btn-icon--sm',
       state === 'Hovered' && 'jf-btn-icon--hovered',
       isDisabled && 'jf-btn-icon--disabled',
     ].filter(Boolean).join(' ');
 
     return (
       <button className={iconOnlyClasses} disabled={isDisabled} onClick={onClick}>
-        <Icon name={iconOnlyIcon} className="jf-btn-icon__icon" size={24} />
+        <Icon name={iconOnlyIcon} className="jf-btn-icon__icon" size={iconOnlySm ? 16 : 24} />
       </button>
     );
   }

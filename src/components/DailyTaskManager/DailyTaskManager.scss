@@ -23,8 +23,28 @@
 
 .jf-daily-tasks__header {
   display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.jf-daily-tasks__icon {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface-brand);
+  border-radius: var(--radius-md);
+  color: var(--fg-brand);
+}
+
+.jf-daily-tasks__header-text {
+  flex: 1;
+  display: flex;
   flex-direction: column;
   gap: var(--space-1);
+  min-width: 0;
 }
 
 .jf-daily-tasks__title-row {
@@ -128,19 +148,7 @@
 
 .jf-daily-tasks__remove {
   opacity: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--fg-tertiary);
-  padding: var(--space-1);
-  display: flex;
-  align-items: center;
-  border-radius: var(--radius-sm);
-  transition: opacity var(--transition), color var(--transition);
-
-  &:hover {
-    color: var(--fg-error);
-  }
+  transition: opacity var(--transition);
 }
 
 .jf-daily-tasks__item:hover .jf-daily-tasks__remove {
@@ -158,21 +166,28 @@
   flex: 1;
   height: 40px;
   padding: 0 var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--bg-fill);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
   color: var(--fg-primary);
-  font-size: var(--font-size-paragraph-sm);
+  font-size: var(--font-size-label-lg);
+  line-height: var(--line-height-label-lg);
+  font-weight: var(--font-weight-regular);
   font-family: var(--font-family);
   outline: none;
-  transition: border-color var(--transition);
+  transition: border-color var(--transition), box-shadow var(--transition);
 
   &::placeholder {
-    color: var(--fg-tertiary);
+    color: var(--fg-disabled);
+  }
+
+  &:hover {
+    border-color: var(--neutral-300);
   }
 
   &:focus {
-    border-color: var(--bg-fill-brand);
+    border-color: var(--fg-brand);
+    box-shadow: 0 0 0 3px var(--bg-surface-brand);
   }
 }
 
