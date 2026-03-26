@@ -82,7 +82,7 @@ export function MainContent({ component, variants, properties, states, colorInsp
               ref={canvasRef}
               className={`preview-panel__canvas${colorInspectMode ? ' preview-panel__canvas--inspect' : ''}`}
               onClick={() => {
-                if (!colorInspectMode && onPropertyChange) {
+                if (!colorInspectMode && onPropertyChange && component?.id !== 'color-picker') {
                   const hasProp = component?.properties.some(p => p.name === 'Selected');
                   if (hasProp) {
                     onPropertyChange('Selected', !properties['Selected']);
