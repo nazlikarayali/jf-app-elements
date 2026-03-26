@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
 import { Icon } from '../components/Icon/Icon';
 import { useIconLibrary, type IconLibrary, type IconStyle } from '../context/IconLibraryContext';
-import { ICON_LIBRARIES, loadLibrary } from '../utils/iconRegistry';
+import { loadLibrary } from '../utils/iconRegistry';
 import { BottomSheet } from './components/BottomSheet';
 import { generatePalette, applySecondaryPaletteToDOM, resetSecondaryPalette } from '../utils/colorPalette';
 import type { PaletteShade } from '../utils/colorPalette';
@@ -50,10 +50,6 @@ function resetRadius(canvas: HTMLElement | null) {
   if (canvas) canvas.removeAttribute('data-radius');
 }
 
-const PRESET_COLORS = [
-  '#7D38EF', '#DF2125', '#0385C8', '#19A44B', '#F97101', '#DC7801',
-  '#E91E63', '#00B5D4', '#8D5DF9', '#64A501',
-];
 
 interface ColorScheme {
   brand: string;
@@ -389,7 +385,7 @@ export function ThemesView() {
   const [radius, setRadius] = useState<RadiusScale>(DEFAULT_RADIUS as RadiusScale);
   const [, setPalette] = useState<PaletteShade[]>(() => generatePalette(DEFAULT_COLOR, isDarkMode()));
   const [harmonyOffset, setHarmonyOffset] = useState(DEFAULT_HARMONY);
-  const [secondaryEnabled, setSecondaryEnabled] = useState(false);
+  const [secondaryEnabled] = useState(false);
   const [activePreset, setActivePreset] = useState('Default');
 
   const applySecondary = useCallback((primaryColor: string, offset: number, dark: boolean) => {
@@ -397,16 +393,6 @@ export function ThemesView() {
     const secondaryPalette = generatePalette(secondaryColor, dark);
     applySecondaryPaletteToDOM(secondaryPalette);
   }, []);
-
-  const removeSecondary = useCallback(() => {
-    setSecondaryEnabled(false);
-    resetSecondaryPalette();
-  }, []);
-
-  const addSecondary = useCallback(() => {
-    setSecondaryEnabled(true);
-    applySecondary(color, harmonyOffset, isDarkMode());
-  }, [color, harmonyOffset, applySecondary]);
 
   const applyHeadingFontToDOM = useCallback((hFont: string, bodyFont: string) => {
     if (hFont) {
@@ -465,13 +451,6 @@ export function ThemesView() {
     const neutralPalette = generateNeutralPalette(color, newTint, isDarkMode());
     applyNeutralToDOM(neutralPalette);
   }, [color]);
-
-  const handleHarmonyChange = useCallback((offset: number) => {
-    setHarmonyOffset(offset);
-    if (secondaryEnabled) {
-      applySecondary(color, offset, isDarkMode());
-    }
-  }, [color, secondaryEnabled, applySecondary]);
 
   const handleFontChange = useCallback((newFont: string) => {
     setFont(newFont);
