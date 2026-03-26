@@ -985,6 +985,9 @@ export function ThemesView() {
             <div onClick={() => togglePreviewSelect('card-3')} style={{ cursor: 'pointer' }}>
               <Card selected={selectedPreviewItem === 'card-3'} imageStyle="Icon" layout="Horizontal" action="Button" iconName="Code" title="Development" description="Scalable solutions built to last" buttonLabel="Start Project" />
             </div>
+            <div onClick={() => togglePreviewSelect('daily-tasks')} style={{ cursor: 'pointer' }}>
+              <DailyTaskManager selected={selectedPreviewItem === 'daily-tasks'} />
+            </div>
           </section>
 
           {/* List Section */}
@@ -998,13 +1001,6 @@ export function ThemesView() {
                 { title: 'Community meetup next week', description: 'Join us for the monthly gathering' },
                 { title: 'Partnership announcement', description: 'Exciting collaboration coming soon' },
               ]} />
-            </div>
-          </section>
-
-          {/* Daily Tasks Widget */}
-          <section className="themes-view__section">
-            <div onClick={() => togglePreviewSelect('daily-tasks')} style={{ cursor: 'pointer' }}>
-              <DailyTaskManager selected={selectedPreviewItem === 'daily-tasks'} />
             </div>
           </section>
 
