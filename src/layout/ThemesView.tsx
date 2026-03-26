@@ -174,18 +174,45 @@ function loadGoogleFont(fontName: string) {
 }
 
 /**
- * Calculate relative luminance from hex and return appropriate contrast color
+ * Convert hex to OKLab components
  */
-function getContrastColor(hex: string): string {
+function hexToOklab(hex: string): { L: number; C: number; H: number } {
   hex = hex.replace('#', '');
   const r = parseInt(hex.substring(0, 2), 16) / 255;
   const g = parseInt(hex.substring(2, 4), 16) / 255;
   const b = parseInt(hex.substring(4, 6), 16) / 255;
-  // sRGB to linear
+  const toLinear = (c: number) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  const R = toLinear(r), G = toLinear(g), B = toLinear(b);
+  const l = 0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B;
+  const m = 0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B;
+  const s = 0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B;
+  const l_ = Math.cbrt(l), m_ = Math.cbrt(m), s_ = Math.cbrt(s);
+  const L = 0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_;
+  const a = 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_;
+  const bv = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_;
+  const C = Math.sqrt(a * a + bv * bv);
+  let H = Math.atan2(bv, a) * 180 / Math.PI;
+  if (H < 0) H += 360;
+  return { L, C, H };
+}
+
+/**
+ * Calculate relative luminance and return brand-tinted contrast color
+ */
+function getContrastColor(hex: string, brandHex: string): string {
+  const clean = hex.replace('#', '');
+  const r = parseInt(clean.substring(0, 2), 16) / 255;
+  const g = parseInt(clean.substring(2, 4), 16) / 255;
+  const b = parseInt(clean.substring(4, 6), 16) / 255;
   const toLinear = (c: number) => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
   const luminance = 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
-  // WCAG: if luminance > 0.4, use dark text; otherwise white
-  return luminance > 0.4 ? '#091141' : '#FFFFFF';
+
+  if (luminance > 0.4) {
+    // Dark text: use brand hue with very low lightness
+    const { H } = hexToOklab(brandHex);
+    return `oklch(0.20 0.08 ${Math.round(H)})`;
+  }
+  return '#FFFFFF';
 }
 
 function applyPaletteToDOM(palette: PaletteShade[]) {
@@ -212,7 +239,7 @@ function applyPaletteToDOM(palette: PaletteShade[]) {
   // Light mode uses primary-600, dark mode uses primary-400
   const dark = document.documentElement.getAttribute('data-theme') === 'dark';
   const btnBgShade = dark ? map['400'] : map['600'];
-  root.style.setProperty('--fg-inverse', getContrastColor(btnBgShade));
+  root.style.setProperty('--fg-inverse', getContrastColor(btnBgShade, map['600']));
 }
 
 function hslHueToHex(h: number): string {
