@@ -574,6 +574,8 @@ export function ThemesView() {
     setSelectedPreviewItem(prev => prev === id ? null : id);
   }, []);
   const [pickerPos, setPickerPos] = useState({ top: 0, left: 0 });
+  const [mobilePickerOpen, setMobilePickerOpen] = useState(false);
+  const [mobileFontSheet, setMobileFontSheet] = useState<'pairing' | 'heading' | 'body' | null>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
   const customBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -758,7 +760,7 @@ export function ThemesView() {
       </aside>
 
       {/* Mobile: bottom tab bar + bottom sheets */}
-      <div className="themes-bottom-bar">
+      <div className="themes-bottom-bar" data-theme="dark">
         <button
           className={`themes-bottom-bar__tab${activeTab === 'colors' ? ' active' : ''}`}
           onClick={() => handleTabToggle('colors')}
@@ -782,166 +784,222 @@ export function ThemesView() {
         </button>
       </div>
 
-      <BottomSheet open={activeTab === 'colors'} onClose={() => setActiveTab(null)} title="Colors" noOverlay>
+      <BottomSheet open={activeTab === 'colors'} onClose={() => setActiveTab(null)} title="Colors" noOverlay dark>
         <div className="themes-sheet-content">
           <div className="themes-sheet-content__section">
-            <h3 className="themes-view__sidebar-title">Theme Presets</h3>
-            <div className="themes-view__preset-dropdown-wrapper">
-              <select
-                className="themes-view__preset-dropdown"
-                value={activePreset}
-                onChange={(e) => {
-                  const preset = THEME_PRESETS.find(p => p.name === e.target.value);
-                  if (preset) applyPreset(preset);
-                }}
+            <h3 className="themes-view__sidebar-title">Themes</h3>
+            <div className="color-theme-grid">
+              <button
+                className={`color-theme-grid__custom${activePreset === '' ? ' active customized' : ''}`}
+                style={activePreset === '' ? { background: color } : undefined}
+                onClick={() => { setActivePreset(''); setMobilePickerOpen(true); }}
               >
-                {THEME_PRESETS.map((p) => (
-                  <option key={p.name} value={p.name}>{p.name}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="themes-sheet-content__section">
-            <h3 className="themes-view__sidebar-title">Custom Color</h3>
-            <div className="themes-sheet-content__presets-row">
-              {PRESET_COLORS.map((c) => (
-                <button
-                  key={c}
-                  className={`themes-sheet-content__color-circle${color.toUpperCase() === c ? ' active' : ''}`}
-                  style={{ background: c }}
-                  onClick={() => { handleColorChange(c); setActivePreset(''); }}
-                  title={c}
-                />
-              ))}
-            </div>
-          </div>
-          {secondaryEnabled ? (
-            <div className="themes-sheet-content__section">
-              <div className="themes-view__section-header">
-                <h3 className="themes-view__sidebar-title">Secondary Color</h3>
-                <button className="themes-view__remove-btn" onClick={removeSecondary} title="Remove secondary color">
-                  <Icon name="Trash2" size={14} />
-                </button>
-              </div>
-              <div className="themes-view__secondary-color-row">
-                <div className="themes-view__harmony-preview" style={{ background: getSecondaryColor(color, harmonyOffset) }} />
-                <span className="themes-view__secondary-hex">{getSecondaryColor(color, harmonyOffset)}</span>
-              </div>
-              <div className="themes-view__harmony-slider">
-                <div className="themes-view__harmony-row">
-                  <input
-                    type="range"
-                    min="0"
-                    max="360"
-                    value={harmonyOffset}
-                    onChange={(e) => handleHarmonyChange(Number(e.target.value))}
-                    className="themes-view__harmony-range"
-                    style={{
-                      background: `linear-gradient(to right, ${color}, ${getSecondaryColor(color, harmonyOffset)})`,
-                    }}
-                  />
+                <div className="color-theme-grid__custom-inner">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </div>
-              </div>
-            </div>
-          ) : (
-            <div className="themes-sheet-content__section">
-              <button className="themes-view__add-secondary" onClick={addSecondary}>
-                <Icon name="Plus" size={16} />
-                <span>Add secondary color scale</span>
               </button>
+              {THEME_PRESETS.map((preset) => (
+                <button
+                  key={preset.name}
+                  className={`color-theme-grid__item${activePreset === preset.name ? ' active' : ''}`}
+                  onClick={() => { applyPreset(preset); }}
+                  title={preset.name}
+                >
+                  <div className="color-theme-grid__outer" style={{ backgroundColor: preset.color }} />
+                </button>
+              ))}
             </div>
-          )}
+          </div>
+          <div className="themes-sheet-content__section">
+            <h3 className="themes-view__sidebar-title">Appearing</h3>
+            <div className="themes-view__appearing-options">
+              {(['light', 'dark'] as const).map((mode) => (
+                <button
+                  key={mode}
+                  className={`themes-view__appearing-btn${colorMode === mode ? ' active' : ''}`}
+                  onClick={() => handleColorModeChange(mode)}
+                >
+                  {mode === 'light' ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                  ) : (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                  )}
+                  <span>{mode.charAt(0).toUpperCase() + mode.slice(1)}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </BottomSheet>
 
-      <BottomSheet open={activeTab === 'style'} onClose={() => setActiveTab(null)} title="Style" noOverlay>
+      <BottomSheet open={activeTab === 'style'} onClose={() => setActiveTab(null)} title="Style" noOverlay dark>
         <div className="themes-sheet-content">
           <div className="themes-sheet-content__section">
-            <h3 className="themes-view__sidebar-title">Color Mode</h3>
-            <div className="themes-sheet-content__segmented">
-              <button
-                className={`themes-sheet-content__seg-btn${colorMode === 'light' ? ' active' : ''}`}
-                onClick={() => handleColorModeChange('light')}
-              >
-                Light
-              </button>
-              <button
-                className={`themes-sheet-content__seg-btn${colorMode === 'dark' ? ' active' : ''}`}
-                onClick={() => handleColorModeChange('dark')}
-              >
-                Dark
-              </button>
+            <h3 className="themes-view__sidebar-title">Border Radius</h3>
+            <div className="themes-view__radius-options">
+              {RADIUS_MODES.map(({ scale, lg }) => {
+                const r = parseInt(lg);
+                return (
+                  <button
+                    key={scale}
+                    className={`themes-view__radius-btn${radius === scale ? ' active' : ''}`}
+                    onClick={() => handleRadiusChange(scale)}
+                    title={scale}
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d={`M4 24 V${r} Q4 4 ${r} 4 H24`} strokeLinecap="round" />
+                    </svg>
+                  </button>
+                );
+              })}
             </div>
           </div>
           <div className="themes-sheet-content__section">
-            <h3 className="themes-view__sidebar-title">Radius</h3>
-            <div className="themes-sheet-content__segmented">
-              {RADIUS_MODES.map(({ scale }) => (
-                <button
-                  key={scale}
-                  className={`themes-sheet-content__seg-btn${radius === scale ? ' active' : ''}`}
-                  onClick={() => handleRadiusChange(scale)}
-                >
-                  {scale}
-                </button>
-              ))}
+            <h3 className="themes-view__sidebar-title">Icon Style</h3>
+            <div className="themes-view__icon-library-options themes-view__icon-library-options--4col">
+              {([
+                { lib: 'lucide' as const, style: 'outline' as const, svg: (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                  </svg>
+                )},
+                { lib: 'phosphor' as const, style: 'outline' as const, svg: (
+                  <svg width="24" height="24" viewBox="0 0 256 256" fill="none" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="32" y="48" width="192" height="160" rx="8"/><circle cx="96" cy="112" r="20"/><path d="M224,168l-44.69-44.69a8,8,0,0,0-11.31,0L100.69,190.6,83.31,173.31a8,8,0,0,0-11.31,0L32,213.09"/>
+                  </svg>
+                )},
+                { lib: 'tabler' as const, style: 'outline' as const, svg: (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M15 8h.01"/><rect width="16" height="16" x="4" y="4" rx="3"/><path d="m4 15 4-4a3 5 0 0 1 3 0l5 5"/><path d="m14 14 1-1a3 5 0 0 1 3 0l2 2"/>
+                  </svg>
+                )},
+                { lib: 'phosphor' as const, style: 'fill' as const, svg: (
+                  <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor">
+                    <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm-60,64a12,12,0,1,1,12,12A12,12,0,0,1,156,104ZM40,200V172l52-52,80,80Zm176,0H194.63l-56-56,20-20L216,181.38Z"/>
+                  </svg>
+                )},
+              ]).map(({ lib, style, svg }) => {
+                const isActive = activeIconLibrary === lib && activeIconStyle === style;
+                return (
+                  <button
+                    key={`${lib}-${style}`}
+                    className={`themes-view__icon-library-btn${isActive ? ' active' : ''}`}
+                    onClick={() => { handleIconLibraryChange(lib); handleIconStyleChange(style); }}
+                  >
+                    {svg}
+                  </button>
+                );
+              })}
             </div>
           </div>
-          <div className="themes-sheet-content__section">
-            <h3 className="themes-view__sidebar-title">Icon Library</h3>
-            <div className="themes-sheet-content__segmented">
-              {ICON_LIBRARIES.map(({ value, label }) => (
-                <button
-                  key={value}
-                  className={`themes-sheet-content__seg-btn${activeIconLibrary === value ? ' active' : ''}`}
-                  onClick={() => handleIconLibraryChange(value)}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-          {ICON_LIBRARIES.find(l => l.value === activeIconLibrary)?.hasFill && (
-            <div className="themes-sheet-content__section">
-              <h3 className="themes-view__sidebar-title">Icon Style</h3>
-              <div className="themes-sheet-content__segmented">
-                <button
-                  className={`themes-sheet-content__seg-btn${activeIconStyle === 'outline' ? ' active' : ''}`}
-                  onClick={() => handleIconStyleChange('outline')}
-                >
-                  Outline
-                </button>
-                <button
-                  className={`themes-sheet-content__seg-btn${activeIconStyle === 'fill' ? ' active' : ''}`}
-                  onClick={() => handleIconStyleChange('fill')}
-                >
-                  Fill
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </BottomSheet>
 
-      <BottomSheet open={activeTab === 'font'} onClose={() => setActiveTab(null)} title="Font" noOverlay>
+      <BottomSheet open={activeTab === 'font'} onClose={() => setActiveTab(null)} title="Typography" noOverlay dark>
         <div className="themes-sheet-content">
           <div className="themes-sheet-content__section">
             <h3 className="themes-view__sidebar-title">Font Pairing</h3>
-            <FontPairingDropdown
-              pairings={FONT_PAIRINGS}
-              activeHeading={headingFont || font}
-              activeBody={font}
-              onSelect={handlePairingSelect}
-            />
-          </div>
-          <div className="themes-sheet-content__section">
-            <h3 className="themes-view__sidebar-title">Body Font</h3>
-            <FontDropdown fonts={FONT_OPTIONS} active={font} onChange={handleFontChange} />
+            <button className="themes-sheet-content__font-trigger" onClick={() => setMobileFontSheet('pairing')}>
+              <span className="font-preview" style={{ fontFamily: `'${headingFont || font}', sans-serif`, fontWeight: 600 }}>{headingFont || font}</span>
+              <span style={{ color: 'var(--fg-tertiary)' }}>+</span>
+              <span className="font-preview" style={{ fontFamily: `'${font}', sans-serif` }}>{font}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
           </div>
           <div className="themes-sheet-content__section">
             <h3 className="themes-view__sidebar-title">Heading Font</h3>
-            <FontDropdown fonts={HEADING_FONT_OPTIONS} active={headingFont || font} onChange={handleHeadingFontChange} />
+            <button className="themes-sheet-content__font-trigger" onClick={() => setMobileFontSheet('heading')}>
+              <span className="font-preview" style={{ fontFamily: `'${headingFont || font}', sans-serif` }}>{headingFont || font}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
           </div>
+          <div className="themes-sheet-content__section">
+            <h3 className="themes-view__sidebar-title">Body Font</h3>
+            <button className="themes-sheet-content__font-trigger" onClick={() => setMobileFontSheet('body')}>
+              <span className="font-preview" style={{ fontFamily: `'${font}', sans-serif` }}>{font}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </BottomSheet>
+
+      {/* Font Pairing Sheet */}
+      <BottomSheet open={mobileFontSheet === 'pairing'} onClose={() => setMobileFontSheet(null)} title="Font Pairing" noOverlay dark>
+        <div className="themes-sheet-content themes-sheet-content--font-list">
+          {FONT_PAIRINGS.map((p, i) => {
+            const isActive = p.heading === (headingFont || font) && p.body === font;
+            loadGoogleFont(p.heading);
+            loadGoogleFont(p.body);
+            return (
+              <button
+                key={i}
+                className={`themes-sheet-content__font-item${isActive ? ' active' : ''}`}
+                onClick={() => handlePairingSelect(p)}
+              >
+                <div className="themes-sheet-content__font-item-text">
+                  <span className="font-preview" style={{ fontFamily: `'${p.heading}', sans-serif`, fontWeight: 600, fontSize: 16, color: '#e8e9ed' }}>{p.heading}</span>
+                  <span className="font-preview" style={{ fontFamily: `'${p.body}', sans-serif`, fontSize: 13, color: '#8b90a8' }}>{p.body}</span>
+                </div>
+                {isActive && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-primary)', flexShrink: 0 }}><path d="M20 6 9 17l-5-5"/></svg>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </BottomSheet>
+
+      {/* Heading Font Sheet */}
+      <BottomSheet open={mobileFontSheet === 'heading'} onClose={() => setMobileFontSheet(null)} title="Heading Font" noOverlay dark>
+        <div className="themes-sheet-content themes-sheet-content--font-list">
+          {HEADING_FONT_OPTIONS.map((f) => {
+            const isActive = f === (headingFont || font);
+            loadGoogleFont(f);
+            return (
+              <button
+                key={f}
+                className={`themes-sheet-content__font-item${isActive ? ' active' : ''}`}
+                onClick={() => handleHeadingFontChange(f)}
+              >
+                <span className="font-preview" style={{ fontFamily: `'${f}', sans-serif`, color: '#e8e9ed' }}>{f}</span>
+                {isActive && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-primary)', flexShrink: 0 }}><path d="M20 6 9 17l-5-5"/></svg>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </BottomSheet>
+
+      {/* Body Font Sheet */}
+      <BottomSheet open={mobileFontSheet === 'body'} onClose={() => setMobileFontSheet(null)} title="Body Font" noOverlay dark>
+        <div className="themes-sheet-content themes-sheet-content--font-list">
+          {FONT_OPTIONS.map((f) => {
+            const isActive = f === font;
+            loadGoogleFont(f);
+            return (
+              <button
+                key={f}
+                className={`themes-sheet-content__font-item${isActive ? ' active' : ''}`}
+                onClick={() => handleFontChange(f)}
+              >
+                <span className="font-preview" style={{ fontFamily: `'${f}', sans-serif`, color: '#e8e9ed' }}>{f}</span>
+                {isActive && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-primary)', flexShrink: 0 }}><path d="M20 6 9 17l-5-5"/></svg>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </BottomSheet>
+
+      <BottomSheet open={mobilePickerOpen} onClose={() => setMobilePickerOpen(false)} title="Custom Color" noOverlay dark>
+        <div className="themes-sheet-content themes-sheet-content--picker">
+          <ColorPicker color={color} onChange={handleColorChange} tint={tint} onTintChange={handleTintChange} />
         </div>
       </BottomSheet>
 

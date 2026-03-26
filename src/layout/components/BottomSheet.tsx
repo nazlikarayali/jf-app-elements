@@ -6,9 +6,10 @@ interface BottomSheetProps {
   title: string;
   children: ReactNode;
   noOverlay?: boolean;
+  dark?: boolean;
 }
 
-export const BottomSheet: FC<BottomSheetProps> = ({ open, onClose, title, children, noOverlay }) => {
+export const BottomSheet: FC<BottomSheetProps> = ({ open, onClose, title, children, noOverlay, dark }) => {
   useEffect(() => {
     if (open && !noOverlay) {
       document.body.style.overflow = 'hidden';
@@ -22,7 +23,7 @@ export const BottomSheet: FC<BottomSheetProps> = ({ open, onClose, title, childr
 
   if (noOverlay) {
     return (
-      <div className="bottom-sheet bottom-sheet--no-overlay" onClick={(e) => e.stopPropagation()}>
+      <div className="bottom-sheet bottom-sheet--no-overlay" data-theme={dark ? 'dark' : undefined} onClick={(e) => e.stopPropagation()}>
         <div className="bottom-sheet__header">
           <div className="bottom-sheet__handle" />
           <span className="bottom-sheet__title">{title}</span>
@@ -42,7 +43,7 @@ export const BottomSheet: FC<BottomSheetProps> = ({ open, onClose, title, childr
 
   return (
     <div className="bottom-sheet__overlay" onClick={onClose}>
-      <div className="bottom-sheet" onClick={(e) => e.stopPropagation()}>
+      <div className="bottom-sheet" data-theme={dark ? 'dark' : undefined} onClick={(e) => e.stopPropagation()}>
         <div className="bottom-sheet__header">
           <div className="bottom-sheet__handle" />
           <span className="bottom-sheet__title">{title}</span>
