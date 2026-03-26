@@ -3045,12 +3045,19 @@ body {
     );
 
   &.active.customized {
-    &::after {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    background-origin: border-box;
+    position: relative;
+
+    &::before {
       content: '';
       position: absolute;
       inset: -4px;
-      border-radius: var(--radius-rounded);
-      border: 2px solid transparent;
+      border-radius: inherit;
+      padding: 2px;
       background: conic-gradient(
         from 90deg,
         hsl(60, 100%, 50%),
@@ -3060,11 +3067,11 @@ body {
         hsl(300, 100%, 50%),
         hsl(0, 100%, 50%),
         hsl(60, 100%, 50%)
-      ) border-box;
-      mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0) border-box;
-      mask-composite: exclude;
-      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0) border-box;
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
       pointer-events: none;
     }
   }
