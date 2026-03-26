@@ -247,9 +247,9 @@ export function ColorPicker({ color, onChange, tint, onTintChange, opacity = 100
           ref={opacityBarRef}
           className="color-picker__opacity"
           style={{
-            backgroundImage: `linear-gradient(to right, transparent, ${currentColor}), linear-gradient(45deg, #ddd 25%, transparent 25%), linear-gradient(-45deg, #ddd 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ddd 75%), linear-gradient(-45deg, transparent 75%, #ddd 75%)`,
-            backgroundSize: '100% 100%, 12px 12px, 12px 12px, 12px 12px, 12px 12px',
-            backgroundPosition: '0 0, 0 0, 0 6px, 6px -6px, -6px 0',
+            backgroundImage: `linear-gradient(to right, transparent, ${currentColor}), linear-gradient(45deg, rgba(128,128,128,0.4) 25%, rgba(128,128,128,0.15) 25%, rgba(128,128,128,0.15) 75%, rgba(128,128,128,0.4) 75%), linear-gradient(45deg, rgba(128,128,128,0.4) 25%, rgba(128,128,128,0.15) 25%, rgba(128,128,128,0.15) 75%, rgba(128,128,128,0.4) 75%)`,
+            backgroundSize: '100% 100%, 12px 12px, 12px 12px',
+            backgroundPosition: '0 0, 0 0, 6px 6px',
           }}
           onMouseDown={onOpacityDown}
         >
