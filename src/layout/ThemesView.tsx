@@ -574,7 +574,6 @@ export function ThemesView() {
     setSelectedPreviewItem(prev => prev === id ? null : id);
   }, []);
   const [pickerPos, setPickerPos] = useState({ top: 0, left: 0 });
-  const [customColorChanged, setCustomColorChanged] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
   const customBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -604,7 +603,6 @@ export function ThemesView() {
                 onClick={() => {
                   if (activePreset !== '') {
                     setActivePreset('');
-                    setCustomColorChanged(false);
                   }
                   if (!pickerOpen && customBtnRef.current) {
                     const rect = customBtnRef.current.getBoundingClientRect();
@@ -623,7 +621,7 @@ export function ThemesView() {
               </button>
               {pickerOpen && (
                 <div className="color-theme-grid__picker-popup" style={{ top: pickerPos.top, left: pickerPos.left }}>
-                  <ColorPicker color={color} onChange={(c) => { setCustomColorChanged(true); handleColorChange(c); }} tint={tint} onTintChange={handleTintChange} />
+                  <ColorPicker color={color} onChange={handleColorChange} tint={tint} onTintChange={handleTintChange} />
                 </div>
               )}
             </div>
@@ -633,7 +631,7 @@ export function ThemesView() {
               <button
                 key={preset.name}
                 className={`color-theme-grid__item${activePreset === preset.name ? ' active' : ''}`}
-                onClick={() => { applyPreset(preset); setPickerOpen(false); setCustomColorChanged(false); }}
+                onClick={() => { applyPreset(preset); setPickerOpen(false); }}
                 title={preset.name}
               >
                 <div className="color-theme-grid__outer" style={{ backgroundColor: preset.color }} />
