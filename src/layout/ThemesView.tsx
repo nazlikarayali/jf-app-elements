@@ -599,7 +599,7 @@ export function ThemesView() {
             <div className="color-theme-grid__custom-wrapper" ref={pickerRef}>
               <button
                 ref={customBtnRef}
-                className={`color-theme-grid__custom${activePreset === '' ? ' active' : ''}${activePreset === '' && customColorChanged ? ' customized' : ''}`}
+                className={`color-theme-grid__custom${activePreset === '' ? ' active customized' : ''}`}
                 style={activePreset === '' ? { background: color } : undefined}
                 onClick={() => {
                   if (activePreset !== '') {
@@ -608,7 +608,10 @@ export function ThemesView() {
                   }
                   if (!pickerOpen && customBtnRef.current) {
                     const rect = customBtnRef.current.getBoundingClientRect();
-                    setPickerPos({ top: rect.bottom + 8, left: rect.left });
+                    const sidebar = customBtnRef.current.closest('.themes-view__sidebar');
+                    const sidebarRect = sidebar?.getBoundingClientRect();
+                    const left = sidebarRect ? sidebarRect.left + 16 : rect.left;
+                    setPickerPos({ top: rect.bottom + 8, left });
                   }
                   setPickerOpen(!pickerOpen);
                 }}

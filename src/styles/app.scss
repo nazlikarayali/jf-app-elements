@@ -2909,7 +2909,7 @@ body {
 .color-theme-grid__picker-popup {
   position: fixed;
   z-index: 9999;
-  width: 280px;
+  width: 268px;
 
   .color-picker {
     background: var(--bg-surface-active);
@@ -2939,13 +2939,7 @@ body {
       hsl(60, 100%, 50%)
     );
 
-  &.active {
-    outline: 2px solid #FFFFFF;
-    outline-offset: 2px;
-  }
-
   &.active.customized {
-    outline: none;
 
     &::after {
       content: '';
