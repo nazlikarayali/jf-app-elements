@@ -3064,7 +3064,7 @@ body {
       mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0) border-box;
       mask-composite: exclude;
       -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0) border-box;
-      -webkit-mask-composite: destination-out;
+      -webkit-mask-composite: xor;
       pointer-events: none;
     }
   }
