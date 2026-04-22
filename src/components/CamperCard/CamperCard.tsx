@@ -104,7 +104,7 @@ export function CamperCard({ selected = false }: CamperCardProps) {
           onChange={e => setSearchQuery(e.target.value)}
         />
         <div className="jf-camper__selector-chips">
-          {filteredCampers.map((c, i) => {
+          {filteredCampers.map((c) => {
             const realIndex = CAMPERS.indexOf(c);
             return (
               <button

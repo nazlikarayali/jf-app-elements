@@ -6,7 +6,6 @@ export interface CampCountdownProps {
 }
 
 const CAMP_START = new Date('2026-07-15T09:00:00');
-const CAMP_END = new Date('2026-08-09T17:00:00');
 const SESSION_NAME = 'Summer Session 2026';
 
 const MILESTONES = [

@@ -5,16 +5,6 @@ export interface TripPlannerProps {
   selected?: boolean;
 }
 
-interface Stop {
-  id: string;
-  name: string;
-  emoji: string;
-  time: string;
-  duration: string;
-  category: string;
-  done: boolean;
-}
-
 const DAYS = [
   {
     label: 'Day 1 – North Coast',

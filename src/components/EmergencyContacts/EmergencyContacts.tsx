@@ -22,7 +22,6 @@ const CONTACTS: Contact[] = [
 
 export function EmergencyContacts({ selected = false }: EmergencyContactsProps) {
   const [contacts] = useState(CONTACTS);
-  const [editingId, setEditingId] = useState<string | null>(null);
 
   const classes = ['jf-emergency', selected && 'jf-emergency--selected'].filter(Boolean).join(' ');
 
