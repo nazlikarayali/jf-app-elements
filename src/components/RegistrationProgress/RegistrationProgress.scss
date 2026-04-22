@@ -1,0 +1,264 @@
+// ============================================
+// JotForm Apps - RegistrationProgress Component
+// ============================================
+
+.jf-regprog {
+  width: 616px;
+  max-width: 100%;
+  background: var(--bg-fill);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-family: var(--font-family);
+
+  &--selected {
+    outline: 2px solid var(--border-info);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+}
+
+// Header
+.jf-regprog__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.jf-regprog__icon {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface-brand);
+  border-radius: var(--radius-md);
+  color: var(--fg-brand);
+}
+
+.jf-regprog__header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.jf-regprog__title {
+  font-size: var(--font-size-label-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-label-lg);
+  color: var(--fg-primary);
+  margin: 0;
+}
+
+.jf-regprog__subtitle {
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-paragraph-sm);
+  color: var(--fg-disabled);
+  margin: 0;
+}
+
+// Selector
+.jf-regprog__selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.jf-regprog__selector-label {
+  font-size: var(--font-size-label-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-secondary);
+}
+
+.jf-regprog__dropdown-wrapper {
+  position: relative;
+}
+
+.jf-regprog__dropdown-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  color: var(--fg-primary);
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: border-color var(--transition);
+
+  &:hover { border-color: var(--border-active); }
+  svg { color: var(--fg-disabled); }
+}
+
+.jf-regprog__dropdown-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-1);
+  z-index: 10;
+}
+
+.jf-regprog__dropdown-option {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: calc(var(--radius-md) - 2px);
+  background: transparent;
+  color: var(--fg-primary);
+  font-size: var(--font-size-paragraph-sm);
+  font-family: var(--font-family);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition);
+
+  &:hover { background: var(--bg-surface-hover); }
+  &--selected { background: var(--bg-surface-brand); color: var(--fg-brand); }
+}
+
+// Progress
+.jf-regprog__progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.jf-regprog__progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.jf-regprog__progress-label {
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-secondary);
+}
+
+.jf-regprog__progress-count {
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-disabled);
+}
+
+.jf-regprog__progress-track {
+  height: var(--space-2);
+  background: var(--bg-fill-active);
+  border-radius: var(--radius-rounded);
+  overflow: hidden;
+}
+
+.jf-regprog__progress-fill {
+  height: 100%;
+  background: var(--bg-fill-brand);
+  border-radius: var(--radius-rounded);
+  transition: width 300ms ease;
+}
+
+.jf-regprog__progress-pct {
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--fg-disabled);
+}
+
+// Callout
+.jf-regprog__callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-surface-brand);
+  border-radius: var(--radius-md);
+}
+
+.jf-regprog__callout-text {
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--fg-brand);
+
+  strong { font-weight: var(--font-weight-bold); }
+}
+
+// Form cards
+.jf-regprog__forms {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.jf-regprog__forms-title {
+  font-size: var(--font-size-label-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--fg-primary);
+}
+
+.jf-regprog__form-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  transition: border-color var(--transition);
+
+  &:hover {
+    border-color: var(--border-hover);
+  }
+}
+
+.jf-regprog__form-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.jf-regprog__form-name {
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--fg-primary);
+}
+
+.jf-regprog__form-card-bottom {
+  display: flex;
+}
+
+// Status badges
+.jf-regprog__status-badge {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-rounded);
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+
+  &--completed {
+    background: var(--bg-surface-success);
+    color: var(--fg-success);
+  }
+
+  &--in-progress {
+    background: var(--bg-surface-warning);
+    color: var(--fg-warning);
+  }
+
+  &--not-started {
+    background: var(--bg-fill-active);
+    color: var(--fg-secondary);
+  }
+}

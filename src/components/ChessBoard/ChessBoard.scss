@@ -1,0 +1,229 @@
+// ============================================
+// JotForm Apps - ChessBoard Component
+// ============================================
+
+.jf-chess {
+  width: 616px;
+  max-width: 100%;
+  background: var(--bg-fill);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-family: var(--font-family);
+
+  &--selected {
+    outline: 2px solid var(--border-info);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+}
+
+// Header
+.jf-chess__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.jf-chess__icon {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface-brand);
+  border-radius: var(--radius-md);
+  color: var(--fg-brand);
+}
+
+.jf-chess__header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.jf-chess__title {
+  font-size: var(--font-size-label-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-label-lg);
+  color: var(--fg-primary);
+  margin: 0;
+}
+
+.jf-chess__subtitle {
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-paragraph-sm);
+  color: var(--fg-disabled);
+  margin: 0;
+}
+
+.jf-chess__reset {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--fg-secondary);
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all var(--transition);
+
+  &:hover {
+    border-color: var(--border-hover);
+    background: var(--bg-fill-hover);
+  }
+}
+
+// Captured pieces
+.jf-chess__captured {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.jf-chess__captured-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.jf-chess__captured-label {
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-secondary);
+}
+
+.jf-chess__captured-pieces {
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+// Board wrapper
+.jf-chess__board-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.jf-chess__ranks {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: -20px;
+  top: 0;
+  height: 100%;
+}
+
+.jf-chess__board-wrapper {
+  position: relative;
+  padding-left: 24px;
+}
+
+.jf-chess__board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  width: 100%;
+  max-width: 480px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 2px solid var(--fg-primary);
+}
+
+.jf-chess__ranks {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 24px;
+}
+
+.jf-chess__files {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 480px;
+  margin-left: 24px;
+}
+
+.jf-chess__coord {
+  font-size: var(--font-size-label-xs);
+  color: var(--fg-disabled);
+  font-weight: var(--font-weight-medium);
+  width: 16px;
+  text-align: center;
+}
+
+// Cells
+.jf-chess__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  cursor: pointer;
+  position: relative;
+  transition: background var(--transition);
+
+  &--light {
+    background: var(--bg-surface);
+  }
+
+  &--dark {
+    background: var(--bg-fill-active);
+  }
+
+  &--selected {
+    background: var(--bg-surface-brand) !important;
+  }
+
+  &--valid {
+    cursor: pointer;
+  }
+
+  &--capture {
+    background: rgba(239, 68, 68, 0.15) !important;
+  }
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+// Pieces
+.jf-chess__piece {
+  font-size: clamp(24px, 5vw, 42px);
+  line-height: 1;
+  user-select: none;
+  cursor: pointer;
+  transition: transform var(--transition);
+
+  &--white {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+  }
+
+  &--black {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+  }
+}
+
+.jf-chess__cell--selected .jf-chess__piece {
+  transform: scale(1.1);
+}
+
+// Valid move dot
+.jf-chess__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--fg-brand);
+  opacity: 0.3;
+}

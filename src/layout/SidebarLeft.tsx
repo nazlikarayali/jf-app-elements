@@ -56,6 +56,15 @@ export function SidebarLeft({ selectedId, onSelect, components, foundationPage, 
               </span>
               Colors
             </button>
+            <button
+              className={`component-list__item${foundationPage === 'typography' ? ' active' : ''}`}
+              onClick={() => onFoundationSelect?.('typography')}
+            >
+              <span className="component-list__item-icon">
+                <Icon name="Type" size={16} />
+              </span>
+              Typography
+            </button>
           </div>
         )}
         {filtered.length === 0 ? (

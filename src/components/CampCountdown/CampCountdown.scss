@@ -1,0 +1,170 @@
+// ============================================
+// JotForm Apps - CampCountdown Component
+// ============================================
+
+.jf-countdown {
+  width: 616px;
+  max-width: 100%;
+  background: var(--bg-fill);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-family: var(--font-family);
+
+  &--selected {
+    outline: 2px solid var(--border-info);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+}
+
+// Header
+.jf-countdown__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.jf-countdown__icon {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface-brand);
+  border-radius: var(--radius-md);
+  font-size: 28px;
+}
+
+.jf-countdown__header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.jf-countdown__title {
+  font-size: var(--font-size-label-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-label-lg);
+  color: var(--fg-primary);
+  margin: 0;
+}
+
+.jf-countdown__subtitle {
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-paragraph-sm);
+  color: var(--fg-disabled);
+  margin: 0;
+}
+
+// Timer
+.jf-countdown__timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-4);
+  background: var(--bg-surface-brand);
+  border-radius: var(--radius-md);
+}
+
+.jf-countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 64px;
+}
+
+.jf-countdown__number {
+  font-size: var(--font-size-heading-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--fg-brand);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.jf-countdown__label {
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.jf-countdown__separator {
+  font-size: var(--font-size-heading-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--fg-disabled);
+  line-height: 1;
+  margin-bottom: var(--space-4);
+}
+
+// Milestones
+.jf-countdown__milestones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.jf-countdown__milestones-title {
+  font-size: var(--font-size-label-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--fg-primary);
+}
+
+.jf-countdown__milestone {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+
+  &:last-child { border-bottom: none; }
+}
+
+.jf-countdown__milestone-dot {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border-secondary);
+  border-radius: 50%;
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-bold);
+  color: transparent;
+  transition: all var(--transition);
+}
+
+.jf-countdown__milestone--done .jf-countdown__milestone-dot {
+  background: var(--bg-fill-brand);
+  border-color: var(--bg-fill-brand);
+  color: var(--fg-inverse);
+}
+
+.jf-countdown__milestone-label {
+  flex: 1;
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-primary);
+}
+
+.jf-countdown__milestone--done .jf-countdown__milestone-label {
+  color: var(--fg-disabled);
+  text-decoration: line-through;
+}
+
+.jf-countdown__milestone-date {
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-disabled);
+  flex-shrink: 0;
+}

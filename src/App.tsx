@@ -6,7 +6,9 @@ import { SidebarLeft } from './layout/SidebarLeft';
 import { SidebarRight } from './layout/SidebarRight';
 import { MainContent } from './layout/MainContent';
 import { FoundationColors } from './layout/FoundationColors';
+import { FoundationTypography } from './layout/FoundationTypography';
 import { ThemesView } from './layout/ThemesView';
+import { SampleAppsView } from './layout/SampleAppsView';
 import { BottomSheet } from './layout/components/BottomSheet';
 import { ComponentRegistry, type RegisteredComponent } from './types/registry';
 import type { VariantValues, PropertyValues, StateValues } from './types/component';
@@ -22,14 +24,35 @@ import './components/List/register';
 import './components/Document/register';
 import './components/SignDocument/register';
 import './components/ImageGallery/register';
+import './components/MemoriesGallery/register';
 import './components/SocialFollow/register';
 import './components/Form/register';
 import './components/Table/register';
 import './components/Testimonial/register';
 import './components/DailyTaskManager/register';
+import './components/BMICalculator/register';
+import './components/ShoppingList/register';
+import './components/DestinationExplorer/register';
 import './components/ColorPicker/register';
+import './components/Dropdown/register';
+import './components/Tag/register';
+import './components/Checkbox/register';
+import './components/InputField/register';
+import './components/RadioButton/register';
+import './components/ViewToggle/register';
+import './components/Chip/register';
+import './components/ChessBoard/register';
+import './components/CamperCard/register';
+import './components/TabBar/register';
+import './components/ActivitySchedule/register';
+import './components/CampFeedback/register';
+import './components/TripPlanner/register';
+import './components/FormSubmissions/register';
+import './components/CampCountdown/register';
+import './components/EmergencyContacts/register';
+import './components/RegistrationProgress/register';
 
-type AppMode = 'components' | 'themes';
+type AppMode = 'components' | 'themes' | 'sample-apps';
 type MobileSheet = 'none' | 'components' | 'properties';
 
 function App() {
@@ -113,6 +136,8 @@ function App() {
             />
             {foundationPage === 'colors' ? (
               <FoundationColors />
+            ) : foundationPage === 'typography' ? (
+              <FoundationTypography />
             ) : (
               <>
                 <MainContent
@@ -185,8 +210,10 @@ function App() {
               />
             </BottomSheet>
           </>
-        ) : (
+        ) : mode === 'themes' ? (
           <ThemesView />
+        ) : (
+          <SampleAppsView />
         )}
       </div>
       {import.meta.env.DEV && <Agentation />}

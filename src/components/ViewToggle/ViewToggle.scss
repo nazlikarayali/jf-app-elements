@@ -1,0 +1,55 @@
+// ============================================
+// JotForm Apps - ViewToggle Component
+// ============================================
+
+.jf-view-toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--bg-fill-active);
+  border-radius: var(--radius-md);
+
+  // =========================================
+  // Toggle Button
+  // =========================================
+  &__btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: calc(var(--radius-md) - 2px);
+    background: transparent;
+    color: var(--fg-disabled);
+    cursor: pointer;
+    transition: all var(--transition);
+
+    &:hover:not(.jf-view-toggle__btn--active) {
+      color: var(--fg-secondary);
+    }
+
+    // Active state
+    &--active {
+      background: var(--bg-surface);
+      color: var(--fg-primary);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  // =========================================
+  // Icon
+  // =========================================
+  &__icon {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  // =========================================
+  // Disabled
+  // =========================================
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}

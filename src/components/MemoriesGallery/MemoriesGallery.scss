@@ -1,0 +1,193 @@
+// ============================================
+// JotForm Apps - Memories Gallery Widget
+// ============================================
+
+.jf-memories {
+  width: 100%;
+  max-width: 960px;
+  padding: var(--space-4);
+  background: var(--bg-surface, #FFFFFF);
+  border-radius: var(--radius-lg, 12px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-family: var(--font-family, 'Inter', -apple-system, sans-serif);
+
+  &--selected {
+    outline: 2px solid var(--border-info);
+    outline-offset: 4px;
+    border-radius: var(--radius-lg, 12px);
+  }
+
+  &--shrinked {
+    max-width: 480px;
+  }
+}
+
+// --- Filters ----------------------------------
+.jf-memories__filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.jf-memories__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.jf-memories__label {
+  font-family: var(--font-family);
+  font-size: var(--font-size-label-md, 14px);
+  line-height: var(--line-height-label-md, 20px);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--fg-secondary, #353C6A);
+}
+
+.jf-memories__input,
+.jf-memories__select {
+  height: 44px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-lg, 12px);
+  border: 1px solid var(--border-secondary, #C8CEED);
+  background: var(--bg-surface, #FFFFFF);
+  font-family: var(--font-family);
+  font-size: var(--font-size-paragraph-sm, 14px);
+  line-height: var(--line-height-paragraph-sm, 20px);
+  font-weight: var(--font-weight-regular, 400);
+  color: var(--fg-primary, #091141);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &::placeholder {
+    color: var(--fg-disabled, #979DC6);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--fg-brand, #7D38EF);
+    box-shadow: 0 0 0 3px rgba(125, 56, 239, 0.15);
+  }
+}
+
+.jf-memories__select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23353C6A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  padding-right: calc(var(--space-3) + 20px);
+  cursor: pointer;
+}
+
+// --- Grid -------------------------------------
+.jf-memories__grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(var(--memories-cols, 3), minmax(0, 1fr));
+}
+
+.jf-memories--cols-2 { --memories-cols: 2; }
+.jf-memories--cols-3 { --memories-cols: 3; }
+.jf-memories--cols-4 { --memories-cols: 4; }
+
+// --- Card -------------------------------------
+.jf-memories__card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface, #FFFFFF);
+  border: 1px solid var(--border-secondary, #C8CEED);
+  border-radius: var(--radius-lg, 12px);
+  overflow: hidden;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    border-color: var(--border-primary, #979DC6);
+  }
+}
+
+.jf-memories__image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--bg-fill-disabled, #F3F3FE);
+}
+
+.jf-memories__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.jf-memories__body {
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.jf-memories__title {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-label-lg, 16px);
+  line-height: var(--line-height-label-lg, 24px);
+  font-weight: var(--font-weight-bold, 600);
+  color: var(--fg-primary, #091141);
+}
+
+// Matches Figma Badge — Semantic × Style × Size (Medium Filled here).
+// Spec: paddingX=8, paddingY=4, radius rounded, font 12/16 Medium Inter.
+.jf-memories__badge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-rounded, 9999px);
+  font-family: var(--font-family);
+  font-size: var(--font-size-label-sm, 12px);
+  line-height: var(--line-height-label-sm, 16px);
+  font-weight: var(--font-weight-medium, 500);
+
+  &--warning {
+    background: var(--bg-surface-warning, #FEF3C5);
+    color: var(--fg-warning, #DC7801);
+  }
+
+  &--success {
+    background: var(--bg-surface-success, #DDFBE8);
+    color: var(--fg-success, #19A44B);
+  }
+
+  &--info {
+    background: var(--bg-surface-info, #DDF3FF);
+    color: var(--fg-info, #0385C8);
+  }
+
+  &--brand {
+    background: var(--bg-surface-brand, #EDE8FE);
+    color: var(--fg-brand, #7D38EF);
+  }
+
+  &--neutral {
+    background: var(--bg-surface-neutral, #DADEF3);
+    color: var(--fg-secondary, #353C6A);
+  }
+
+  &--error {
+    background: var(--bg-surface-error, #FCEAEA);
+    color: var(--fg-error, #DF2124);
+  }
+}
+
+.jf-memories__desc {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-paragraph-sm, 14px);
+  line-height: var(--line-height-paragraph-sm, 20px);
+  font-weight: var(--font-weight-regular, 400);
+  color: var(--fg-disabled, #979DC6);
+}

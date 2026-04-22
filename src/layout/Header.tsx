@@ -1,8 +1,8 @@
 import { useTheme } from '../hooks/useTheme';
 
 interface HeaderProps {
-  mode: 'components' | 'themes';
-  onModeChange: (mode: 'components' | 'themes') => void;
+  mode: 'components' | 'themes' | 'sample-apps';
+  onModeChange: (mode: 'components' | 'themes' | 'sample-apps') => void;
 }
 
 export function Header({ mode, onModeChange }: HeaderProps) {
@@ -35,6 +35,12 @@ export function Header({ mode, onModeChange }: HeaderProps) {
             onClick={() => onModeChange('themes')}
           >
             Themes
+          </button>
+          <button
+            className={`app-header__nav-btn${mode === 'sample-apps' ? ' active' : ''}`}
+            onClick={() => onModeChange('sample-apps')}
+          >
+            Sample Apps
           </button>
         </div>
         <button className="theme-toggle" onClick={toggleTheme} title="Toggle theme">

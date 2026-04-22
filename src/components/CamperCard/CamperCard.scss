@@ -1,0 +1,382 @@
+// ============================================
+// JotForm Apps - CamperCard Component
+// ============================================
+
+.jf-camper {
+  width: 616px;
+  max-width: 100%;
+  background: var(--bg-fill);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-family: var(--font-family);
+
+  &--selected {
+    outline: 2px solid var(--border-info);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+}
+
+// Camper Selector
+.jf-camper__selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.jf-camper__selector-label {
+  font-size: var(--font-size-label-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-primary);
+}
+
+.jf-camper__selector-search {
+  width: 100%;
+  height: 44px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  color: var(--fg-primary);
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  font-family: var(--font-family);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+
+  &::placeholder {
+    color: var(--fg-disabled);
+  }
+
+  &:focus {
+    border-color: var(--fg-brand);
+    box-shadow: 0 0 0 3px var(--bg-surface-brand);
+  }
+}
+
+.jf-camper__selector-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.jf-camper__selector-chip {
+  padding: var(--space-2) var(--space-4);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-rounded);
+  background: var(--bg-surface);
+  color: var(--fg-primary);
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all var(--transition);
+
+  &:hover {
+    border-color: var(--fg-brand);
+  }
+
+  &--active {
+    background: var(--fg-brand);
+    border-color: var(--fg-brand);
+    color: var(--fg-inverse);
+  }
+}
+
+// Header
+.jf-camper__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.jf-camper__avatar {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface-brand);
+  border-radius: var(--radius-md);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.jf-camper__header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.jf-camper__name {
+  font-size: var(--font-size-label-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-label-lg);
+  color: var(--fg-primary);
+  margin: 0;
+}
+
+.jf-camper__meta {
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-paragraph-sm);
+  color: var(--fg-disabled);
+  margin: 0;
+}
+
+.jf-camper__status {
+  flex-shrink: 0;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-rounded);
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  background: var(--bg-surface-warning);
+  color: var(--fg-warning);
+
+  &--complete {
+    background: var(--bg-surface-success);
+    color: var(--fg-success);
+  }
+}
+
+// Progress
+.jf-camper__progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.jf-camper__progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.jf-camper__progress-label {
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-secondary);
+}
+
+.jf-camper__progress-value {
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-disabled);
+}
+
+.jf-camper__progress-track {
+  height: var(--space-2);
+  background: var(--bg-fill-active);
+  border-radius: var(--radius-rounded);
+  overflow: hidden;
+}
+
+.jf-camper__progress-fill {
+  height: 100%;
+  background: var(--bg-fill-brand);
+  border-radius: var(--radius-rounded);
+  transition: width 300ms ease;
+}
+
+// Tabs
+.jf-camper__tabs {
+  display: flex;
+  gap: 2px;
+  background: var(--bg-fill-active);
+  border-radius: var(--radius-md);
+  padding: 2px;
+}
+
+.jf-camper__tab {
+  flex: 1;
+  padding: var(--space-2);
+  border: none;
+  border-radius: calc(var(--radius-md) - 2px);
+  background: transparent;
+  color: var(--fg-secondary);
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all var(--transition);
+
+  &--active {
+    background: var(--bg-surface);
+    color: var(--fg-primary);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:not(.jf-camper__tab--active):hover {
+    color: var(--fg-primary);
+  }
+}
+
+// Content
+.jf-camper__content {
+  display: flex;
+  flex-direction: column;
+}
+
+// Overview tab
+.jf-camper__overview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.jf-camper__info-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  color: var(--fg-disabled);
+}
+
+.jf-camper__info-label {
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-paragraph-sm);
+  color: var(--fg-primary);
+}
+
+.jf-camper__info-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.jf-camper__info-sub {
+  font-size: var(--font-size-paragraph-xs);
+  color: var(--fg-disabled);
+}
+
+// Health tab
+.jf-camper__health {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.jf-camper__health-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.jf-camper__health-label {
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-secondary);
+}
+
+.jf-camper__badge {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-rounded);
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+
+  &--success {
+    background: var(--bg-surface-success);
+    color: var(--fg-success);
+  }
+
+  &--warning {
+    background: var(--bg-surface-warning);
+    color: var(--fg-warning);
+  }
+}
+
+.jf-camper__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.jf-camper__tag {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-rounded);
+  background: var(--bg-surface-error);
+  color: var(--fg-error);
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+// Forms tab
+.jf-camper__forms {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.jf-camper__form-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  transition: background var(--transition);
+
+  &:hover {
+    background: var(--bg-fill-hover);
+  }
+}
+
+.jf-camper__form-check {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 2px solid var(--border-secondary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+
+  &--done {
+    background: var(--bg-fill-brand);
+    border-color: var(--bg-fill-brand);
+    color: var(--fg-inverse);
+  }
+}
+
+.jf-camper__form-name {
+  flex: 1;
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-paragraph-sm);
+  color: var(--fg-primary);
+
+  &--done {
+    text-decoration: line-through;
+    color: var(--fg-disabled);
+  }
+}
+
+.jf-camper__form-status {
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-warning);
+
+  &--done {
+    color: var(--fg-success);
+  }
+}

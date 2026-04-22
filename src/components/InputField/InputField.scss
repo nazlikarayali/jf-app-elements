@@ -1,0 +1,124 @@
+// ============================================
+// JotForm Apps - InputField Component
+// ============================================
+// All tokens from Figma variables.json
+
+.jf-input {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family);
+  width: 100%;
+
+  // =========================================
+  // Label
+  // =========================================
+  // Label: Label/Medium/Medium
+  &__label {
+    font-size: var(--font-size-label-md);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-label-md);
+    color: var(--fg-secondary);
+    margin-bottom: 4px;
+  }
+
+  // =========================================
+  // Input Field Box
+  // =========================================
+  // Placeholder/Value: Paragraph/text-sm + Body/Regular
+  &__field {
+    width: 100%;
+    padding: 0 12px;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-lg);
+    background: var(--bg-surface);
+    font-size: var(--font-size-paragraph-sm);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-paragraph-sm);
+    font-family: var(--font-family);
+    color: var(--fg-primary);
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    cursor: text;
+
+    &::placeholder {
+      color: var(--fg-disabled);
+    }
+  }
+
+  // =========================================
+  // Helper Text
+  // =========================================
+  // Helper: Paragraph/text-xsm + Body/Regular
+  &__helper {
+    font-size: var(--font-size-paragraph-xs);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-paragraph-xs);
+    color: var(--fg-disabled);
+    margin-top: 4px;
+  }
+
+  // =========================================
+  // Size: Small (40px)
+  // =========================================
+  &--sm {
+    .jf-input__field {
+      height: 40px;
+    }
+  }
+
+  // =========================================
+  // Size: Medium (44px)
+  // =========================================
+  &--md {
+    .jf-input__field {
+      height: 44px;
+    }
+  }
+
+  // =========================================
+  // State: Focused
+  // =========================================
+  &--focused {
+    .jf-input__field {
+      border-color: var(--fg-brand);
+      box-shadow: 0 0 0 3px var(--bg-surface-brand);
+    }
+  }
+
+  // =========================================
+  // State: Filled
+  // =========================================
+  &--filled {
+    .jf-input__field {
+      border-color: var(--border-secondary);
+    }
+
+    .jf-input__text {
+      color: var(--fg-primary);
+    }
+  }
+
+  // =========================================
+  // State: Error
+  // =========================================
+  &--error {
+    .jf-input__field {
+      border-color: var(--border-error);
+    }
+
+    .jf-input__helper {
+      color: var(--fg-error);
+    }
+  }
+
+  // =========================================
+  // State: Disabled
+  // =========================================
+  &--disabled {
+    .jf-input__field {
+      background: var(--bg-fill-disabled, var(--neutral-50, #F3F3FE));
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}

@@ -1,0 +1,103 @@
+// ============================================
+// JotForm Apps - Checkbox Component
+// ============================================
+// All tokens from Figma variables.json
+
+.jf-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+
+  // =========================================
+  // Checkbox Box
+  // =========================================
+  &__box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--border-secondary);
+    border-radius: 4px;
+    background: var(--bg-fill);
+    flex-shrink: 0;
+    transition: background 200ms ease, border-color 200ms ease;
+  }
+
+  // =========================================
+  // Checkbox Icon (checkmark / dash)
+  // =========================================
+  &__icon {
+    display: block;
+    color: var(--fg-inverse);
+  }
+
+  // =========================================
+  // Label
+  // =========================================
+  &__label {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    color: var(--fg-primary);
+  }
+
+  // =========================================
+  // Size: Small (16px box, 12px label)
+  // =========================================
+  &--sm {
+    .jf-checkbox__label {
+      font-size: var(--font-size-label-sm);
+      line-height: var(--line-height-label-sm);
+    }
+  }
+
+  // =========================================
+  // Size: Medium (20px box, 14px label)
+  // =========================================
+  &--md {
+    .jf-checkbox__label {
+      font-size: var(--font-size-label-md);
+      line-height: var(--line-height-label-md);
+    }
+  }
+
+  // =========================================
+  // Checked / Indeterminate
+  // =========================================
+  &--checked {
+    .jf-checkbox__box {
+      background: var(--bg-fill-brand);
+      border-color: var(--bg-fill-brand);
+    }
+  }
+
+  // =========================================
+  // Hovered
+  // =========================================
+  &--hovered,
+  &:hover {
+    .jf-checkbox__box {
+      border-color: var(--border-active);
+    }
+
+    &.jf-checkbox--checked .jf-checkbox__box {
+      border-color: var(--bg-fill-brand);
+    }
+  }
+
+  // =========================================
+  // Disabled
+  // =========================================
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    &:hover .jf-checkbox__box {
+      border-color: var(--border-secondary);
+    }
+
+    &.jf-checkbox--checked:hover .jf-checkbox__box {
+      border-color: var(--bg-fill-brand);
+    }
+  }
+}

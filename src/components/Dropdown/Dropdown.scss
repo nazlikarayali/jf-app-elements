@@ -1,0 +1,175 @@
+// ============================================
+// JotForm Apps - Dropdown Component
+// ============================================
+
+.jf-dropdown {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family);
+  width: 100%;
+
+  // =========================================
+  // Label
+  // =========================================
+  // Label: Label/text-md + Medium + Font/Family/Label
+  &__label {
+    font-size: var(--font-size-label-md);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-label-md);
+    color: var(--fg-secondary);
+    margin-bottom: 4px;
+  }
+
+  // Helper: Paragraph/text-xsm + Regular + Font/Family/Body
+  &__description {
+    font-size: var(--font-size-paragraph-xs);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-paragraph-xs);
+    color: var(--fg-disabled);
+    margin: 4px 0 0;
+  }
+
+  // =========================================
+  // Trigger
+  // =========================================
+  &__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 var(--space-3);
+    background: var(--bg-fill);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    font-family: var(--font-family);
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+
+  // =========================================
+  // Value / Placeholder
+  // =========================================
+  // Value: Paragraph/text-sm + Regular + Font/Family/Body
+  &__value {
+    font-size: var(--font-size-paragraph-sm);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-paragraph-sm);
+    color: var(--fg-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &--placeholder {
+      color: var(--fg-disabled);
+    }
+  }
+
+  // =========================================
+  // Chevron Icon
+  // =========================================
+  &__chevron {
+    width: 16px;
+    height: 16px;
+    color: var(--fg-disabled);
+    flex-shrink: 0;
+    transition: transform 200ms ease;
+  }
+
+  // =========================================
+  // Dropdown Panel
+  // =========================================
+  &__panel {
+    position: relative;
+    margin-top: var(--space-1);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    padding: var(--space-1);
+  }
+
+  // =========================================
+  // Option Item
+  // =========================================
+  // Option: Paragraph/text-sm + Regular + Font/Family/Body
+  &__option {
+    padding: var(--space-2) var(--space-3);
+    border-radius: calc(var(--radius-md) - 2px);
+    font-size: var(--font-size-paragraph-sm);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-paragraph-sm);
+    color: var(--fg-primary);
+    cursor: pointer;
+    transition: background var(--transition);
+
+    &:hover {
+      background: var(--bg-surface-hover);
+    }
+
+    &--selected {
+      background: var(--bg-surface-brand);
+      color: var(--fg-brand);
+
+      &:hover {
+        background: var(--bg-surface-brand);
+      }
+    }
+  }
+
+  // =========================================
+  // Size: Medium (44px trigger)
+  // =========================================
+  &--md {
+    .jf-dropdown__trigger {
+      height: 44px;
+    }
+  }
+
+  // =========================================
+  // Size: Small (40px trigger)
+  // =========================================
+  &--sm {
+    .jf-dropdown__trigger {
+      height: 40px;
+    }
+  }
+
+  // =========================================
+  // State: Open
+  // =========================================
+  &--open {
+    .jf-dropdown__chevron {
+      transform: rotate(180deg);
+    }
+  }
+
+  // =========================================
+  // State: Focused
+  // =========================================
+  &--focused {
+    .jf-dropdown__trigger {
+      border-color: var(--fg-brand);
+      box-shadow: 0 0 0 3px var(--bg-surface-brand);
+    }
+  }
+
+  // =========================================
+  // State: Disabled
+  // =========================================
+  &--disabled {
+    opacity: 0.6;
+
+    .jf-dropdown__trigger {
+      cursor: not-allowed;
+    }
+
+    .jf-dropdown__option {
+      cursor: not-allowed;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+  }
+}

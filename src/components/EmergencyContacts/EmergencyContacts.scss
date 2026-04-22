@@ -1,0 +1,148 @@
+// ============================================
+// JotForm Apps - EmergencyContacts Component
+// ============================================
+
+.jf-emergency {
+  width: 616px;
+  max-width: 100%;
+  background: var(--bg-fill);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-family: var(--font-family);
+
+  &--selected {
+    outline: 2px solid var(--border-info);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+}
+
+.jf-emergency__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.jf-emergency__icon {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface-brand);
+  border-radius: var(--radius-md);
+  color: var(--fg-brand);
+}
+
+.jf-emergency__header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.jf-emergency__title {
+  font-size: var(--font-size-label-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-label-lg);
+  color: var(--fg-primary);
+  margin: 0;
+}
+
+.jf-emergency__subtitle {
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-paragraph-sm);
+  color: var(--fg-disabled);
+  margin: 0;
+}
+
+// Contact list
+.jf-emergency__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.jf-emergency__contact {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  transition: border-color var(--transition);
+
+  &:hover {
+    border-color: var(--border-hover);
+  }
+}
+
+// Avatar
+.jf-emergency__avatar {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-fill-active);
+  border-radius: 50%;
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--fg-secondary);
+}
+
+// Info
+.jf-emergency__contact-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.jf-emergency__contact-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.jf-emergency__contact-name {
+  font-size: var(--font-size-label-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--fg-primary);
+}
+
+.jf-emergency__primary-badge {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-rounded);
+  background: var(--bg-surface-success);
+  color: var(--fg-success);
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.jf-emergency__contact-relationship {
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--fg-secondary);
+}
+
+.jf-emergency__contact-phone {
+  font-size: var(--font-size-paragraph-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--fg-primary);
+}
+
+// Actions
+.jf-emergency__contact-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}

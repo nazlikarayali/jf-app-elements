@@ -1,0 +1,155 @@
+// ============================================
+// JotForm Apps - Tag Component
+// ============================================
+
+.jf-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--radius-rounded, 9999px);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium, 500);
+  line-height: 1;
+  white-space: nowrap;
+  transition: background 200ms ease;
+  vertical-align: middle;
+
+  // =========================================
+  // Sizes
+  // =========================================
+  &--sm {
+    padding: 2px 8px;
+    font-size: var(--font-size-label-xs, 10px);
+
+    .jf-tag__remove {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &--md {
+    padding: 4px 10px;
+    font-size: var(--font-size-label-sm, 12px);
+
+    .jf-tag__remove {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  // =========================================
+  // Variants
+  // =========================================
+  &--default {
+    background: var(--bg-fill-active, #DADEF3);
+    color: var(--fg-secondary, #353C6A);
+
+    .jf-tag__remove:hover {
+      background: rgba(9, 17, 65, 0.1);
+    }
+  }
+
+  &--brand {
+    background: var(--bg-surface-brand, #EDE8FE);
+    color: var(--fg-brand, #7D38EF);
+
+    .jf-tag__remove:hover {
+      background: rgba(125, 56, 239, 0.12);
+    }
+  }
+
+  &--success {
+    background: var(--bg-surface-success, #E6F7EC);
+    color: var(--fg-success, #19A44B);
+
+    .jf-tag__remove:hover {
+      background: rgba(25, 164, 75, 0.12);
+    }
+  }
+
+  &--warning {
+    background: var(--bg-surface-warning, #FEF3E5);
+    color: var(--fg-warning, #DC7801);
+
+    .jf-tag__remove:hover {
+      background: rgba(220, 120, 1, 0.12);
+    }
+  }
+
+  &--error {
+    background: var(--bg-surface-error, #FCEAEA);
+    color: var(--fg-error, #DF2125);
+
+    .jf-tag__remove:hover {
+      background: rgba(223, 33, 37, 0.12);
+    }
+  }
+
+  &--info {
+    background: var(--bg-surface-info, #E5F2FA);
+    color: var(--fg-info, #0385C8);
+
+    .jf-tag__remove:hover {
+      background: rgba(3, 133, 200, 0.12);
+    }
+  }
+
+  // =========================================
+  // States
+  // =========================================
+  &--hovered {
+    &.jf-tag--default {
+      background: var(--bg-fill-active-hover, #C8CEED);
+    }
+    &.jf-tag--brand {
+      background: var(--bg-surface-brand-hover, #DBD6FA);
+    }
+    &.jf-tag--success {
+      background: var(--bg-surface-success-hover, #CCF0D9);
+    }
+    &.jf-tag--warning {
+      background: var(--bg-surface-warning-hover, #FDE7CC);
+    }
+    &.jf-tag--error {
+      background: var(--bg-surface-error-hover, #F9D5D5);
+    }
+    &.jf-tag--info {
+      background: var(--bg-surface-info-hover, #CCE5F5);
+    }
+  }
+
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  // =========================================
+  // Elements
+  // =========================================
+  &__label {
+    user-select: none;
+  }
+
+  &__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    border-radius: var(--radius-rounded, 9999px);
+    transition: background 150ms ease;
+    flex-shrink: 0;
+
+    &:focus-visible {
+      outline: 2px solid var(--fg-brand, #7D38EF);
+      outline-offset: 1px;
+    }
+  }
+
+  &__remove-icon {
+    display: block;
+  }
+}

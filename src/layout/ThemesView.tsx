@@ -20,6 +20,12 @@ import { SocialFollow } from '../components/SocialFollow';
 import { List } from '../components/List';
 import { ProductList } from '../components/ProductList';
 import { DailyTaskManager } from '../components/DailyTaskManager/DailyTaskManager';
+import { BMICalculator } from '../components/BMICalculator/BMICalculator';
+import { ShoppingList } from '../components/ShoppingList/ShoppingList';
+import { CamperCard } from '../components/CamperCard/CamperCard';
+import { ActivitySchedule } from '../components/ActivitySchedule/ActivitySchedule';
+import { CampFeedback } from '../components/CampFeedback/CampFeedback';
+import { TripPlanner } from '../components/TripPlanner/TripPlanner';
 
 const DEFAULT_COLOR = '#7D38EF';
 const DEFAULT_FONT = 'Inter';
@@ -398,10 +404,13 @@ function getSecondaryColor(primaryHex: string, offsetDegrees: number): string {
   return hslHueToHex(secondaryHue);
 }
 
+type ThemesPageTab = 'elements' | 'widgets';
+
 export function ThemesView() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const { library: activeIconLibrary, iconStyle: activeIconStyle, setLibrary: setIconLibrary, setIconStyle } = useIconLibrary();
   const [activeTab, setActiveTab] = useState<'colors' | 'style' | 'font' | null>(null);
+  const [pageTab, setPageTab] = useState<ThemesPageTab>('elements');
   const [colorMode, setColorMode] = useState<'light' | 'dark'>(() =>
     document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
   );
@@ -1009,8 +1018,26 @@ export function ThemesView() {
         </div>
       </BottomSheet>
 
-      {/* Right: Preview as App Page */}
+      {/* Right: Preview area with left tab sidebar */}
       <main className="themes-view__preview">
+        <div className="themes-view__page-tabs">
+          <span className="themes-view__page-tabs-title">Preview</span>
+          <button
+            className={`themes-view__page-tab ${pageTab === 'elements' ? 'themes-view__page-tab--active' : ''}`}
+            onClick={() => setPageTab('elements')}
+          >
+            Elements
+          </button>
+          <button
+            className={`themes-view__page-tab ${pageTab === 'widgets' ? 'themes-view__page-tab--active' : ''}`}
+            onClick={() => setPageTab('widgets')}
+          >
+            Widgets
+          </button>
+        </div>
+
+        <div className="themes-view__preview-content">
+        {pageTab === 'elements' ? (
         <div className="themes-view__canvas" ref={canvasRef}>
         <div className="themes-view__app">
           {/* Hero Section */}
@@ -1136,6 +1163,31 @@ export function ThemesView() {
             </div>
           </section>
         </div>
+        </div>
+        ) : (
+        <div className="themes-view__canvas" ref={canvasRef}>
+        <div className="themes-view__app themes-view__app--widgets">
+          <section className="themes-view__section">
+            <BMICalculator />
+          </section>
+          <section className="themes-view__section">
+            <ShoppingList />
+          </section>
+          <section className="themes-view__section">
+            <CamperCard />
+          </section>
+          <section className="themes-view__section">
+            <ActivitySchedule />
+          </section>
+          <section className="themes-view__section">
+            <CampFeedback />
+          </section>
+          <section className="themes-view__section">
+            <TripPlanner />
+          </section>
+        </div>
+        </div>
+        )}
         </div>
       </main>
     </div>

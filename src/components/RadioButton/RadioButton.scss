@@ -1,0 +1,123 @@
+// ============================================
+// JotForm Apps - RadioButton Component
+// ============================================
+
+.jf-radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+
+  // =========================================
+  // Circle (outer)
+  // =========================================
+  &__circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--border-secondary);
+    border-radius: 50%;
+    background: var(--bg-fill);
+    flex-shrink: 0;
+    transition: border-color 200ms ease, background-color 200ms ease;
+  }
+
+  // =========================================
+  // Dot (inner)
+  // =========================================
+  &__dot {
+    border-radius: 50%;
+    background: var(--fg-inverse);
+    transform: scale(0);
+    transition: transform 200ms ease;
+  }
+
+  // =========================================
+  // Label
+  // =========================================
+  &__label {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    color: var(--fg-primary);
+  }
+
+  // =========================================
+  // Size: Small
+  // =========================================
+  &--sm {
+    .jf-radio__circle {
+      width: 16px;
+      height: 16px;
+    }
+
+    .jf-radio__dot {
+      width: 6px;
+      height: 6px;
+    }
+
+    .jf-radio__label {
+      font-size: var(--font-size-label-sm);
+      line-height: var(--line-height-label-sm);
+    }
+  }
+
+  // =========================================
+  // Size: Medium
+  // =========================================
+  &--md {
+    .jf-radio__circle {
+      width: 20px;
+      height: 20px;
+    }
+
+    .jf-radio__dot {
+      width: 8px;
+      height: 8px;
+    }
+
+    .jf-radio__label {
+      font-size: var(--font-size-label-md);
+      line-height: var(--line-height-label-md);
+    }
+  }
+
+  // =========================================
+  // Checked
+  // =========================================
+  &--checked {
+    .jf-radio__circle {
+      border-color: var(--bg-fill-brand);
+      background: var(--bg-fill-brand);
+    }
+
+    .jf-radio__dot {
+      transform: scale(1);
+    }
+  }
+
+  // =========================================
+  // Hover
+  // =========================================
+  &:hover,
+  &--hover {
+    .jf-radio__circle {
+      border-color: var(--border-active);
+    }
+
+    &.jf-radio--checked {
+      .jf-radio__circle {
+        border-color: var(--bg-fill-brand);
+      }
+    }
+  }
+
+  // =========================================
+  // Disabled
+  // =========================================
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+}
